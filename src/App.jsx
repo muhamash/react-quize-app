@@ -1,9 +1,10 @@
 import './App.css'
+import IndexPage from './page/IndexPage'
 
 function App() {
   return (
-    <div className="bg-green-700 text-white">
-      hello
+    <div>
+      <IndexPage/>
     </div>
   )
 }
