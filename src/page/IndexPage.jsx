@@ -2,8 +2,8 @@
 
 import Footer from "../components/common/Footer";
 import Nav from "../components/common/Nav";
-import QuizCard from "../components/Index/QuizCard";
-import UserCard from "../components/Index/UserCard";
+import QuizCard from "../components/index/QuizCard";
+import UserCard from "../components/index/UserCard";
 
 export default function IndexPage() {
     return (

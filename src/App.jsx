@@ -1,11 +1,12 @@
 import './App.css'
-import QuizePage from './page/QuizePage'
+import RegistrationPage from './page/RegistrationPage'
 
 function App() {
   return (
     <div>
       {/* <Login/> */ }
-      <QuizePage/>
+      {/* <QuizePage/> */ }
+      <RegistrationPage/>
     </div>
   )
 }
