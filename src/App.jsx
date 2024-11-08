@@ -1,12 +1,15 @@
 import './App.css'
-import RegistrationPage from './page/RegistrationPage'
+// import DashBoard from './components/admin/DashBoard'
+// import AddQuizCardPage from './page/AddQuizCardPage'
+import CreateQuiz from './page/CreateQuiz'
+// import RegistrationPage from './page/RegistrationPage'
+// import ResultPage from './page/ResultPage'
 
 function App() {
   return (
     <div>
-      {/* <Login/> */ }
-      {/* <QuizePage/> */ }
-      <RegistrationPage/>
+      {/* <AddQuizCardPage/> */ }
+      <CreateQuiz/>
     </div>
   )
 }
