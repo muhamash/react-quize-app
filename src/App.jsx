@@ -1,10 +1,11 @@
 import './App.css'
-import IndexPage from './page/IndexPage'
+import QuizePage from './page/QuizePage'
 
 function App() {
   return (
     <div>
-      <IndexPage/>
+      {/* <Login/> */ }
+      <QuizePage/>
     </div>
   )
 }
