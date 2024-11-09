@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { PacmanLoader } from 'react-spinners';
 import './App.css';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import AdminLayout from './layouts/AdminLayout';
@@ -21,13 +22,12 @@ function App ()
   return (
     <ErrorBoundary>
       <Suspense fallback={ <div className="flex items-center justify-center pt-10">
-        {/* <BookLoader
-          background={ "linear-gradient(135deg, #2d0c6e, #306d91)" }
-          desktopSize={ "300px" }
-          mobileSize={ "150px" }
-          textColor={ "#6e31d0" }
-          text="Be patient!"
-        /> */}
+        <PacmanLoader
+          color="#067023"
+          margin={ 2 }
+          size={ 99 }
+          speedMultiplier={ 1 }
+        />
       </div> }>
         <Routes>
           <Route element={ <MainLayout /> }>
