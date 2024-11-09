@@ -8,7 +8,7 @@ export default function Login() {
         <HelmetProvider>
             <Helmet>
                 <title>
-                    Login!!!
+                    Quizzes - Login!!!
                 </title>
             </Helmet>
             <div className="bg-white text-gray-800 overflow-hidden">

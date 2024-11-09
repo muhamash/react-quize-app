@@ -5,6 +5,8 @@ import { AuthContext } from '../context/index';
 export default function AuthProvider ( { children } )
 {
     const [ auth, setAuth ] = React.useState( {} );
+    console.log( auth );
+
     return (
         <AuthContext.Provider value={ { auth, setAuth } }>
             { children }

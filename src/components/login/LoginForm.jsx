@@ -27,15 +27,16 @@ const LoginForm = () => {
             });
             return response.data;
         },
-        onSuccess: (data) => {
-            const { tokens, user } = data;
+        onSuccess: ( response ) =>
+        {
+            // console.log("Login success response:", response);
+            const { tokens, user } = response.data;
             if (tokens) {
                 const authToken = tokens.accessToken;
                 const refreshToken = tokens.refreshToken;
 
                 setAuth({ user, authToken, refreshToken });
-                console.log("Auth state after login:", { user, authToken, refreshToken });
-                toast('User Found!');
+                // console.log("Auth state after login:", { user, authToken, refreshToken });
                 navigate('/');
             }
         },
@@ -50,23 +51,23 @@ const LoginForm = () => {
     });
 
     const submitForm = (formData) => {
-        console.log("Submitting form data:", formData);
-        loginMutation.mutate(formData);
+        
+        loginMutation.mutate( formData );
+        // console.log( "Submitting form data:", formData, loginMutation );
     };
-
     return (
         <form onSubmit={handleSubmit(submitForm)}>
             <div className="mb-4">
                 <Toaster position="top-right" reverseOrder={false} />
-                <label htmlFor="username" className="block mb-2">
+                <label htmlFor="email" className="block mb-2">
                     Enter your username or email address
                 </label>
                 <input
                     type="text"
-                    id="username"
+                    id="email"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300"
                     placeholder="Username or email address"
-                    {...register('username', { required: 'Username or email is required' })}
+                    {...register('email', { required: 'Email is required' })}
                 />
                 {errors.username && <p className="text-red-600">{errors.username.message}</p>}
             </div>
@@ -101,9 +102,9 @@ const LoginForm = () => {
             <button
                 type="submit"
                 className="w-full bg-yellow-600 text-white py-3 rounded-lg mb-4"
-                disabled={loginMutation.isLoading}
+                disabled={loginMutation.isPending}
             >
-                {loginMutation.isLoading ? 'Signing in...' : 'Sign in'}
+                {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
             </button>
         </form>
     );
