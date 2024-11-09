@@ -21,8 +21,11 @@
     "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.53.1",
     "react-hot-toast": "^2.4.1",
+    "react-loader-spinner": "^6.1.6",
+    "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^6.28.0",
     "react-spinner": "^0.2.7",
+    "react-spinners": "^0.14.1",
     "sass": "^1.80.6",
     "sort-by": "^1.2.0"
   },
