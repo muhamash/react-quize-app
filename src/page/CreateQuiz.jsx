@@ -1,12 +1,18 @@
 // import React from 'react'
-
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Question from "../components/admin/Question";
 import QuizForm from "../components/admin/QuizForm";
 import SideBar from "../components/admin/SideBar";
 
 export default function CreateQuiz() {
     return (
-        <div className="bg-[#F5F3FF] min-h-screen flex">
+        <HelmetProvider>
+            <Helmet>
+                <title>
+                    Create your quiz
+                </title>
+            </Helmet>
+            <div className="bg-[#F5F3FF] min-h-screen flex">
             <SideBar />
             <div className="md:flex-grow px-4 sm:px-6 lg:px-8 py-8">
                 <div>
@@ -36,5 +42,6 @@ export default function CreateQuiz() {
                 </div>
             </div>
         </div>
+        </HelmetProvider>
     );
 }

@@ -1,11 +1,17 @@
 // import React from 'react'
-
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import QuizCardForm from "../components/admin/QuizCardForm";
 import SideBar from "../components/admin/SideBar";
 
 export default function AddQuizCardPage() {
   return (
-    <div className="bg-[#F5F3FF] min-h-screen flex">
+    <HelmetProvider>
+      <Helmet>
+        <title>
+          Add quiz Card
+        </title>
+      </Helmet>
+      <div className="bg-[#F5F3FF] min-h-screen flex">
       <SideBar />
       <div className="md:flex-grow px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -25,5 +31,6 @@ export default function AddQuizCardPage() {
         </div>
       </div>
     </div>
+    </HelmetProvider>
   );
 }

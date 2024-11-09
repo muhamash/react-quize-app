@@ -1,12 +1,18 @@
 // import React from 'react'
-
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import LeftReg from "../components/Registration/LeftReg";
 import RegisterForm from "../components/Registration/RegForm";
 
 
 export default function RegistrationPage() {
     return (
-        <div className="bg-white text-gray-800 ">
+        <HelmetProvider>
+            <Helmet>
+                <title>
+                    Registration!
+                </title>
+            </Helmet>
+            <div className="bg-white text-gray-800 ">
             <div className="flex min-h-screen max-h-screen">
                 <LeftReg />
 
@@ -25,5 +31,6 @@ export default function RegistrationPage() {
                 </div>
             </div>
         </div>
+        </HelmetProvider>
     );
 }

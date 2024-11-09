@@ -1,29 +1,57 @@
+import { Suspense, lazy } from 'react';
+import { BookLoader } from "react-awesome-loaders";
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import AddQuizCardPage from './page/AddQuizCardPage';
-import CreateQuiz from './page/CreateQuiz';
-import DashBoard from './page/DashBoard';
-import IndexPage from './page/IndexPage';
-import LeaderBoard from './page/LeaderBoard';
-import Login from './page/Login';
-import QuizePage from './page/QuizePage';
-import RegistrationPage from './page/RegistrationPage';
-import ResultPage from './page/ResultPage';
+import ErrorBoundary from './components/common/ErrorBoundary';
+import AdminLayout from './layouts/AdminLayout';
+import MainLayout from './layouts/MainLayout';
+import QuizLayout from './layouts/QuizLayout';
 
-function App() {
+const AddQuizCardPage = lazy(() => import('./page/AddQuizCardPage'));
+const CreateQuiz = lazy(() => import('./page/CreateQuiz'));
+const DashBoard = lazy(() => import('./page/DashBoard'));
+const IndexPage = lazy(() => import('./page/IndexPage'));
+const LeaderBoard = lazy(() => import('./page/LeaderBoard'));
+const Login = lazy(() => import('./page/Login'));
+const QuizePage = lazy(() => import('./page/QuizePage'));
+const RegistrationPage = lazy(() => import('./page/RegistrationPage'));
+const ResultPage = lazy(() => import('./page/ResultPage'));
+
+function App ()
+{
   return (
-    <Routes>
-      <Route element={ <IndexPage /> } path="/" exact />
-      <Route element={ <QuizePage /> } path="/quizess" />
-      <Route element={ <ResultPage /> } path="/result" />
-      <Route element={ <LeaderBoard /> } path="/leaderBoard" />
-      <Route element={ <DashBoard /> } path="/dashBoard" />
-      <Route element={ <AddQuizCardPage/> } path="/addQuiz" />
-      <Route element={ <CreateQuiz /> } path="createQuiz" />
-      <Route element={ <RegistrationPage /> } path="/registration" />
-      <Route element={ <Login /> } path="/login" />
-    </Routes>
-  );
-}
+    <ErrorBoundary>
+      <Suspense fallback={ <div className="flex items-center justify-center pt-10">
+        <BookLoader
+          background={ "linear-gradient(135deg, #2d0c6e, #306d91)" }
+          desktopSize={ "300px" }
+          mobileSize={ "150px" }
+          textColor={ "#6e31d0" }
+          text="Be patient!"
+        />
+      </div> }>
+        <Routes>
+          <Route element={ <MainLayout /> }>
+            <Route path="/" element={ <IndexPage /> } />
+            <Route path="/leaderBoard" element={ <LeaderBoard /> } />
+          </Route>
 
-export default App
+          <Route element={ <QuizLayout /> }>
+            <Route path="/quizess" element={ <QuizePage /> } />
+            <Route path="/result" element={ <ResultPage /> } />
+            <Route path="/registration" element={ <RegistrationPage /> } />
+            <Route path="/login" element={ <Login /> } />
+          </Route>
+
+          <Route element={ <AdminLayout /> }>
+            <Route path="/dashBoard" element={ <DashBoard /> } />
+            <Route path="/addQuiz" element={ <AddQuizCardPage /> } />
+            <Route path="/createQuiz" element={ <CreateQuiz /> } />
+          </Route>
+        </Routes>
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
+
+export default App;
