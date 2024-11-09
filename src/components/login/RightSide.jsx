@@ -1,5 +1,5 @@
 // import React from 'react'
-
+import { Link } from 'react-router-dom';
 import LoginForm from "./LoginForm";
 
 export default function RightSide() {
@@ -16,7 +16,12 @@ export default function RightSide() {
                     <a href="#" className="text-primary">Forgot Password</a>
                 </div>
                 <div className="mt-8">
-                    <p className="text-center">No Account ? <a href="#" className="text-indigo-900">Sign up</a></p>
+                    <p className="text-center">No Account? 
+                        <span>
+                            <Link to="/registration" className="text-indigo-900 px-2">
+                             Sign up</Link>
+                        </span>
+                    </p>
                 </div>
             </div>
         </div>
