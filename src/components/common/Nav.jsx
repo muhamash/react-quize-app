@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 export default function Nav() {
     const [isHovered, setIsHovered] = useState(false);
-    const [isVisible, setIsVisible] = useState(true);
+    const [ isVisible, setIsVisible ] = useState( true );
+    const { auth, setAuth } = useAuth();
     const lastScrollY = useRef(0);
     const hideTimeout = useRef(null);
 

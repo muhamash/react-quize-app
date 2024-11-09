@@ -29,13 +29,14 @@ const LoginForm = () => {
         },
         onSuccess: ( response ) =>
         {
-            // console.log("Login success response:", response);
+            // console.log("Login success response:", response.data);
             const { tokens, user } = response.data;
             if (tokens) {
                 const authToken = tokens.accessToken;
                 const refreshToken = tokens.refreshToken;
 
-                setAuth({ user, authToken, refreshToken });
+                setAuth( { user, authToken, refreshToken } );
+
                 // console.log("Auth state after login:", { user, authToken, refreshToken });
                 navigate('/');
             }

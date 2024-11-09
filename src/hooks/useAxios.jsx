@@ -20,7 +20,7 @@ const useAxios = () =>
                 {
                     config.headers.Authorization = `Bearer ${authToken}`;
                 }
-                // console.log( config );
+                console.log( config );
 
                 return config;
             },
@@ -43,10 +43,10 @@ const useAxios = () =>
                         const refreshToken = auth?.refreshToken;
                         const response = await axios.post( `http://localhost:3000/api/auth/refresh-token`, { refreshToken } );
 
-                        const { token } = response.data
-                        console.log( 'new token', token );
-                        setAuth( { ...auth, authToken: token } );
-                        mainRequest.headers.Authorization = `Bearer ${token}`;
+                        const { tokens } = response.data
+                        console.log( 'new token', tokens );
+                        setAuth( { ...auth, authToken: tokens } );
+                        mainRequest.headers.Authorization = `Bearer ${tokens}`;
 
                         return axios( mainRequest )
                     }
