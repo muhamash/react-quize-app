@@ -1,9 +1,9 @@
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 // import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import QuizCard from "../components/index/QuizCard";
 import UserCard from "../components/index/UserCard";
-import { HelmetProvider, Helmet } from 'react-helmet-async';
 import useIntersectionObserver from "../hooks/useIntersection";
 
 export default function IndexPage() {
@@ -19,7 +19,7 @@ export default function IndexPage() {
         }, 1000);
     };
 
-   
+    //     throw new Error( "ErrorComponent", "This is a test error" );
     const targetRef = useIntersectionObserver(loadMoreQuizzes);
 
     return (

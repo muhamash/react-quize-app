@@ -4,7 +4,9 @@ import AddQuizCard from "../components/admin/AddQuizCard";
 import DashBoardCard from "../components/admin/DashBoardCard";
 import SideBar from "../components/admin/SideBar";
 
-export default function DashBoard() {
+export default function DashBoard ()
+{
+        // throw new Error( "ErrorComponent", "This is a test error" );
     return (
         <HelmetProvider>
             <Helmet>

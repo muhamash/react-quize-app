@@ -1,46 +1,58 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import { Component } from 'react';
+import { FadeLoader } from 'react-spinners';
 
-const ErrorBoundary = ( { children } ) =>
-{
-    const [ hasError, setHasError ] = useState( false );
+class ErrorBoundary extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false, errorInfo: null };
+    }
 
-    const handleRetry = () =>
-    {
-        setHasError( false );
+    static getDerivedStateFromError(error) {
+        return { hasError: true, errorInfo: error };
+    }
+
+    componentDidCatch(error, errorInfo) {
+        console.error("ErrorBoundary caught an error:", error, errorInfo);
+    }
+
+    handleRetry = () => {
+        this.setState({ hasError: false, errorInfo: null });
         window.location.reload();
     };
 
-    const ErrorWrapper = ( { children } ) =>
-    {
-        try
-        {
-            return children;
-        } catch ( error )
-        {
-            console.error( "Error Boundary caught an error", error );
-            setHasError( true );
-            return null;
+    render() {
+        const { hasError, errorInfo } = this.state;
+
+        if (hasError) {
+            return (
+                <div className="flex flex-col justify-center items-center h-screen text-center mx-auto relative">
+                    <div className="p-5 mx-auto bottom-20 relative">
+                        <FadeLoader
+                        color="#bb1313"
+                        cssOverride={ 1 }
+                        height={ 100 }
+                        loading
+                        margin={ 10 }
+                        radius={ 10 }
+                        speedMultiplier={ 2 }
+                        width={ 30 }
+                    />
+                    </div>
+                    <h2 className="text-red-600 text-lg font-bold">Error in { errorInfo?.componentName || "Application" }</h2>
+                    <p>{ errorInfo?.message || "An unexpected error occurred." }</p>
+                    <button
+                        onClick={ this.handleRetry }
+                        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                        Refresh
+                    </button>
+                </div>
+            );
         }
-    };
 
-    if ( hasError )
-    {
-        return (
-            <div className="flex flex-col justify-center items-center h-screen text-center">
-                {/* <FadeLoader /> */}
-                <button
-                    onClick={ handleRetry }
-                    className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                >
-                    Refresh
-                </button>
-            </div>
-        );
+        return this.props.children;
     }
-
-    return <ErrorWrapper>{ children }</ErrorWrapper>;
 };
 
 export default ErrorBoundary;

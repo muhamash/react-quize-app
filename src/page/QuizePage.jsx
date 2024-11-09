@@ -1,7 +1,7 @@
 // import React from 'react'
 import { Suspense } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import 'react-loading-skeleton/dist/skeleton.css';
+// import 'react-loading-skeleton/dist/skeleton.css';
 import Quiz from "../components/quizPage/Quiz";
 import QuizCounter from "../components/quizPage/QuizCounter";
 
