@@ -47,7 +47,11 @@ export default function IndexPage() {
             </Helmet>
             <div className="container mx-auto pt-20">
                 <ErrorBoundary>
-                    <UserCard userName={auth.user.full_name} />
+                    {
+                        auth?.user && (
+                             <UserCard userName={auth.user.full_name} />
+                        )
+                   }
                 </ErrorBoundary>
                 <div className="bg-white p-6 rounded-md h-full">
                     <h3 className="text-2xl font-bold mb-6">Participate In Quizzes</h3>
