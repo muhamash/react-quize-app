@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
@@ -17,12 +18,13 @@ export default function Nav() {
 
         if (currentScrollY > lastScrollY.current && currentScrollY > 5) {
             setIsVisible(false);
-            setIsHovered(false); 
+            setIsHovered( false );
         } else {
             setIsVisible(true);
 
             if (hideTimeout.current) clearTimeout(hideTimeout.current);
-            hideTimeout.current = setTimeout(() => {
+            hideTimeout.current = setTimeout( () =>
+            {
                 setIsVisible(false);
                 setIsHovered(false);
             }, 5000);
@@ -62,7 +64,9 @@ export default function Nav() {
         setIsVisible(true);
     };
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = () =>
+    {
+
         hideTimeout.current = setTimeout(() => {
             setIsVisible(false);
             setIsHovered(false);
@@ -77,6 +81,7 @@ export default function Nav() {
             onMouseEnter={ handleMouseEnter }
             onMouseLeave={ handleMouseLeave }
         >
+            <Toaster position="top-right" reverseOrder={false} />
             <Link to="/">
                 <img src="./assets/logo.svg" className="h-7" alt="Logo" />
             </Link>
