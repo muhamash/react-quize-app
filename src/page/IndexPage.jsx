@@ -1,4 +1,3 @@
-import { AnimatePresence } from "framer-motion";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 // import { Toaster toast } from 'react-hot-toast';
 import { HashLoader } from 'react-spinners';
@@ -63,11 +62,7 @@ export default function IndexPage() {
                                 <p className="text-violet-800 font-mono">No quizzes found on the server!</p>
                             ) : (
                                 state?.quizzes?.map( ( quiz ) => (
-                                    <AnimatePresence key={ quiz.id }>
-                                        <ErrorBoundary>
-                                             <QuizCard  quiz={ quiz } />
-                                       </ErrorBoundary>
-                                    </AnimatePresence>
+                                    <QuizCard key={quiz.id}  quiz={ quiz } />
                                 ) )
                             ) }
                         </div>
