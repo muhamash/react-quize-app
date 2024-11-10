@@ -5,36 +5,49 @@ import useAuth from '../../hooks/useAuth';
 
 export default function Nav() {
     const [isHovered, setIsHovered] = useState(false);
-    const [ isVisible, setIsVisible ] = useState( true );
+    const [isVisible, setIsVisible] = useState(true);
     const { auth, setAuth } = useAuth();
     const lastScrollY = useRef(0);
     const hideTimeout = useRef(null);
 
+    const navigate = useNavigate();
+
     const handleScroll = useCallback(() => {
         const currentScrollY = window.scrollY;
 
-        if (currentScrollY > lastScrollY.current && currentScrollY > 10) {
-            setIsVisible(false); 
+        if (currentScrollY > lastScrollY.current && currentScrollY > 5) {
+            setIsVisible(false);
+            setIsHovered(false); 
         } else {
-            setIsVisible(true); 
+            setIsVisible(true);
 
             if (hideTimeout.current) clearTimeout(hideTimeout.current);
-            hideTimeout.current = setTimeout(() => setIsVisible(false), 5000);
+            hideTimeout.current = setTimeout(() => {
+                setIsVisible(false);
+                setIsHovered(false);
+            }, 5000);
         }
 
         lastScrollY.current = currentScrollY;
     }, []);
 
+    const handleLogout = () => {
+        setAuth(null); 
+        navigate('/login');
+    };
+
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
 
-        const handleWindowClick = () =>
-        {
-            setIsVisible( true );
-            if ( hideTimeout.current ) clearTimeout( hideTimeout.current );
-            hideTimeout.current = setTimeout( () => setIsVisible( false ), 5000 );
+        const handleWindowClick = () => {
+            setIsVisible(true);
+            if (hideTimeout.current) clearTimeout(hideTimeout.current);
+            hideTimeout.current = setTimeout(() => {
+                setIsVisible(false);
+                setIsHovered(false); // Close hover card on auto-hide
+            }, 5000);
         };
-        
+
         window.addEventListener('click', handleWindowClick);
 
         return () => {
@@ -50,10 +63,11 @@ export default function Nav() {
     };
 
     const handleMouseLeave = () => {
-        hideTimeout.current = setTimeout(() => setIsVisible(false), 5000);
+        hideTimeout.current = setTimeout(() => {
+            setIsVisible(false);
+            setIsHovered(false);
+        }, 5000);
     };
-
-    const navigate = useNavigate();
 
     return (
         <motion.header
@@ -66,29 +80,31 @@ export default function Nav() {
             <Link to="/">
                 <img src="./assets/logo.svg" className="h-7" alt="Logo" />
             </Link>
-            <div className="relative flex items-center gap-5"
+            <div
+                className="relative flex items-center gap-5"
                 onMouseEnter={ () => setIsHovered( true ) }
                 onMouseLeave={ () => setIsHovered( false ) }
             >
-                {
-                    auth?.user ? (
-                        <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center cursor-pointer">
-                            <img src="./assets/avater.webp" alt="Profile Picture"
-                                className="w-[50px] h-[50px] rounded-full border-blue-900 border-1" />
-                        </div>
-                    ) : (
-                        <Link to="/login">
-                            <button className="px-4 py-2 rounded hover:bg-primary hover:text-white transition-colors" style={ { fontFamily: "Jaro" } }>
-                                Login
-                            </button>
-                        </Link>
-                    )
-                }
+                { auth?.user ? (
+                    <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center cursor-pointer">
+                        <img
+                            src="./assets/avater.webp"
+                            alt="Profile Picture"
+                            className="w-[50px] h-[50px] rounded-full border-blue-900 border-1"
+                        />
+                    </div>
+                ) : (
+                    <Link to="/login">
+                        <button className="px-4 py-2 rounded hover:bg-primary hover:text-white transition-colors" style={ { fontFamily: 'Jaro' } }>
+                            Login
+                        </button>
+                    </Link>
+                ) }
 
                 {/* Hover Card */ }
                 { isHovered && auth?.user && (
                     <motion.div
-                        className="absolute top-10 right-2  p-4 rounded-lg bg-gradient-to-r from-violet-800 via-blue-900 to-cyan-700 backdrop-blur-sm z-20 border border-white/10 shadow-lg"
+                        className="absolute top-10 right-2 p-4 rounded-lg bg-gradient-to-r from-violet-800 via-blue-900 to-cyan-700 backdrop-blur-sm z-20 border border-white/10 shadow-lg"
                         initial={ { opacity: 0, y: -10 } }
                         animate={ { opacity: 1, y: 0 } }
                         exit={ { opacity: 0, y: -10 } }
@@ -105,27 +121,25 @@ export default function Nav() {
                             </li>
                             <li>
                                 <button
+                                    onClick={ handleLogout }
                                     className="px-4 py-2 rounded hover:bg-primary hover:text-white transition-colors bg-cyan-700"
-                                    style={ { fontFamily: "Jaro" } }>
-                                    { "Logout" }
+                                    style={ { fontFamily: 'Jaro' } }
+                                >
+                                    Logout
                                 </button>
                             </li>
                         </ul>
                     </motion.div>
                 ) }
 
-                {
-                    !auth?.user && (
-                        <Link to={ `/registration` }>
-                            <button
-                                className="px-4 py-2 rounded hover:bg-primary hover:text-white transition-colors"
-                                style={ { fontFamily: "Jaro" } }>
-                                { "Register" }
-                            </button>
-                        </Link>
-                    )
-                }
+                { !auth?.user && (
+                    <Link to="/registration">
+                        <button className="px-4 py-2 rounded hover:bg-primary hover:text-white transition-colors" style={ { fontFamily: 'Jaro' } }>
+                            Register
+                        </button>
+                    </Link>
+                ) }
             </div>
         </motion.header>
     );
-};
+}

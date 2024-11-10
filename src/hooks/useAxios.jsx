@@ -20,7 +20,7 @@ const useAxios = () =>
                 {
                     config.headers.Authorization = `Bearer ${authToken}`;
                 }
-                console.log( config );
+                // console.log( config );
 
                 return config;
             },

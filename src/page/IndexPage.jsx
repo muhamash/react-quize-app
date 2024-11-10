@@ -3,7 +3,7 @@ import { Suspense, useEffect, useState } from "react";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { SquareLoader } from 'react-spinners';
 import ErrorBoundary from "../components/common/ErrorBoundary";
-// import UserCard from "../components/index/UserCard";
+import UserCard from "../components/index/UserCard";
 import useAuth from "../hooks/useAuth";
 import useAxios from "../hooks/useAxios";
 
@@ -46,13 +46,13 @@ export default function IndexPage() {
                 <meta name="description" content="Welcome to the home page!" />
             </Helmet>
             <div className="container mx-auto pt-20">
-                {/* <ErrorBoundary>
+                <ErrorBoundary>
                     {
                         auth?.user && (
                              <UserCard userName={auth.user.full_name} />
                         )
                    }
-                </ErrorBoundary> */}
+                </ErrorBoundary>
                 <div className="bg-white p-6 rounded-md h-full">
                     <h3 className="text-2xl font-bold mb-6">Participate In Quizzes</h3>
                     <ErrorBoundary>
