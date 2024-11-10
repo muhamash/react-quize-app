@@ -57,10 +57,10 @@ export default function IndexPage() {
                 ) }
                 <div className="bg-white p-6 rounded-md h-full">
                     <h3 className="text-2xl font-bold mb-6">Participate In Quizzes</h3>
-                    {/* <ErrorBoundary> */}
+                    <ErrorBoundary>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             { state?.quizzes?.length === 0 ? (
-                                <p className="text-violet-800 font-mono">No quizzes found on the server!</p>
+                                <p className="text-violet-800 font-mono">No quizzes found on the server! or there is no quizzes left!!!</p>
                             ) : (
                                 state?.quizzes?.map( ( quiz ) => (
                                     <AnimatePresence key={ quiz.id }>
@@ -71,7 +71,7 @@ export default function IndexPage() {
                                 ) )
                             ) }
                         </div>
-                    {/* </ErrorBoundary> */}
+                    </ErrorBoundary>
                 </div>
             </div>
         </HelmetProvider>

@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import { motion, useInView } from 'framer-motion';
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import { GridLoader } from 'react-spinners';
+import useQuiz from '../../hooks/useQuiz';
 
 const Loader = () => (
   <div className="w-full flex items-center justify-center p-3">
@@ -22,9 +24,12 @@ const QuizCard = ({ quiz }) => {
   const [loading, setLoading] = React.useState(true);
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true });
+  const { dispatch } = useQuiz();
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    console.log('card clicked');
+    dispatch( { type: "SET_SINGLE_QUIZ", payload: quiz.id } );
+    navigate("/quizzes")
   };
 
   return (
@@ -33,7 +38,7 @@ const QuizCard = ({ quiz }) => {
       ref={ref}
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      exit={{ x: -300 }}
+      exit={{ x: -100 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] cursor-pointer group relative"
     >

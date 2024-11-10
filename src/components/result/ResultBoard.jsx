@@ -1,4 +1,5 @@
 // import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ResultBoard() {
     return (
@@ -30,10 +31,10 @@ export default function ResultBoard() {
                                 </div>
                             </div>
 
-                            <a href="./leaderboard_page.html"
+                            <Link to="/leaderBoard"
                                 className=" bg-secondary py-3 rounded-md hover:bg-secondary/90 transition-colors text-lg font-medium underline text-white">
                                 View Leaderboard
-                            </a>
+                            </Link>
                         </div>
 
                         <div className="w-1/2 bg-primary/80 rounded-md border border-white/20 flex items-center p-4">

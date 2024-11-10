@@ -5,7 +5,7 @@ const actionTypes = {
 
 const initialState = {
     quizzes: [],
-    singleQuiz: null,
+    singleQuiz:"",
 };
 
 const quizReducer = (state, action) => {

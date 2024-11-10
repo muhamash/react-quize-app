@@ -1,33 +1,76 @@
-// import React from 'react'
-import { Suspense } from 'react';
+/* eslint-disable no-unused-vars */
+import { Suspense, useState } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-// import 'react-loading-skeleton/dist/skeleton.css';
+import toast, { Toaster } from 'react-hot-toast';
+import { HashLoader } from 'react-spinners';
+import ErrorBoundary from '../components/common/ErrorBoundary';
 import Quiz from "../components/quizPage/Quiz";
 import QuizCounter from "../components/quizPage/QuizCounter";
+import useAuth from '../hooks/useAuth';
+import { useFetchData } from '../hooks/useFetchData';
+import useQuiz from '../hooks/useQuiz';
 
-export default function QuizePage ()
-{
-  const onNext = () =>
-  {
-    const filledArray = new Array( 5 ).fill( 'value' );
-    console.log( filledArray ); // ["value", "value", "value", "value", "value"]
+export default function QuizPage() {
+  const { state } = useQuiz();
+  const { auth } = useAuth();
+  const [ questionIndex, setQuestionIndex ] = useState( 0 );
+  const [allAnswers, setAllAnswers] = useState([]);
+
+
+  const { data: singleQuiz, isLoading, error } = useFetchData('singleQuiz', `http://localhost:3000/api/quizzes/${state.singleQuiz}`, state.singleQuiz);
+
+  const handleNext = () => {
+    if (questionIndex < singleQuiz.data.questions.length - 1) {
+      setQuestionIndex((prevIndex) => prevIndex + 1);
+    }
+
+    toast( 'Good Job!', {
+      icon: '👏',
+    } );
   };
-  
+
+  const resetQuiz = () =>
+  {
+    setQuestionIndex( 0 );
+    setAllAnswers( [] );
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center">
+        <HashLoader color="#4e1f9b" size={100} speedMultiplier={2} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="w-screen h-screen text-red-700 flex justify-center items-center text-xl">Error! Maybe backend is not connected.</div>;
+  }
+
   return (
     <HelmetProvider>
       <Helmet>
-        <title>Quiz page</title>
+        <title>Quiz Page</title>
       </Helmet>
-      <div className="max-w-8xl mx-auto h-[calc(100vh-10rem)]">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 h-full">
-          <QuizCounter />
-          <div className="lg:col-span-2 bg-white">
-            <Suspense fallback={<p>loading</p> }>
-              <Quiz onNext={onNext}/>
-            </Suspense>
+      <ErrorBoundary>
+         <Toaster />
+        <div className="max-w-8xl mx-auto h-[calc(100vh-10rem)]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 h-full">
+            <QuizCounter user={auth?.user.full_name} quizData={singleQuiz.data} />
+            <div className="lg:col-span-2 bg-white">
+              <Suspense fallback={<p>Loading...</p>}>
+                <Quiz 
+                  question={singleQuiz.data.questions[questionIndex]} 
+                  onNext={handleNext}
+                  currentIndex={questionIndex}
+                  totalQuestions={ singleQuiz.data.questions.length }
+                  resetQuiz={resetQuiz} 
+                />
+              </Suspense>
+            </div>
           </div>
         </div>
-      </div>
+      </ErrorBoundary>
     </HelmetProvider>
   );
 }

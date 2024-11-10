@@ -42,10 +42,10 @@ const useAxios = () =>
                         const refreshToken = auth?.refreshToken;
                         const response = await axios.post( `http://localhost:3000/api/auth/refresh-token`, { refreshToken } );
 
-                        const { tokens } = response.data
-                        console.log( 'new token', tokens );
-                        setAuth( { ...auth, authToken: tokens } );
-                        mainRequest.headers.Authorization = `Bearer ${tokens}`;
+                        const { accessToken } = response.data.data
+                        console.log( 'new token', response );
+                        setAuth( { ...auth, authToken: accessToken } );
+                        mainRequest.headers.Authorization = `Bearer ${accessToken}`;
 
                         return axios( mainRequest )
                     }

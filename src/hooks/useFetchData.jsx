@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import useAxios from '../hooks/useAxios';
 
-export const useFetchData = ( key, url ) =>
+export const useFetchData = ( key, url, id= null ) =>
 {
     const { api } = useAxios();
 
     return useQuery( {
-        queryKey: key,
-        queryFn: async (context) =>
+        queryKey: [key, id],
+        queryFn: async () =>
         {
             const response = await api.get( url );
-            console.log( 'Fetched Data:', response.data.data, context.queryKey );
+            // console.log( 'Fetched Data:', response.data.data, context.queryKey );
             return response.data;
         },
         onError: ( error, variable ) =>

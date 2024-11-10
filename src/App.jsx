@@ -12,7 +12,7 @@ import PrivateRoute from './routes/PrivateRoute';
 const AddQuizCardPage = lazy(() => import('./page/AddQuizCardPage'));
 const CreateQuiz = lazy(() => import('./page/CreateQuiz'));
 const DashBoard = lazy(() => import('./page/DashBoard'));
-const IndexPage = lazy(() => import('./page/IndexPage'));
+const IndexPage = lazy(() => import('./page/HomePage'));
 const LeaderBoard = lazy(() => import('./page/LeaderBoard'));
 const Login = lazy(() => import('./page/Login'));
 const QuizPage = lazy(() => import('./page/QuizePage')); 
