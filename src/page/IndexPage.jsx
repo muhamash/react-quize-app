@@ -3,8 +3,8 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 // import { Toaster toast } from 'react-hot-toast';
 import { HashLoader } from 'react-spinners';
 import ErrorBoundary from "../components/common/ErrorBoundary";
-import QuizCard from '../components/index/QuizCard';
-import UserCard from "../components/index/UserCard";
+import QuizCard from '../components/homePage/QuizCard';
+import UserCard from "../components/homePage/UserCard";
 import useAuth from "../hooks/useAuth";
 import useQuiz from "../hooks/useQuiz";
 
