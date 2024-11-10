@@ -28,10 +28,11 @@ export default function Nav() {
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
 
-        const handleWindowClick = () => {
-            setIsVisible(true);
-            if (hideTimeout.current) clearTimeout(hideTimeout.current);
-            hideTimeout.current = setTimeout(() => setIsVisible(false), 5000);
+        const handleWindowClick = () =>
+        {
+            setIsVisible( true );
+            if ( hideTimeout.current ) clearTimeout( hideTimeout.current );
+            hideTimeout.current = setTimeout( () => setIsVisible( false ), 5000 );
         };
         
         window.addEventListener('click', handleWindowClick);
@@ -87,35 +88,43 @@ export default function Nav() {
                 {/* Hover Card */ }
                 { isHovered && auth?.user && (
                     <motion.div
-                        className="absolute top-10 left-0 w-[150px] p-4 rounded-lg bg-gradient-to-r from-violet-800 via-blue-900 to-cyan-700 backdrop-blur-sm z-20 border border-white/10 shadow-lg"
+                        className="absolute top-10 right-2  p-4 rounded-lg bg-gradient-to-r from-violet-800 via-blue-900 to-cyan-700 backdrop-blur-sm z-20 border border-white/10 shadow-lg"
                         initial={ { opacity: 0, y: -10 } }
                         animate={ { opacity: 1, y: 0 } }
                         exit={ { opacity: 0, y: -10 } }
                         whileHover={ { scale: 1.05 } }
                     >
                         <ul className="text-sm text-white space-y-2">
+                            <li className="bg-green-800 p-1 rounded-md shadow-md">{ auth.user.full_name }</li>
+                            <li className="bg-green-800 p-1 rounded-md shadow-md">{ auth.user.email }</li>
                             <li>
                                 <Link to="/result" className="hover:text-slate-300">Result</Link>
                             </li>
                             <li>
                                 <Link to="/leaderBoard" className="hover:text-slate-300">LeaderBoard</Link>
                             </li>
-                            
+                            <li>
+                                <button
+                                    className="px-4 py-2 rounded hover:bg-primary hover:text-white transition-colors bg-cyan-700"
+                                    style={ { fontFamily: "Jaro" } }>
+                                    { "Logout" }
+                                </button>
+                            </li>
                         </ul>
                     </motion.div>
                 ) }
 
-                <Link to={ `${!auth?.user ? "/registration": "login"}` }>
-                    <button
-                        onClick={ () =>
-                        {
-                            setAuth( {} )
-                            // navigate('/login')
-                        } } className="px-4 py-2 rounded hover:bg-primary hover:text-white transition-colors"
-                        style={ { fontFamily: "Jaro" } }>
-                        { auth?.user ? "Logout" : "Register" }
-                    </button>
-                </Link>
+                {
+                    !auth?.user && (
+                        <Link to={ `/registration` }>
+                            <button
+                                className="px-4 py-2 rounded hover:bg-primary hover:text-white transition-colors"
+                                style={ { fontFamily: "Jaro" } }>
+                                { "Register" }
+                            </button>
+                        </Link>
+                    )
+                }
             </div>
         </motion.header>
     );

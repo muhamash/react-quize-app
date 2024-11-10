@@ -37,7 +37,7 @@ function App() {
           {/* Private Routes for Logged-in Users */}
           <Route element={<PrivateRoute requiredRole="user" />}>
             <Route element={<MainLayout />}>
-              <Route path="/" element={<IndexPage />} />  {/* Accessible to both logged-in and not-logged-in users */}
+              <Route path="/" element={<IndexPage />} /> 
               <Route path="/leaderBoard" element={<LeaderBoard />} />
             </Route>
             <Route element={<QuizLayout />}>
