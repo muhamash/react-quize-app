@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import useAxios from '../hooks/useAxios';
 
-export const useFetchData = ( key, url ,onSuccessCallback ) =>
+export const useFetchData = ( key, url ) =>
 {
     const { api } = useAxios();
 
@@ -11,16 +11,7 @@ export const useFetchData = ( key, url ,onSuccessCallback ) =>
         {
             const response = await api.get( url );
             console.log( 'Fetched Data:', response.data.data, context.queryKey );
-            return response.data.data;
-        },
-        onSuccess: ( response ) =>
-        {
-            const { data } = response.data;
-            console.log( 'onSuccess Triggered:', response );
-            if ( onSuccessCallback )
-            {
-               onSuccessCallback( data );
-            }
+            return response.data;
         },
         onError: ( error, variable ) =>
         {

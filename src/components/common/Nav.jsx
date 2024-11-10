@@ -32,7 +32,7 @@ export default function Nav() {
     }, []);
 
     const handleLogout = () => {
-        setAuth(null); 
+        setAuth({}); 
         navigate('/login');
     };
 

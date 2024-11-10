@@ -34,8 +34,6 @@ const LoginForm = () => {
             if (tokens) {
                 const authToken = tokens.accessToken;
                 const refreshToken = tokens.refreshToken;
-
-                toast.success('User logging in!');
                 setAuth( { user, authToken, refreshToken } );
 
                 // console.log("Auth state after login:", { user, authToken, refreshToken });
