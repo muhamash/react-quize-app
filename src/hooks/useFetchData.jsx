@@ -7,19 +7,24 @@ export const useFetchData = ( key, url ,onSuccessCallback ) =>
 
     return useQuery( {
         queryKey: key,
-        queryFn: async () =>
+        queryFn: async (context) =>
         {
             const response = await api.get( url );
-            console.log( 'Fetched Data:', response.data );
-            return response.data;
+            console.log( 'Fetched Data:', response.data.data, context.queryKey );
+            return response.data.data;
         },
         onSuccess: ( response ) =>
         {
-            console.log( 'onSuccess Triggered:', response.data );
+            const { data } = response.data;
+            console.log( 'onSuccess Triggered:', response );
             if ( onSuccessCallback )
             {
-                onSuccessCallback( response.data );
+               onSuccessCallback( data );
             }
         },
+        onError: ( error, variable ) =>
+        {
+            console.log(error, variable)
+        }
     } );
 }

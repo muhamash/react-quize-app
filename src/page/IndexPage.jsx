@@ -1,6 +1,7 @@
 import { AnimatePresence } from "framer-motion";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { SquareLoader } from 'react-spinners';
+import toast, { Toaster } from 'react-hot-toast';
+import { HashLoader } from 'react-spinners';
 import ErrorBoundary from "../components/common/ErrorBoundary";
 import QuizCard from '../components/index/QuizCard';
 import UserCard from "../components/index/UserCard";
@@ -16,23 +17,36 @@ export default function IndexPage() {
         ['quizzes'],
         'http://localhost:3000/api/quizzes',
         {},
-        ( data ) =>
-        {
-            // not working
-            console.log('Data received in callback:', data); 
-            // dispatch({ type: 'SET_QUIZZES', payload: data });
+        (data) => {
+            console.log('Data received in callback:', data);
+            dispatch({ type: 'SET_QUIZZES', payload: data });
+            toast.success('Quizzes found!', {
+                style: {
+                    border: '1px solid #713200',
+                    padding: '16px',
+                    color: '#713200',
+                },
+                iconTheme: {
+                    primary: '#713200',
+                    secondary: '#FFFAEE',
+                },
+            });
         }
     );
 
-    console.log(state);
-
     if (isLoading) {
-        return <SquareLoader color="#0d4b28" size={100} />;
+        return (
+            <div className="w-screen h-screen flex items-center justify-center">
+                <HashLoader color="#4e1f9b" size={100} speedMultiplier={2} />
+            </div>
+        );
     }
 
     if (error) {
-        return <div className="w-screen h-screen text-red-700 flex justify-center items-center">Error loading quizzes.</div>;
+        return <div className="w-screen h-screen text-red-700 flex justify-center items-center text-xl">Error!!!..May be backend not connected!!</div>;
     }
+
+    console.log(state)
 
     return (
         <HelmetProvider>
@@ -40,6 +54,7 @@ export default function IndexPage() {
                 <title>Quizzes - Home</title>
                 <meta name="description" content="Welcome to the home page!" />
             </Helmet>
+            <Toaster position="top-right" reverseOrder={false} />
             <div className="container mx-auto pt-20">
                 {auth?.user && (
                     <ErrorBoundary>
@@ -52,10 +67,10 @@ export default function IndexPage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <AnimatePresence>
                                 {state.quizzes.length === 0 ? (
-                                    <p className="text-violet-800 font-mono">No quizzes found at the server!</p>
+                                    <p className="text-violet-800 font-mono">No quizzes found on the server!</p>
                                 ) : (
                                     state.quizzes.map((quiz) => (
-                                        <QuizCard key={quiz.id} />
+                                        <QuizCard key={quiz.id} quiz={quiz} />
                                     ))
                                 )}
                             </AnimatePresence>
