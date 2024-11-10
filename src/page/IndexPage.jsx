@@ -48,26 +48,26 @@ export default function IndexPage() {
                 <title>Quizzes - Home</title>
                 <meta name="description" content="Welcome to the home page!" />
             </Helmet>
-            {/* <Toaster position="top-right" reverseOrder={false} /> */}
+            {/* <Toaster position="top-right" reverseOrder={false} /> */ }
             <div className="container mx-auto pt-20">
-                {auth?.user && (
+                { auth?.user && (
                     <ErrorBoundary>
-                        <UserCard userName={auth?.user.full_name} />
+                        <UserCard userName={ auth?.user.full_name } />
                     </ErrorBoundary>
-                )}
+                ) }
                 <div className="bg-white p-6 rounded-md h-full">
                     <h3 className="text-2xl font-bold mb-6">Participate In Quizzes</h3>
                     <ErrorBoundary>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <AnimatePresence>
-                                {state?.quizzes?.length === 0 ? (
-                                    <p className="text-violet-800 font-mono">No quizzes found on the server!</p>
-                                ) : (
-                                    state?.quizzes?.map((quiz) => (
-                                        <QuizCard key={quiz.id} quiz={quiz} />
-                                    ))
-                                )}
-                            </AnimatePresence>
+                            { state?.quizzes?.length === 0 ? (
+                                <p className="text-violet-800 font-mono">No quizzes found on the server!</p>
+                            ) : (
+                                state?.quizzes?.map( ( quiz ) => (
+                                    <AnimatePresence key={ quiz.id }>
+                                        <QuizCard  quiz={ quiz } />
+                                    </AnimatePresence>
+                                ) )
+                            ) }
                         </div>
                     </ErrorBoundary>
                 </div>
