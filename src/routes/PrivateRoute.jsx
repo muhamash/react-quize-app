@@ -14,4 +14,4 @@ export default function PrivateRoute({ requiredRole }) {
   }
 
   return <Outlet />;
-}
+};

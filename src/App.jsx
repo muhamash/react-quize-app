@@ -1,8 +1,9 @@
-import { Suspense, lazy } from 'react';
+import { Fragment, Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { PacmanLoader } from 'react-spinners';
 import './App.css';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import QuizProvider from './context/QuizProvider';
 import AdminLayout from './layouts/AdminLayout';
 import MainLayout from './layouts/MainLayout';
 import QuizLayout from './layouts/QuizLayout';
@@ -23,38 +24,42 @@ function App() {
     <ErrorBoundary>
       <Suspense fallback={
         <div className="flex items-center justify-center min-h-screen">
-          <PacmanLoader color="#067023" margin={2} size={99} speedMultiplier={1} />
+          <PacmanLoader color="#067023" margin={ 2 } size={ 99 } speedMultiplier={ 1 } />
         </div>
       }>
-        <Routes>
-          {/* Public Routes accessible to all users */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<IndexPage />} />
-          </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/registration" element={<RegistrationPage />} />
+        <Fragment>
+          <QuizProvider>
+            <Routes>
+              {/* Public Routes accessible to all users */ }
+              <Route element={ <MainLayout /> }>
+                <Route path="/" element={ <IndexPage /> } />
+              </Route>
+              <Route path="/login" element={ <Login /> } />
+              <Route path="/registration" element={ <RegistrationPage /> } />
 
-          {/* Private Routes for Logged-in Users */}
-          <Route element={<PrivateRoute requiredRole="user" />}>
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<IndexPage />} /> 
-              <Route path="/leaderBoard" element={<LeaderBoard />} />
-            </Route>
-            <Route element={<QuizLayout />}>
-              <Route path="/quizzes" element={<QuizPage />} />
-              <Route path="/result" element={<ResultPage />} />
-            </Route>
-          </Route>
+              {/* Private Routes for Logged-in Users */ }
+              <Route element={ <PrivateRoute requiredRole="user" /> }>
+                <Route element={ <MainLayout /> }>
+                  <Route path="/" element={ <IndexPage /> } />
+                  <Route path="/leaderBoard" element={ <LeaderBoard /> } />
+                </Route>
+                <Route element={ <QuizLayout /> }>
+                  <Route path="/quizzes" element={ <QuizPage /> } />
+                  <Route path="/result" element={ <ResultPage /> } />
+                </Route>
+              </Route>
 
-          {/* Private Routes for Admins */}
-          <Route element={<PrivateRoute requiredRole="admin" />}>
-            <Route element={<AdminLayout />}>
-              <Route path="/dashBoard" element={<DashBoard />} />
-              <Route path="/addQuiz" element={<AddQuizCardPage />} />
-              <Route path="/createQuiz" element={<CreateQuiz />} />
-            </Route>
-          </Route>
-        </Routes>
+              {/* Private Routes for Admins */ }
+              <Route element={ <PrivateRoute requiredRole="admin" /> }>
+                <Route element={ <AdminLayout /> }>
+                  <Route path="/dashBoard" element={ <DashBoard /> } />
+                  <Route path="/addQuiz" element={ <AddQuizCardPage /> } />
+                  <Route path="/createQuiz" element={ <CreateQuiz /> } />
+                </Route>
+              </Route>
+            </Routes>
+          </QuizProvider>
+        </Fragment>
       </Suspense>
     </ErrorBoundary>
   );
