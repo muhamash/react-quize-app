@@ -1,5 +1,6 @@
 // import React from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import LeftReg from "../components/Registration/LeftReg";
 import RegisterForm from "../components/Registration/RegForm";
 
@@ -25,7 +26,9 @@ export default function RegistrationPage() {
                         <h1 className="text-4xl font-bold mb-6">Sign Up</h1>
                         <RegisterForm />
                         <div className="mt-2 text-gray-400">
-                            <p className="text-center">Already have account ? <a href="#" className="text-primary">Sign In</a></p>
+                                <p className="text-center">Already have account? {" "}
+                                    <Link to="/login" className="text-primary">Sign In</Link>
+                                </p>
                         </div>
                     </div>
                 </div>

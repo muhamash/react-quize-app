@@ -1,23 +1,52 @@
-// import React from 'react';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
-const RegisterForm = () =>
-{
+const RegisterForm = () => {
+    const navigate = useNavigate();
     const {
         register,
         watch,
         handleSubmit,
         formState: { errors },
+        setError,
     } = useForm();
 
-    const password = watch( "password" );
-    const onSubmit = ( data ) =>
-    {
-        console.log( data );
+    const password = watch("password");
+
+    // Define mutation
+    const mutation = useMutation({
+        mutationFn: async ( data ) =>
+        {
+            console.log(data)
+            const response = await axios.post( 'http://localhost:3000/api/auth/register', { full_name: data.name, email: data.email, password: data.password } );
+            console.log(response.data)
+            // return response.data;
+        },
+        onSuccess: () => {
+            toast.success("Registration successful!");
+            navigate('/');
+        },
+        onError: (error) => {
+            toast.error(error.response?.data?.message);
+            console.error("Error response:", error.response?.data);
+            setError("root.random", {
+                type: "manual",
+                message: error.response?.data?.message || "An unexpected error occurred."
+            });
+        },
+    });
+
+    const onSubmit = (data) => {
+        mutation.mutate( data );
+        console.log(mutation)
     };
 
     return (
         <form onSubmit={ handleSubmit( onSubmit ) } className="">
+            <Toaster position="top-right" reverseOrder={ false } />
             <div className="">
                 <div className="mb-4">
                     <label htmlFor="name" className="block mb-2">Full Name</label>
@@ -38,7 +67,6 @@ const RegisterForm = () =>
                         id="email"
                         className="w-full px-4 py-3 rounded-lg border border-gray-300"
                         placeholder="Email address"
-                  
                         { ...register( 'email', {
                             required: 'Email is required',
                             pattern: {
@@ -96,8 +124,13 @@ const RegisterForm = () =>
             </div>
 
             <button type="submit" className="w-full bg-primary text-white py-3 rounded-lg mb-2">
-                Create Account
+                { mutation.isPending ? 'Creating Account...' : 'Create Account' }
             </button>
+            { mutation.isError && (
+                <p className="text-red-600">
+                    Error: { mutation.error?.response?.data?.message || mutation.error.message }
+                </p>
+            ) }
         </form>
     );
 };

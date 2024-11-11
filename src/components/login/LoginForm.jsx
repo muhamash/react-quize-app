@@ -29,6 +29,7 @@ const LoginForm = () => {
         },
         onSuccess: ( response ) =>
         {
+            toast.success("Login success!!");
             // console.log("Login success response:", response.data);
             const { tokens, user } = response.data;
             if (tokens) {
@@ -106,6 +107,11 @@ const LoginForm = () => {
             >
                 {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
             </button>
+            { loginMutation.isError && (
+                <p className="text-red-600">
+                    Error: { mutation.error?.response?.data?.message || mutation.error.message }
+                </p>
+            ) }
         </form>
     );
 };
