@@ -9,3 +9,4 @@ Currently, two official plugins are available:
 # react-quize-app
 # batch-2-assignment-5-quiz-application-muhamash
 # batch-2-assignment-5-quiz-application-muhamash
+# batch-2-assignment-5-quiz-application-muhamash
