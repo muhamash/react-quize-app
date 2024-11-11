@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
 
 const RegisterForm = () => {
     const navigate = useNavigate();
@@ -26,8 +28,33 @@ const RegisterForm = () => {
             // return response.data;
         },
         onSuccess: () => {
-            toast.success("Registration successful!");
-            navigate('/');
+            let timerInterval;
+            Swal.fire( {
+                title: "Registration completed!!!",
+                html: "Welcoming you as a new user!!",
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () =>
+                {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector( "b" );
+                    timerInterval = setInterval( () =>
+                    {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100 );
+                },
+                willClose: () =>
+                {
+                    clearInterval( timerInterval );
+                }
+            } ).then( ( result ) =>
+            {
+                if ( result.dismiss === Swal.DismissReason.timer )
+                {
+                    console.log( "I was closed by the timer" );
+                }
+            } );
+            navigate('/login');
         },
         onError: (error) => {
             toast.error(error.response?.data?.message);

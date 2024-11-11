@@ -1,9 +1,12 @@
+ 
 /* eslint-disable no-constant-binary-expression */
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
 import useAuth from '../../hooks/useAuth';
 
 const LoginForm = () => {
@@ -29,9 +32,35 @@ const LoginForm = () => {
         },
         onSuccess: ( response ) =>
         {
-            toast.success("Login success!!");
             // console.log("Login success response:", response.data);
             const { tokens, user } = response.data;
+
+            let timerInterval;
+            Swal.fire( {
+                title: "You are logged in!!!",
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () =>
+                {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector( "b" );
+                    timerInterval = setInterval( () =>
+                    {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100 );
+                },
+                willClose: () =>
+                {
+                    clearInterval( timerInterval );
+                }
+            } ).then( ( result ) =>
+            {
+                if ( result.dismiss === Swal.DismissReason.timer )
+                {
+                    console.log( "I was closed by the timer" );
+                }
+            } );
+            
             if (tokens) {
                 const authToken = tokens.accessToken;
                 const refreshToken = tokens.refreshToken;
@@ -109,7 +138,7 @@ const LoginForm = () => {
             </button>
             { loginMutation.isError && (
                 <p className="text-red-600">
-                    Error: { mutation.error?.response?.data?.message || mutation.error.message }
+                    Error: { loginMutation.error?.response?.data?.message || loginMutation.error.message }
                 </p>
             ) }
         </form>

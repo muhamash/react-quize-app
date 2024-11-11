@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
 import useAuth from '../../hooks/useAuth';
 
 export default function Nav() {
@@ -33,9 +35,30 @@ export default function Nav() {
         lastScrollY.current = currentScrollY;
     }, []);
 
-    const handleLogout = () => {
-        setAuth({}); 
-        navigate('/login');
+    const handleLogout = () =>
+    {
+        Swal.fire( {
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, i am logging out!"
+        } ).then( ( result ) =>
+        {
+            if ( result.isConfirmed )
+            {
+                Swal.fire( {
+                    title: "Logged out!",
+                    text: "Successfully logged out!",
+                    icon: "success"
+                } );
+
+                setAuth( {} );
+                navigate( '/login' );
+            }
+        } );
     };
 
     useEffect(() => {
