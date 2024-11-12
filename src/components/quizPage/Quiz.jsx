@@ -67,6 +67,7 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
             {
                 dispatch( { type: 'GET_QUIZ_ANSWERS', payload: allAnswers } );
                 Swal.fire( 'Submitted!', 'Your quiz has been submitted.', 'success' );
+                
                 setTimeout( () => navigate( '/result' ), 1000 );
             } else
             {
