@@ -95,7 +95,6 @@ export default function QuizPage() {
                       resetQuiz={ resetQuiz }
                       allAnswers={ allAnswers }
                     />
-
                   ) }
                 </AnimatePresence>
               </Suspense>

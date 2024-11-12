@@ -88,7 +88,6 @@ export default function ResultPage() {
                             </AnimatePresence>
                         </div>
                     </div>
-
                 </div>
             </div>
         </HelmetProvider>
