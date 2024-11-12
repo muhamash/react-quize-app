@@ -12,7 +12,7 @@ import PrivateRoute from './routes/PrivateRoute';
 const AddQuizCardPage = lazy(() => import('./page/AddQuizCardPage'));
 const CreateQuiz = lazy(() => import('./page/CreateQuiz'));
 const DashBoard = lazy(() => import('./page/DashBoard'));
-const IndexPage = lazy(() => import('./page/HomePage'));
+const HomePage = lazy(() => import('./page/HomePage'));
 const LeaderBoard = lazy(() => import('./page/LeaderBoard'));
 const Login = lazy(() => import('./page/Login'));
 const QuizPage = lazy(() => import('./page/QuizePage')); 
@@ -32,7 +32,7 @@ function App() {
             <Routes>
               {/* Public Routes accessible to all users */ }
               <Route element={ <MainLayout /> }>
-                <Route path="/" element={ <IndexPage /> } />
+                <Route path="/" element={ <HomePage /> } />
               </Route>
               <Route path="/login" element={ <Login /> } />
               <Route path="/registration" element={ <RegistrationPage /> } />
@@ -40,7 +40,7 @@ function App() {
               {/* Private Routes for Logged-in Users */ }
               <Route element={ <PrivateRoute requiredRole="user" /> }>
                 <Route element={ <MainLayout /> }>
-                  <Route path="/" element={ <IndexPage /> } />
+                  <Route path="/" element={ <HomePage /> } />
                   <Route path="/leaderBoard" element={ <LeaderBoard /> } />
                 </Route>
                 <Route element={ <QuizLayout /> }>

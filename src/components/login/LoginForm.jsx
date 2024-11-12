@@ -38,6 +38,7 @@ const LoginForm = () => {
             let timerInterval;
             Swal.fire( {
                 title: "You are logged in!!!",
+                html: `Welcome Back ${user.full_name}`,
                 timer: 2000,
                 timerProgressBar: true,
                 didOpen: () =>
@@ -53,13 +54,14 @@ const LoginForm = () => {
                 {
                     clearInterval( timerInterval );
                 }
-            } ).then( ( result ) =>
-            {
-                if ( result.dismiss === Swal.DismissReason.timer )
-                {
-                    console.log( "I was closed by the timer" );
-                }
             } );
+            //     .then( ( result ) =>
+            // {
+            //     if ( result.dismiss === Swal.DismissReason.timer )
+            //     {
+            //         console.log( "I was closed by the timer" );
+            //     }
+            // } );
             
             if (tokens) {
                 const authToken = tokens.accessToken;

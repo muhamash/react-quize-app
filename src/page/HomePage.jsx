@@ -8,7 +8,7 @@ import UserCard from "../components/homePage/UserCard";
 import useAuth from "../hooks/useAuth";
 import useQuiz from "../hooks/useQuiz";
 
-export default function IndexPage() {
+export default function HomePage() {
     const { auth } = useAuth();
     const { state, isLoading, error } = useQuiz();
     

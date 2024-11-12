@@ -31,7 +31,7 @@ const RegisterForm = () => {
             let timerInterval;
             Swal.fire( {
                 title: "Registration completed!!!",
-                html: "Welcoming you as a new user!!",
+                html: `Welcoming you as a new user!!`,
                 timer: 2000,
                 timerProgressBar: true,
                 didOpen: () =>
@@ -47,18 +47,19 @@ const RegisterForm = () => {
                 {
                     clearInterval( timerInterval );
                 }
-            } ).then( ( result ) =>
-            {
-                if ( result.dismiss === Swal.DismissReason.timer )
-                {
-                    console.log( "I was closed by the timer" );
-                }
             } );
+            //     .then( ( result ) =>
+            // {
+            //     if ( result.dismiss === Swal.DismissReason.timer )
+            //     {
+            //         console.log( result );
+            //     }
+            // } );
             navigate('/login');
         },
         onError: (error) => {
             toast.error(error.response?.data?.message);
-            console.error("Error response:", error.response?.data);
+            console.error("Error response:", error?.response?.data);
             setError("root.random", {
                 type: "manual",
                 message: error.response?.data?.message || "An unexpected error occurred."
