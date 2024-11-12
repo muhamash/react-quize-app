@@ -8,6 +8,7 @@ import { usePostData } from '../../hooks/usePostData';
 
 const RegisterForm = () => {
     const navigate = useNavigate();
+    
     const {
         register,
         watch,

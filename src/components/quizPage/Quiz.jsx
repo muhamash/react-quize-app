@@ -35,7 +35,6 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
         transition: { duration: 0.3 },
     };
 
-
     const handleOptionChange = ( option ) =>
     {
         setCurrentSelection( [ option ] );
@@ -79,7 +78,6 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
             }
         } );
     };
-
 
     const onSubmit = () =>
     {

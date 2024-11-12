@@ -17,8 +17,8 @@ export default function QuizPage() {
   const [allAnswers, setAllAnswers] = useState([]);
 
   const { data: singleQuiz, isLoading, error } = useFetchData(
-    'singleQuiz',
-    `http://localhost:3000/api/quizzes/${state.quizzes[0].id}`,
+    `singleQuiz_${state?.quizzes[0]?.id}`,
+    `http://localhost:3000/api/quizzes/${state?.quizzes[ 0 ]?.id}`,
   );
 
   const handleNext = ( selectedOptions ) =>
@@ -44,7 +44,6 @@ export default function QuizPage() {
 
     setQuestionIndex( ( prevIndex ) => prevIndex + 1 );
   };
-
 
   const handlePrevious = () => {
     if (questionIndex > 0) {
