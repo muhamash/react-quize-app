@@ -1,8 +1,5 @@
 /* eslint-disable react/prop-types */
-// import React from 'react';
-
-export default function Radio ( { label, name, value, checked} )
-{
+export default function Radio({ label, name, value, checked, selected, onChange }) {
     return (
         <div>
             <label className="flex items-center space-x-3">
@@ -11,9 +8,11 @@ export default function Radio ( { label, name, value, checked} )
                     name={name}
                     value={value}
                     checked={checked}
-                    className="form-radio text-buzzr-purple"
+                    onChange={onChange} // Use onChange for controlled input
+                    className={`form-radio ${checked ? 'text-violet-600 ring-2 ring-violet-500' : 'text-gray-400'}`}
                 />
                 <span>{label}</span>
+                {selected && <span className="text-green-500 ml-2 text-sm">user selected</span>}
             </label>
         </div>
     );

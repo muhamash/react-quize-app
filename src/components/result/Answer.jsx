@@ -1,15 +1,20 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-// import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import useQuiz from '../../hooks/useQuiz';
 import Radio from './Radio';
 
-export default function Answer ( { data } )
-{
-
+export default function Answer({ data }) {
     const { state } = useQuiz();
-    console.log( data );
-    console.log(state.quizAnswers)
+    const { control, setValue } = useForm();
+
+    // Find the selected option for this question
+    const userSelectedOption = state.quizAnswers.find((u) => u.questionId === data.id)?.selectedOption;
+
+    // Set the initial value for this question’s answer if it exists
+    if (userSelectedOption) {
+        setValue(`question_${data.id}`, userSelectedOption);
+    }
 
     const slideAnimation = {
         initial: { y: -300, opacity: 0 },
@@ -19,24 +24,32 @@ export default function Answer ( { data } )
     };
 
     return (
-        <motion.div className="rounded-lg overflow-hidden shadow-sm mb-4" { ...slideAnimation }>
+        <motion.div className="rounded-lg overflow-hidden shadow-sm mb-4" {...slideAnimation}>
             <div className="bg-white p-6 !pb-2">
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-semibold">{ data.question }</h3>
+                    <h3 className="text-lg font-semibold">{data.question}</h3>
                 </div>
-                {/* radio */ }
+                {/* Render Radio options with Controller */}
                 <div className="space-y-2">
-                    {
-                        data.options.map( ( o, i ) => (
-                            <Radio key={ i }label={o}/>
-                        ))
-                    }
+                    {data.options.map((option, index) => (
+                        <Controller
+                            key={index}
+                            name={`question_${data.id}`}
+                            control={control}
+                            defaultValue={userSelectedOption}
+                            render={({ field }) => (
+                                <Radio
+                                    {...field}
+                                    label={option}
+                                    value={userSelectedOption}
+                                    checked={true}
+                                    selected={userSelectedOption}
+                                />
+                            )}
+                        />
+                    ))}
                 </div>
             </div>
-            {/* <div className="flex space-x-4 bg-primary/10 px-6 py-2">
-                <button className="text-red-600 hover:text-red-800 font-medium">Delete</button>
-                <button className="text-primary hover:text-primary/80 font-medium">Edit Question</button>
-            </div> */}
         </motion.div>
     );
 }

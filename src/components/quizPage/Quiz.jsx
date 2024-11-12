@@ -45,7 +45,7 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
         const currentQuestionId = question.id;
         const updatedAnswers = prevAnswers.map((answer) =>
           answer.questionId === currentQuestionId
-            ? { ...answer, selectedOptions: updatedSelection }
+            ? { ...answer, selectedOption: updatedSelection }
             : answer
         );
 
