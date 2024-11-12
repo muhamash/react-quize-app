@@ -7,10 +7,10 @@ export const useFetchData = ( key, url, id= null ) =>
 
     return useQuery( {
         queryKey: [key, id],
-        queryFn: async () =>
+        queryFn: async (context) =>
         {
             const response = await api.get( url );
-            // console.log( 'Fetched Data:', response.data.data, context.queryKey );
+            console.log( 'Fetched Data:', response.data.data, context.queryKey );
             return response.data;
         },
         onError: ( error, variable ) =>

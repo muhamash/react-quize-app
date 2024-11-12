@@ -28,7 +28,7 @@ const QuizCard = ({ quiz }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    dispatch( { type: "SET_SINGLE_QUIZ", payload: quiz.id } );
+    // dispatch( { type: "SET_SINGLE_QUIZ", payload: quiz.id } );
     navigate("/quizzes")
   };
 

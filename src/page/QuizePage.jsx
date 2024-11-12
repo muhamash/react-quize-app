@@ -18,8 +18,7 @@ export default function QuizPage() {
 
   const { data: singleQuiz, isLoading, error } = useFetchData(
     'singleQuiz',
-    `http://localhost:3000/api/quizzes/${state.singleQuiz}`,
-    state.singleQuiz
+    `http://localhost:3000/api/quizzes/${state.quizzes[0].id}`,
   );
 
   const handleNext = ( selectedOptions ) =>

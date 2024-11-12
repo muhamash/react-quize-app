@@ -3,8 +3,13 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import Answer from "../components/result/Answer";
 import ResultBoard from "../components/result/ResultBoard";
+import useQuiz from '../hooks/useQuiz';
 
-export default function ResultPage() {
+export default function ResultPage ()
+{
+    const { state } = useQuiz();
+    console.log( state.quizAnswers, state.quizzes[ 0 ].id );
+
     return (
         <HelmetProvider>
             <Helmet>

@@ -19,6 +19,17 @@ export default function QuizProvider ({children})
         dispatch({ type: "SET_QUIZZES", payload: data.data });
     };
 
+    const quizId = state.quizzes[ 0 ]?.id;
+    
+    const { data: singleQuizAnswer } = useFetchData(
+        `${quizId}`,
+        `http://localhost:3000/api/quizzes/${quizId}/attempt`
+    );
+
+    if (singleQuizAnswer) {
+        dispatch({ type: 'GET_QUIZ_ANSWERS_SERVER', payload: singleQuizAnswer.data });
+    };
+
     return <QuizContext.Provider
         value={
             {

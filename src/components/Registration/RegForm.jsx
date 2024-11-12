@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+/* eslint-disable no-unused-vars */
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
+import { usePostData } from '../../hooks/usePostData';
 
 const RegisterForm = () => {
     const navigate = useNavigate();
@@ -16,60 +16,53 @@ const RegisterForm = () => {
         setError,
     } = useForm();
 
-    const password = watch("password");
-
-    // Define mutation
-    const mutation = useMutation({
-        mutationFn: async ( data ) =>
-        {
-            console.log(data)
-            const response = await axios.post( 'http://localhost:3000/api/auth/register', { full_name: data.name, email: data.email, password: data.password } );
-            console.log(response.data)
-            // return response.data;
-        },
-        onSuccess: () => {
-            let timerInterval;
-            Swal.fire( {
-                title: "Registration completed!!!",
-                html: `Welcoming you as a new user!!`,
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: () =>
+    const password = watch( "password" );
+    
+    const onSuccess = ( response ) =>
+    {
+        let timerInterval;
+        Swal.fire( {
+            title: "Registration completed!!!",
+            html: `Welcoming you as a new user!!`,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () =>
+            {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector( "b" );
+                timerInterval = setInterval( () =>
                 {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector( "b" );
-                    timerInterval = setInterval( () =>
-                    {
-                        timer.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100 );
-                },
-                willClose: () =>
-                {
-                    clearInterval( timerInterval );
-                }
-            } );
-            //     .then( ( result ) =>
-            // {
-            //     if ( result.dismiss === Swal.DismissReason.timer )
-            //     {
-            //         console.log( result );
-            //     }
-            // } );
-            navigate('/login');
-        },
-        onError: (error) => {
-            toast.error(error.response?.data?.message);
-            console.error("Error response:", error?.response?.data);
-            setError("root.random", {
-                type: "manual",
-                message: error.response?.data?.message || "An unexpected error occurred."
-            });
-        },
-    });
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100 );
+            },
+            willClose: () =>
+            {
+                clearInterval( timerInterval );
+            }
+        } );
+            
+        navigate( '/login' );
+    };
 
+    const onError = ( error ) =>
+    {
+        toast.error( error.response?.data?.message );
+
+        console.error( "Error response:", error?.response?.data );
+        setError( "root.random", {
+            type: "manual",
+            message: error.response?.data?.message || "An unexpected error occurred."
+        } );
+    };
+
+    const registrationMutation = usePostData( {
+        url: "http://localhost:3000/api/auth/register",
+        onSuccess,
+        onError
+    } );
+    
     const onSubmit = (data) => {
-        mutation.mutate( data );
-        console.log(mutation)
+        registrationMutation.mutate( { full_name: data.name, email: data.email, password: data.password } );
     };
 
     return (
@@ -152,11 +145,11 @@ const RegisterForm = () => {
             </div>
 
             <button type="submit" className="w-full bg-primary text-white py-3 rounded-lg mb-2">
-                { mutation.isPending ? 'Creating Account...' : 'Create Account' }
+                { registrationMutation.isPending ? 'Creating Account...' : 'Create Account' }
             </button>
-            { mutation.isError && (
+            { registrationMutation.isError && (
                 <p className="text-red-600">
-                    Error: { mutation.error?.response?.data?.message || mutation.error.message }
+                    Error: { registrationMutation.error?.response?.data?.message || register.error.message }
                 </p>
             ) }
         </form>
