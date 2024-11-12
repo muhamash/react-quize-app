@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
  
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
@@ -35,21 +36,31 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
         transition: { duration: 0.3 },
     };
 
-    const handleOptionChange = ( option ) =>
-    {
-        setCurrentSelection( [ option ] );
+    const handleOptionChange = (option) => {
+  setCurrentSelection((prevSelection) => {
+    const isSelected = prevSelection.includes(option);
 
-        const updatedAnswers = answers.map( answer =>
-            answer.questionId === question.id ? { ...answer, selectedOptions: [ option ] } : answer
-        );
+    // Toggle option in the selection
+    const updatedSelection = isSelected
+      ? prevSelection.filter((item) => item !== option)
+      : [...prevSelection, option];
 
-        if ( !updatedAnswers.find( answer => answer.questionId === question.id ) )
-        {
-            updatedAnswers.push( { questionId: question.id, selectedOptions: [ option ] } );
-        }
+    // Update the answers with the current question's updated options
+    const updatedAnswers = answers.map((answer) =>
+      answer.questionId === question.id
+        ? { ...answer, selectedOptions: updatedSelection }
+        : answer
+    );
 
-        setAnswers( updatedAnswers );
-    };
+    // If the question is not in answers, add it with the updated selection
+    if (!updatedAnswers.find((answer) => answer.questionId === question.id)) {
+      updatedAnswers.push({ questionId: question.id, selectedOptions: updatedSelection });
+    }
+
+    setAnswers(updatedAnswers);
+    return updatedSelection;
+  });
+};
 
     const handleQuizSubmission = () =>
     {
@@ -65,19 +76,19 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
         {
             if ( result.isConfirmed )
             {
-                dispatch( { type: 'GET_QUIZ_ANSWERS', payload: allAnswers } );
                 Swal.fire( 'Submitted!', 'Your quiz has been submitted.', 'success' );
-                
                 setTimeout( () => navigate( '/result' ), 1000 );
             } else
             {
-                toast( 'You are not allow review your answers at this time and try again from the beginning.', {
+                toast( 'Please review your answers or start again.', {
                     icon: '📰',
                     style: { border: '1px solid #007bff', padding: '16px', color: '#007bff' },
                 } );
                 resetQuiz();
             }
         } );
+
+        dispatch( { type: 'GET_QUIZ_ANSWERS', payload: answers } );
     };
 
     const onSubmit = () =>
@@ -93,11 +104,9 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
         if ( currentIndex + 1 === totalQuestions )
         {
             handleQuizSubmission();
-            
         } else
         {
             onNext( currentSelection );
-            // setCurrentSelection( [] );
             setShuffledOptions( shuffleOptions( question.options ) );
         }
     };
