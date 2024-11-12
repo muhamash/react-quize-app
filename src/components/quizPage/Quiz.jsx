@@ -11,7 +11,7 @@ import { QuizOption } from './QuizOption';
 
 export default function Quiz({ question, onNext, onPrevious, currentIndex, totalQuestions, selectedOptions, resetQuiz, allAnswers }) {
   const [shuffledOptions, setShuffledOptions] = useState([]);
-  const [currentSelection, setCurrentSelection] = useState(selectedOptions || []);
+  const [currentSelection, setCurrentSelection] = useState(selectedOptions);
   const [answers, setAnswers] = useState([]);
   const { handleSubmit } = useForm();
   const navigate = useNavigate();
@@ -92,6 +92,7 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
         if ( currentIndex + 1 === totalQuestions )
         {
             handleQuizSubmission();
+            
         } else
         {
             onNext( currentSelection );
