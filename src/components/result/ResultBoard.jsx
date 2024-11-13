@@ -4,7 +4,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { Link } from 'react-router-dom';
 import useQuiz from '../../hooks/useQuiz';
 
-export default function ResultBoard ()
+export default function ResultBoard ({onClose})
 {
     const { state } = useQuiz();
 
@@ -41,7 +41,7 @@ export default function ResultBoard ()
                                 </div>
                             </div>
 
-                            <Link to="/leaderBoard"
+                            <Link onClick={()=> onClose()} to="/leaderBoard"
                                 className=" bg-secondary py-3 rounded-md hover:bg-secondary/90 transition-colors text-lg font-medium underline text-white">
                                 View Leaderboard
                             </Link>

@@ -1,4 +1,3 @@
- 
 import { AnimatePresence } from "framer-motion";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 // import { Toaster toast } from 'react-hot-toast';
@@ -13,23 +12,6 @@ export default function HomePage() {
     const { auth } = useAuth();
     const { state, isLoading, error } = useQuiz();
     
-    // const toastShown = useRef(false);
-    // if (state?.quizzes && !toastShown.current) {
-    //     setTimeout(() => {
-    //         toast.success('Look at my styles.', {
-    //             style: {
-    //                 border: '1px solid #713200',
-    //                 padding: '16px',
-    //                 color: '#713200',
-    //             },
-    //             iconTheme: {
-    //                 primary: '#713200',
-    //                 secondary: '#FFFAEE',
-    //             },
-    //         } );
-    //         toastShown.current = true;
-    //     }, 100);   
-    // }
 
     if (isLoading) {
         return (

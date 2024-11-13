@@ -6,7 +6,6 @@ import ErrorBoundary from './components/common/ErrorBoundary';
 import QuizProvider from './context/QuizProvider';
 import AdminLayout from './layouts/AdminLayout';
 import MainLayout from './layouts/MainLayout';
-import QuizLayout from './layouts/QuizLayout';
 import PrivateRoute from './routes/PrivateRoute';
 
 const AddQuizCardPage = lazy(() => import('./page/AddQuizCardPage'));
@@ -15,11 +14,13 @@ const DashBoard = lazy(() => import('./page/DashBoard'));
 const HomePage = lazy(() => import('./page/HomePage'));
 const LeaderBoard = lazy(() => import('./page/LeaderBoard'));
 const Login = lazy(() => import('./page/Login'));
-const QuizPage = lazy(() => import('./page/QuizePage')); 
+// const QuizPage = lazy(() => import('./page/QuizePage')); 
 const RegistrationPage = lazy(() => import('./page/RegistrationPage'));
-const ResultPage = lazy(() => import('./page/ResultPage'));
+// const ResultPage = lazy(() => import('./page/ResultPage'));
 
-function App() {
+function App ()
+{
+  // const location = useLocation()
   return (
     <ErrorBoundary>
       <Suspense fallback={
@@ -36,10 +37,10 @@ function App() {
                   <Route path="/" element={ <HomePage /> } />
                   <Route path="/leaderBoard" element={ <LeaderBoard /> } />
                 </Route>
-                <Route element={ <QuizLayout /> }>
+                {/* <Route element={ <QuizLayout /> }>
                   <Route path="/quizzes" element={ <QuizPage /> } />
                   <Route path="/result" element={ <ResultPage /> } />
-                </Route>
+                </Route> */}
               </Route>
 
               {/* Private Routes for Admins */ }

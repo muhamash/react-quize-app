@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
  
 import { AnimatePresence } from 'framer-motion';
@@ -12,7 +14,7 @@ import { usePostData } from '../hooks/usePostData';
 import useQuiz from '../hooks/useQuiz';
 
 
-export default function ResultPage() {
+export default function ResultPage({onClose}) {
     const { state, dispatch } = useQuiz();
 
     console.log(  state.quizAnswerServer );
@@ -80,10 +82,8 @@ export default function ResultPage() {
             </Helmet>
             <div className="bg-background text-foreground min-h-screen">
                 <div className="flex min-h-screen overflow-hidden">
-                    <Link to="/">
-                        <img src="./assets/logo-white.svg" className="max-h-11 fixed left-6 top-6 z-50" />
-                    </Link>
-                    <ResultBoard />
+                    <img src="./assets/logo-white.svg" className="max-h-11 fixed left-6 top-6 z-50" />
+                    <ResultBoard onClose={ onClose } />
                     <div className="flex items-center justify-center h-screen md:w-1/2 p-8">
                         <div className="h-full w-full max-h-full overflow-y-scroll py-10">
                             <AnimatePresence mode="wait">

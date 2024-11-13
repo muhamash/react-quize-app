@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import useQuiz from '../../hooks/useQuiz';
 import { QuizOption } from './QuizOption';
 
-export default function Quiz({ question, onNext, onPrevious, currentIndex, totalQuestions, selectedOptions, resetQuiz, allAnswers, setAllAnswers, data }) {
+export default function Quiz({ question, onNext, onPrevious, currentIndex, totalQuestions, selectedOptions, resetQuiz, allAnswers, setAllAnswers, onModalNext }) {
   const [shuffledOptions, setShuffledOptions] = useState([]);
   const [currentSelection, setCurrentSelection] = useState(selectedOptions || []);
   const { handleSubmit } = useForm();
@@ -28,9 +28,9 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
   }, [question]);
 
   const slideAnimation = {
-    initial: { y: currentIndex % 5 === 0 ? 300 : -300, opacity: 0 },
+    initial: { y: currentIndex % 5 === 0 ? 50 : -50, opacity: 0 },
     animate: { y: 0, opacity: 1 },
-    exit: { y: currentIndex % 3 === 0 ? -300 : 300, opacity: 0 },
+    exit: { y: currentIndex % 3 === 0 ? -50 : 50, opacity: 0 },
     transition: { duration: 0.3 },
   };
 
@@ -89,8 +89,8 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
       if ( result.isConfirmed )
       {
         dispatch( { type: 'GET_QUIZ_ANSWERS', payload: allAnswers } );
-        Swal.fire('Submitted!', 'Your quiz has been submitted.', 'success');
-        setTimeout(() => navigate('/result'), 1000);
+        Swal.fire( 'Submitted!', 'Your quiz has been submitted.', 'success' );
+        onModalNext();
       } else {
         toast('Please review your answers or start again.', {
           icon: '📰',

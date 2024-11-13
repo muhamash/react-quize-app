@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { AnimatePresence } from 'framer-motion';
 import { Suspense, useState } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
@@ -10,7 +11,7 @@ import useAuth from '../hooks/useAuth';
 import { useFetchData } from '../hooks/useFetchData';
 import useQuiz from '../hooks/useQuiz';
 
-export default function QuizPage() {
+export default function QuizPage({onModalNext}) {
   const { state } = useQuiz();
   const { auth } = useAuth();
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -83,7 +84,7 @@ export default function QuizPage() {
                 <AnimatePresence mode="wait">
                   { singleQuiz.data.questions && (
                     <Quiz
-                      key={ singleQuiz.data.questions[ questionIndex ].id } 
+                      key={ singleQuiz.data.questions[ questionIndex ].id }
                       question={ singleQuiz.data.questions[ questionIndex ] }
                       onNext={ handleNext }
                       onPrevious={ handlePrevious }
@@ -95,7 +96,8 @@ export default function QuizPage() {
                       resetQuiz={ resetQuiz }
                       allAnswers={ allAnswers }
                       setAllAnswers={ setAllAnswers }
-                      data={singleQuiz}
+                      data={ singleQuiz }
+                      onModalNext={onModalNext }
                     />
                   ) }
                 </AnimatePresence>
