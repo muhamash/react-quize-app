@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
+ 
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
  
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
 import { HashLoader } from 'react-spinners';
 import Answer from "../components/result/Answer";
 import ResultBoard from "../components/result/ResultBoard";
@@ -80,12 +79,11 @@ export default function ResultPage({onClose}) {
             <Helmet>
                 <title>Your results</title>
             </Helmet>
-            <div className="bg-background text-foreground min-h-screen">
-                <div className="flex min-h-screen overflow-hidden">
-                    <img src="./assets/logo-white.svg" className="max-h-11 fixed left-6 top-6 z-50" />
+            <div className="bg-background text-foreground w-fit h-fit py-1 ">
+                <div className="flex flex-wrap overflow-hidden">
                     <ResultBoard onClose={ onClose } />
-                    <div className="flex items-center justify-center h-screen md:w-1/2 p-8">
-                        <div className="h-full w-full max-h-full overflow-y-scroll py-10">
+                    <div className="flex items-center justify-center h-[700px] md:w-1/2 ">
+                        <div className="h-full w-full overflow-y-scroll">
                             <AnimatePresence mode="wait">
                                 <div className="px-4">
                                     { singleQuiz?.data?.questions.map( ( data ) => (
