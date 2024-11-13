@@ -1,7 +1,10 @@
 // import React from 'react';
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 import { Link } from 'react-router-dom';
 
-export default function ResultBoard() {
+export default function ResultBoard ()
+{
     return (
         <div className="max-h-screen overflow-hidden hidden lg:flex lg:w-1/2 bg-primary flex-col justify-center p-12 relative">
             <div>
@@ -42,8 +45,14 @@ export default function ResultBoard() {
                                 <p className="text-2xl font-bold">5/10</p>
                                 <p>Your Mark</p>
                             </div>
-                            <div>
-                                <img src="./assets/icons/circular-progressbar.svg" className="h-20" />
+                            <div style={{ width: 150, height: 150 }}>
+                                <CircularProgressbarWithChildren strokeWidth={20}   value={ 66 }>
+                                {/* Put any JSX content in here that you'd like. It'll be vertically and horizonally centered. */ }
+                                <img style={ { width: 40, marginTop: -5 } } src="https://i.imgur.com/b9NyUGm.png" alt="doge" />
+                                <div style={ { fontSize: 12, marginTop: -5 } }>
+                                    <strong>66%</strong>
+                                </div>
+                            </CircularProgressbarWithChildren>
                             </div>
                         </div>
                     </div>
