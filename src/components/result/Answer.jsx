@@ -1,20 +1,44 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Controller, useForm } from 'react-hook-form';
 import useQuiz from '../../hooks/useQuiz';
-import Radio from './Radio';
+import { SelectionTracker } from './Radio';
+
+const correctAnswerResponse = [
+    {
+        id: "4fc4f709-13e9-4555-9d03-f487c8a01aa4",
+        correctAnswer: "A web server"
+    },
+    {
+        id: "15eb9586-97b3-4ca0-b48e-0702f133d6c1",
+        correctAnswer: "useReducer"
+    },
+    {
+        id: "42c1ff89-afc8-47e5-92cc-277f562135e2",
+        correctAnswer: "Creative Style System"
+    },
+    {
+        id: "0841efeb-39c3-476e-99e9-342c033c56a6",
+        correctAnswer: "string"
+    },
+    {
+        id: "1a99732e-acd6-4b6e-adf9-2c3e71841d85",
+        correctAnswer: "var variableName"
+    },
+    {
+        id: "1eecba79-a790-498a-8519-1292dcc4dc3d",
+        correctAnswer: "<href>"
+    }
+]
 
 export default function Answer({ data }) {
     const { state } = useQuiz();
-    const { control, setValue } = useForm();
 
     // Find the selected option for this question
-    const userSelectedOption = state.quizAnswers.find((u) => u.questionId === data.id)?.selectedOption;
-
-    // Set the initial value for this question’s answer if it exists
-    if (userSelectedOption) {
-        setValue(`question_${data.id}`, userSelectedOption);
-    }
+    const userSelectedOption = state.quizAnswers.find( ( u ) => u.questionId === data.id )?.selectedOption;
+    const correctAnswer = correctAnswerResponse.find( ( u ) => u.id === data.id )?.correctAnswer;
+    const userSelection = userSelectedOption[ 0 ];
+    
+    console.log(correctAnswer, userSelection)
 
     const slideAnimation = {
         initial: { y: -300, opacity: 0 },
@@ -30,26 +54,13 @@ export default function Answer({ data }) {
                     <h3 className="text-lg font-semibold">{data.question}</h3>
                 </div>
                 {/* Render Radio options with Controller */}
-                <div className="space-y-2">
+                <div className={`space-y-2 ${correctAnswer === userSelection && correctAnswer.length === userSelection.length ? 'bg-slate-400' : 'bg-rose-400'} p-3 rounded-md`}>
                     {data.options.map((option, index) => (
-                        <Controller
-                            key={index}
-                            name={`question_${data.id}`}
-                            control={control}
-                            defaultValue={userSelectedOption}
-                            render={({ field }) => (
-                                <Radio
-                                    {...field}
-                                    label={option}
-                                    value={userSelectedOption}
-                                    checked={true}
-                                    selected={userSelectedOption}
-                                />
-                            )}
-                        />
+                        <SelectionTracker key={ index } label={ option } name={option} value={option} checked={userSelection === option} isUserSelection={userSelection === option} isCorrectAnswer={correctAnswer === option}/>
                     ))}
                 </div>
             </div>
         </motion.div>
     );
 }
+
