@@ -30,13 +30,6 @@ function App() {
         <Fragment>
           <QuizProvider>
             <Routes>
-              {/* Public Routes accessible to all users */ }
-              <Route element={ <MainLayout /> }>
-                <Route path="/" element={ <HomePage /> } />
-              </Route>
-              <Route path="/login" element={ <Login /> } />
-              <Route path="/registration" element={ <RegistrationPage /> } />
-
               {/* Private Routes for Logged-in Users */ }
               <Route element={ <PrivateRoute requiredRole="user" /> }>
                 <Route element={ <MainLayout /> }>
@@ -57,6 +50,13 @@ function App() {
                   <Route path="/createQuiz" element={ <CreateQuiz /> } />
                 </Route>
               </Route>
+
+              {/* Public Routes accessible to all users */ }
+              <Route element={ <MainLayout /> }>
+                <Route path="/" element={ <HomePage /> } />
+              </Route>
+              <Route path="/login" element={ <Login /> } />
+              <Route path="/registration" element={ <RegistrationPage /> } />
             </Routes>
           </QuizProvider>
         </Fragment>

@@ -10,7 +10,8 @@ export default function ResultBoard ()
 
     const { quizAnswerServer } = state;
 
-    const totalQuizMarks = quizAnswerServer.submittedAnswers.total_marks;
+    // const totalQuizMarks = quizAnswerServer.submittedAnswers.total_marks;
+
     return (
         <div className="max-h-screen overflow-hidden hidden lg:flex lg:w-1/2 bg-primary flex-col justify-center p-12 relative">
             <div>
@@ -25,7 +26,7 @@ export default function ResultBoard ()
                         <div className="w-1/2">
                             <div className="flex gap-6 my-6">
                                 <div>
-                                    <p className="font-semibold text-2xl my-0">{ quizAnswerServer.submittedAnswers.length }</p>
+                                    <p className="font-semibold text-2xl my-0">{ 6 }</p>
                                     <p className="text-gray-300">Questions</p>
                                 </div>
 
@@ -48,7 +49,7 @@ export default function ResultBoard ()
 
                         <div className="w-1/2 bg-primary/80 rounded-md border border-white/20 flex items-center p-4">
                             <div className="flex-1">
-                                <p className="text-2xl font-bold">5/ <span>{ totalQuizMarks }</span> </p>
+                                <p className="text-2xl font-bold">5/ <span>{ 30 }</span> </p>
                                 <p>Your Mark</p>
                             </div>
                             <div style={{ width: 150, height: 150 }}>

@@ -94,7 +94,8 @@ export default function QuizPage() {
                       )?.selectedOption || [] }
                       resetQuiz={ resetQuiz }
                       allAnswers={ allAnswers }
-                      setAllAnswers={setAllAnswers}
+                      setAllAnswers={ setAllAnswers }
+                      data={singleQuiz}
                     />
                   ) }
                 </AnimatePresence>

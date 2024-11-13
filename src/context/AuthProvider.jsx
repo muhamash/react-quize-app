@@ -1,48 +1,44 @@
 /* eslint-disable react/prop-types */
 import localforage from 'localforage';
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AuthContext } from '../context/index';
 
 export default function AuthProvider({ children }) {
-    const [ auth, setAuth ] = React.useState( {} );
+    const [auth, setAuth] = useState(null);
+    const [loading, setLoading] = useState(true);  
 
-    useEffect( () =>
-    {
-        const loadAuth = async () =>
-        {
-            const storedAuth = await localforage.getItem( 'auth' );
-            
-            console.log( storedAuth );
-            if ( storedAuth )
-            {
-                setAuth( storedAuth );
+    useEffect(() => {
+        const loadAuth = async () => {
+            const storedAuth = await localforage.getItem('auth');
+            if (storedAuth) {
+                setAuth(storedAuth);
             }
+            setLoading(false);
         };
+
         loadAuth();
-    }, [] );
+    }, []);
 
-    useEffect( () =>
-    {
-        if ( auth?.authToken )
-        {
-            localforage.setItem( 'auth', auth );
-        } else
-        {
-            localforage.removeItem( 'auth' );
+    useEffect(() => {
+        if (auth) {
+            localforage.setItem('auth', auth);
+        } else {
+            localforage.removeItem('auth');
         }
-    }, [ auth ] );
+    }, [auth]);
 
-    const logout = async () =>
-    {
-        setAuth( {} );
-        await localforage.removeItem( 'auth' );
+    const logout = async () => {
+        setAuth(null);
+        await localforage.removeItem('auth');
     };
 
-    // console.log( auth );
+    if (loading) {
+        return null;  
+    }
 
     return (
-        <AuthContext.Provider value={ { auth, setAuth, logout } }>
-            { children }
+        <AuthContext.Provider value={{ auth, setAuth, logout }}>
+            {children}
         </AuthContext.Provider>
     );
 }

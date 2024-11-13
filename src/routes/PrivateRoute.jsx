@@ -1,7 +1,7 @@
+/* eslint-disable react/prop-types */
 import { Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-// eslint-disable-next-line react/prop-types
 export default function PrivateRoute({ requiredRole }) {
   const { auth } = useAuth();
 

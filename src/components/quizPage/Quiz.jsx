@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import useQuiz from '../../hooks/useQuiz';
 import { QuizOption } from './QuizOption';
 
-export default function Quiz({ question, onNext, onPrevious, currentIndex, totalQuestions, selectedOptions, resetQuiz, allAnswers, setAllAnswers }) {
+export default function Quiz({ question, onNext, onPrevious, currentIndex, totalQuestions, selectedOptions, resetQuiz, allAnswers, setAllAnswers, data }) {
   const [shuffledOptions, setShuffledOptions] = useState([]);
   const [currentSelection, setCurrentSelection] = useState(selectedOptions || []);
   const { handleSubmit } = useForm();
@@ -86,8 +86,9 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
       cancelButtonText: 'No, retry!',
       reverseButtons: true,
     }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch({ type: 'GET_QUIZ_ANSWERS', payload: allAnswers });
+      if ( result.isConfirmed )
+      {
+        dispatch( { type: 'GET_QUIZ_ANSWERS', payload: allAnswers } );
         Swal.fire('Submitted!', 'Your quiz has been submitted.', 'success');
         setTimeout(() => navigate('/result'), 1000);
       } else {

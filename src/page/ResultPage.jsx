@@ -22,17 +22,22 @@ export default function ResultPage() {
         `http://localhost:3000/api/quizzes/${state?.quizzes[ 0 ]?.id}`,
     );
 
-    console.log( singleQuiz.data.questions );
+    // console.log( singleQuiz.data.questions );
 
     const onSuccess = ( response ) =>
     {
         console.log( response );
         dispatch( { type: "GET_QUIZ_ANSWERS_SERVER", payload: response.data } );
+
+        const quizId = state?.quizzes[ 0 ]?.id;
+        const attemptId = response.data.attempt_id;
+        dispatch( { type: "GET_ATTEMPT_ID", payload: { quizId, attemptId } } );
     };
 
     const onError = ( error ) =>
     {
         console.log( error );
+        // toast.promise(" something wrong! ")
     };
 
     const quizMutation = usePostData( {

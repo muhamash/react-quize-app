@@ -1,9 +1,10 @@
-/* eslint-disable no-unused-vars */
+ 
 /* eslint-disable react/prop-types */
 import { motion, useInView } from 'framer-motion';
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { GridLoader } from 'react-spinners';
+import useQuiz from '../../hooks/useQuiz';
 
 const Loader = () => (
   <div className="w-full flex items-center justify-center p-3">
@@ -26,11 +27,13 @@ const QuizCard = ( { quiz } ) =>
   const ref = React.useRef( null );
   const isInView = useInView( ref, { once: true } );
   const navigate = useNavigate();
+  const { state } = useQuiz();
+
+  console.log( state.quizAttempts, state?.quizAttempts[0]?.[quiz.id], quiz.id );
 
   const handleClick = () =>
   {
-    // dispatch( { type: "SET_SINGLE_QUIZ", payload: quiz.id } );
-    navigate( "/quizzes" )
+    state?.quizAttempts[0]?.[quiz.id]  ? navigate( "/leaderBoard" ) : navigate( "/quizzes" );
   };
 
   return (
