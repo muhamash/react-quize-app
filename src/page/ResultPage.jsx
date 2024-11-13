@@ -1,4 +1,5 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
@@ -13,7 +14,8 @@ import useQuiz from '../hooks/useQuiz';
 
 export default function ResultPage() {
     const { state, dispatch } = useQuiz();
-    console.log( state.quizAnswers, state.quizzes[ 0 ]?.id, state.quizAnswerServer );
+
+    console.log(  state.quizAnswerServer );
     
     const { data: singleQuiz, isLoading, error } = useFetchData(
         `singleQuiz_${state?.quizzes[ 0 ]?.id}`,
@@ -38,21 +40,21 @@ export default function ResultPage() {
         onSuccess,
         onError,
     } );
-    
-    const firstQuestion = state.quizAnswers[ 0 ].questionId;
-    const firstOption = state.quizAnswers[ 0 ].selectedOption[ 0 ];
 
     React.useEffect( () =>
     {
         if ( state.quizAnswers && state.quizAnswers.length > 0 )
         {
+            const questionId = state.quizAnswers[ 0 ].questionId;
+            const selectedOption = state.quizAnswers[ 0 ].selectedOption[ 0 ];
+
             quizMutation.mutate( {
                 answers: {
-                    firstQuestion : firstOption
-                },
+                    [ questionId ]: selectedOption
+                }
             } );
         }
-    }, [ state.quizAnswers ] );
+    }, [] );
 
     if (isLoading) {
     return (
