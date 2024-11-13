@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
- 
 import axios from 'axios';
+import localforage from 'localforage';
 import React from 'react';
 import { api } from '../components/api/localhost.js';
 import useAuth from '../hooks/useAuth.jsx';
@@ -45,6 +45,10 @@ const useAxios = () =>
                         const { accessToken } = response.data.data
                         console.log( 'new token', response );
                         setAuth( { ...auth, authToken: accessToken } );
+                        // mainRequest.headers.Authorization = `Bearer ${accessToken}`;
+
+                        await localforage.setItem( 'auth', { ...auth, authToken: accessToken } );
+                        
                         mainRequest.headers.Authorization = `Bearer ${accessToken}`;
 
                         return axios( mainRequest )
