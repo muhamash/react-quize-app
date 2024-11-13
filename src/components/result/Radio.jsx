@@ -1,3 +1,5 @@
+import Indicator from "./Indicator";
+
 /* eslint-disable react/prop-types */
 export function SelectionTracker({ label, name, value, checked, isUserSelection, isCorrectAnswer }) {
     return (
@@ -23,6 +25,22 @@ export function SelectionTracker({ label, name, value, checked, isUserSelection,
                 <span className={isCorrectAnswer ? 'text-green-900' : isUserSelection ? 'text-violet-900' : 'text-white'}>
                     {label}
                 </span>
+                {
+                    isUserSelection && !isCorrectAnswer && (
+                        <Indicator text={'*** user selected option but wrong answer ***'}/>
+                    )
+                }
+
+                {
+                    !isUserSelection && isCorrectAnswer && (
+                        <Indicator text={'*** correct option ***'}/>
+                    )
+                }
+                {
+                    isUserSelection && isCorrectAnswer && (
+                        <Indicator text={'*** user selected the correct option ***'}/>
+                    )
+                }
             </label>
         </div>
     );

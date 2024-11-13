@@ -48,16 +48,21 @@ export default function Answer({ data }) {
     };
 
     return (
-        <motion.div className="rounded-lg overflow-hidden shadow-sm mb-4" {...slideAnimation}>
+        <motion.div className="rounded-lg overflow-hidden shadow-sm mb-4" { ...slideAnimation }>
             <div className="bg-white p-6 !pb-2">
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-semibold">{data.question}</h3>
+                    <h3 className="text-lg font-semibold">{ data.question }</h3>
                 </div>
-                {/* Render Radio options with Controller */}
-                <div className={`space-y-2 ${correctAnswer === userSelection && correctAnswer.length === userSelection.length ? 'bg-slate-400' : 'bg-rose-400'} p-3 rounded-md`}>
-                    {data.options.map((option, index) => (
-                        <SelectionTracker key={ index } label={ option } name={option} value={option} checked={userSelection === option} isUserSelection={userSelection === option} isCorrectAnswer={correctAnswer === option}/>
-                    ))}
+                {/* Render Radio options with Controller */ }
+                <div className={ `space-y-2 ${correctAnswer === userSelection && correctAnswer.length === userSelection.length ? 'bg-slate-400' : 'bg-rose-400'} p-3 rounded-md` }>
+                    { data.options.map( ( option, index ) => (
+                        <SelectionTracker key={ index } label={ option } name={ option } value={ option } checked={ userSelection === option } isUserSelection={ userSelection === option } isCorrectAnswer={ correctAnswer === option } />
+                    ) ) }
+                    <div className="bg-violet-500 p-2 my-2">
+                        {
+                            correctAnswer === userSelection && correctAnswer.length === userSelection.length ? ( <p className="text-sm font-mono">Correct Answer</p> ) : ( <p className="text-sm font-mono">Wrong Answer</p> )
+                        }
+                    </div>
                 </div>
             </div>
         </motion.div>
