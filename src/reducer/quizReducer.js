@@ -2,7 +2,9 @@ const actionTypes = {
     SET_QUIZZES: 'SET_QUIZZES',
     GET_ATTEMPT_ID: 'GET_ATTEMPT_ID',
     GET_QUIZ_ANSWERS: 'GET_QUIZ_ANSWERS',
-    GET_QUIZ_ANSWERS_SERVER: 'GET_QUIZ_ANSWERS_SERVER'
+    GET_QUIZ_ANSWERS_SERVER: 'GET_QUIZ_ANSWERS_SERVER',
+    GET_LEADER_DATA: "GET_LEADER_DATA",
+    GET_SINGLE_QUIZ:"GET_SINGLE_QUIZ"
 };
 
 const initialState = {
@@ -10,12 +12,17 @@ const initialState = {
     quizAnswers: [],
     quizAttempts: [],
     quizAnswerServer: [],
+    leaderBoard: [],
+    singleQuiz:[]
 };
 
 const quizReducer = (state, action) => {
     switch (action.type) {
         case actionTypes.SET_QUIZZES:
             return { ...state, quizzes: action.payload };
+
+        case actionTypes.GET_SINGLE_QUIZ:
+            return { ...state, singleQuiz: action.payload };
 
         case actionTypes.GET_ATTEMPT_ID: {
             const { quizId, attemptId } = action.payload;
@@ -29,6 +36,17 @@ const quizReducer = (state, action) => {
                 ]
             };
         }
+            
+        // case actionTypes.GET_LEADER_DATA: {
+        //     const { quizId, leaderData } = action.payload;
+            
+        //     return {
+        //         ...state,
+        //         leaderBoard: [
+        //             { [ quizId ]: leaderData }
+        //         ]
+        //     };
+        // }
 
         case actionTypes.GET_QUIZ_ANSWERS:
             return { ...state, quizAnswers: action.payload };

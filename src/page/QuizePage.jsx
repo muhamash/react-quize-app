@@ -19,7 +19,7 @@ export default function QuizPage({onModalNext}) {
 
   const { data: singleQuiz, isLoading, error } = useFetchData(
     `singleQuiz_${state?.quizzes[0]?.id}`,
-    `http://localhost:3000/api/quizzes/${state?.quizzes[ 0 ]?.id}`,
+    `http://localhost:5000/api/quizzes/${state?.quizzes[ 0 ]?.id}`,
   );
 
   const handleNext = ( selectedOptions ) =>

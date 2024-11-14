@@ -1,67 +1,93 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { usePostData } from '../../hooks/usePostData';
 import useQuiz from '../../hooks/useQuiz';
 import { QuizOption } from './QuizOption';
 
-export default function Quiz({ question, onNext, onPrevious, currentIndex, totalQuestions, selectedOptions, resetQuiz, allAnswers, setAllAnswers, onModalNext }) {
+export default function Quiz({
+  question,
+  onNext,
+  onPrevious,
+  currentIndex,
+  totalQuestions,
+  selectedOptions,
+  resetQuiz,
+  allAnswers,
+  setAllAnswers,
+  onModalNext,
+  data,
+}) {
   const [shuffledOptions, setShuffledOptions] = useState([]);
-  const [currentSelection, setCurrentSelection] = useState(selectedOptions || []);
+  const [currentSelection, setCurrentSelection] = useState(selectedOptions);
   const { handleSubmit } = useForm();
-  // const navigate = useNavigate();
   const { dispatch } = useQuiz();
 
-  const shuffleOptions = (options) => {
-    return [...options].sort(() => Math.random() - 0.5);
-  };
+  // Helper to shuffle options
+  const shuffleOptions = (options) => options.sort(() => Math.random() - 0.5);
 
   useEffect(() => {
     setShuffledOptions(shuffleOptions(question.options));
-    if (question && question.id) {
-      // Initialize only if question changes
-      setCurrentSelection(selectedOptions || []);
-    }
+    setCurrentSelection(selectedOptions || null);
   }, [question]);
 
   const slideAnimation = {
-    initial: { y: currentIndex % 5 === 0 ? 50 : -50, opacity: 0 },
+    initial: { y: currentIndex % 2 === 0 ? 50 : -50, opacity: 0 },
     animate: { y: 0, opacity: 1 },
-    exit: { y: currentIndex % 3 === 0 ? -50 : 50, opacity: 0 },
+    exit: { y: currentIndex % 2 === 0 ? -50 : 50, opacity: 0 },
     transition: { duration: 0.3 },
   };
 
+  // Handle selection change
   const handleOptionChange = (option) => {
-    setCurrentSelection((prevSelection) => {
-      const isSelected = prevSelection.includes(option);
-      const updatedSelection = isSelected
-        ? prevSelection.filter((item) => item !== option)
-        : [...prevSelection, option];
+    const newSelection = currentSelection === option ? null : option;
+    setCurrentSelection(newSelection);
 
-      setAllAnswers((prevAnswers) => {
-        const currentQuestionId = question.id;
-        const updatedAnswers = prevAnswers.map((answer) =>
-          answer.questionId === currentQuestionId
-            ? { ...answer, selectedOption: updatedSelection }
-            : answer
-        );
+    setAllAnswers((prevAnswers) => {
+      const updatedAnswers = prevAnswers.map((answer) =>
+        answer.questionId === question.id
+          ? { ...answer, selectedOption: newSelection }
+          : answer
+      );
 
-        if (!updatedAnswers.find((answer) => answer.questionId === currentQuestionId)) {
-          updatedAnswers.push({ questionId: currentQuestionId, selectedOptions: updatedSelection });
-        }
-
-        return updatedAnswers;
-      });
-
-      return updatedSelection;
+      if (!updatedAnswers.some((answer) => answer.questionId === question.id)) {
+        updatedAnswers.push({ questionId: question.id, selectedOption: newSelection });
+      }
+      return updatedAnswers;
     });
   };
 
+  const  onSuccess = ( response ) =>
+  {
+    console.log( response );
+    dispatch( { type: 'GET_QUIZ_ANSWERS_SERVER', payload: response.data } );
+    dispatch( {
+      type: 'GET_ATTEMPT_ID',
+      payload: { quizId: data?.data?.id, attemptId: response.data.attempt_id },
+    } );
+  };
+  const onError = ( error ) =>
+  {
+    console.error( error );
+    toast.error( 'Something went wrong. Please try again.', {
+      style: { border: '1px solid red', padding: '16px', color: 'red' },
+    } );
+  };
+
+  const quizMutation = usePostData({
+    url: `http://localhost:5000/api/quizzes/${data?.data?.id}/attempt`,
+    onSuccess,
+    onError
+    
+  });
+
   const onSubmit = () => {
-    if (currentSelection.length === 0) {
-      toast.error('Please select at least one option to proceed.', {
+    if (!currentSelection) {
+      toast.error('Please select an option to proceed.', {
         style: { border: '1px solid #713200', padding: '16px', color: '#713200' },
       });
       return;
@@ -69,12 +95,21 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
 
     if (currentIndex + 1 === totalQuestions) {
       handleQuizSubmission();
+      const answersPayload = allAnswers.reduce( ( acc, answer ) =>
+      {
+        acc[ answer.questionId ] = answer.selectedOption;
+        return acc;
+      }, {} );
+
+      quizMutation.mutate( { answers: answersPayload } );
+      
     } else {
       onNext(currentSelection);
       setShuffledOptions(shuffleOptions(question.options));
     }
   };
 
+  // Confirm and submit quiz
   const handleQuizSubmission = () => {
     Swal.fire({
       title: 'Are you sure you want to submit?',
@@ -85,11 +120,12 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
       cancelButtonText: 'No, retry!',
       reverseButtons: true,
     }).then((result) => {
-      if ( result.isConfirmed )
-      {
-        dispatch( { type: 'GET_QUIZ_ANSWERS', payload: allAnswers } );
-        Swal.fire( 'Submitted!', 'Your quiz has been submitted.', 'success' );
+      if (result.isConfirmed) {
+        dispatch({ type: 'GET_QUIZ_ANSWERS', payload: allAnswers });
+        dispatch({ type: 'GET_SINGLE_QUIZ', payload: data.data });
+        
         onModalNext();
+        Swal.fire('Submitted!', 'Your quiz has been submitted.', 'success');
       } else {
         toast('Please review your answers or start again.', {
           icon: '📰',
@@ -111,14 +147,18 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
             <QuizOption
               key={index}
               option={option}
-              isSelected={currentSelection.includes(option)}
+              isSelected={currentSelection === option}
               onChange={() => handleOptionChange(option)}
             />
           ))}
         </div>
         <div className="flex justify-between items-center mt-6">
           {currentIndex > 0 && (
-            <button type="button" onClick={onPrevious} className="text-center bg-primary text-white py-2 px-4 rounded-md">
+            <button
+              type="button"
+              onClick={onPrevious}
+              className="text-center bg-primary text-white py-2 px-4 rounded-md"
+            >
               Previous
             </button>
           )}

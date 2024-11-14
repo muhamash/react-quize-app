@@ -57,7 +57,7 @@ const RegisterForm = () => {
     };
 
     const registrationMutation = usePostData( {
-        url: "http://localhost:3000/api/auth/register",
+        url: "http://localhost:5000/api/auth/register",
         onSuccess,
         onError
     } );

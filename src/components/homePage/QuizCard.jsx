@@ -30,10 +30,21 @@ const QuizCard = ({ quiz }) => {
   const { state } = useQuiz();
   const [modalStep, setModalStep] = React.useState(-1);
 
-  console.log(state.quizAttempts, state?.quizAttempts[0]?.[quiz.id], quiz.id);
+  console.log(state.quizAttempts, state?.quizAttempts, quiz.id);
 
-  const handleClick = () => {
-    state?.quizAttempts[0]?.[quiz.id] ? navigate("/leaderBoard") : setModalStep(0);
+  const handleClick = () =>
+  {
+    const hasAttemptedQuiz = state?.quizAttempts?.some( ( attempt ) => attempt[ quiz.id ] );
+
+    // console.log( hasAttemptedQuiz );
+  
+    if ( hasAttemptedQuiz )
+    {
+      navigate( "/leaderBoard" );
+    } else
+    {
+      setModalStep( 0 );
+    }
   };
 
   const handleModalNext = () => {

@@ -10,7 +10,7 @@ export default function QuizProvider ({children})
     console.log(state)
     const {data ,isLoading, error } = useFetchData(
         ['quizzes'],
-        'http://localhost:3000/api/quizzes',
+        'http://localhost:5000/api/quizzes',
         {},
     );
 

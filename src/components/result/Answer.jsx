@@ -3,42 +3,45 @@ import { motion } from 'framer-motion';
 import useQuiz from '../../hooks/useQuiz';
 import { SelectionTracker } from './Radio';
 
-const correctAnswerResponse = [
-    {
-        id: "4fc4f709-13e9-4555-9d03-f487c8a01aa4",
-        correctAnswer: "A web server"
-    },
-    {
-        id: "15eb9586-97b3-4ca0-b48e-0702f133d6c1",
-        correctAnswer: "useReducer"
-    },
-    {
-        id: "42c1ff89-afc8-47e5-92cc-277f562135e2",
-        correctAnswer: "Creative Style System"
-    },
-    {
-        id: "0841efeb-39c3-476e-99e9-342c033c56a6",
-        correctAnswer: "string"
-    },
-    {
-        id: "1a99732e-acd6-4b6e-adf9-2c3e71841d85",
-        correctAnswer: "var variableName"
-    },
-    {
-        id: "1eecba79-a790-498a-8519-1292dcc4dc3d",
-        correctAnswer: "<href>"
-    }
-]
+// const correctAnswerResponse = [
+//     {
+//         id: "4fc4f709-13e9-4555-9d03-f487c8a01aa4",
+//         correctAnswer: "A web server"
+//     },
+//     {
+//         id: "15eb9586-97b3-4ca0-b48e-0702f133d6c1",
+//         correctAnswer: "useReducer"
+//     },
+//     {
+//         id: "42c1ff89-afc8-47e5-92cc-277f562135e2",
+//         correctAnswer: "Creative Style System"
+//     },
+//     {
+//         id: "0841efeb-39c3-476e-99e9-342c033c56a6",
+//         correctAnswer: "string"
+//     },
+//     {
+//         id: "1a99732e-acd6-4b6e-adf9-2c3e71841d85",
+//         correctAnswer: "var variableName"
+//     },
+//     {
+//         id: "1eecba79-a790-498a-8519-1292dcc4dc3d",
+//         correctAnswer: "<href>"
+//     }
+// ]
 
 export default function Answer({ data }) {
     const { state } = useQuiz();
 
     // Find the selected option for this question
+    // const correct_answers  =;
     const userSelectedOption = state.quizAnswers.find( ( u ) => u.questionId === data.id )?.selectedOption;
-    const correctAnswer = correctAnswerResponse.find( ( u ) => u.id === data.id )?.correctAnswer;
-    const userSelection = userSelectedOption[ 0 ];
-    
-    console.log(correctAnswer, userSelection)
+    const correctAnswer = state.quizAnswerServer.correct_answers.find( ( u ) => u.question_id === data.id )?.answer;
+    const userSelection = userSelectedOption;
+
+    console.log(correctAnswer,  state.quizAnswerServer.correct_answers[0].question_id)
+
+    // console.log( state.quizAnswerServer.correct_answers);
 
     const slideAnimation = {
         initial: { y: -300, opacity: 0 },

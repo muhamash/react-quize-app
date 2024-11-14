@@ -40,7 +40,7 @@ const useAxios = () =>
                     try
                     {
                         const refreshToken = auth?.refreshToken;
-                        const response = await axios.post( `http://localhost:3000/api/auth/refresh-token`, { refreshToken } );
+                        const response = await axios.post( `http://localhost:5000/api/auth/refresh-token`, { refreshToken } );
 
                         const { accessToken } = response.data.data
                         console.log( 'new token', response );
