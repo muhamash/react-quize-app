@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast, Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { usePostData } from '../../hooks/usePostData';
 import useQuiz from '../../hooks/useQuiz';
@@ -15,7 +14,6 @@ export default function Quiz({
   onPrevious,
   currentIndex,
   totalQuestions,
-  selectedOptions,
   resetQuiz,
   allAnswers,
   setAllAnswers,
@@ -23,7 +21,7 @@ export default function Quiz({
   data,
 }) {
   const [shuffledOptions, setShuffledOptions] = useState([]);
-  const [currentSelection, setCurrentSelection] = useState(selectedOptions);
+  const [currentSelection, setCurrentSelection] = useState(null);
   const { handleSubmit } = useForm();
   const { dispatch } = useQuiz();
 
@@ -31,9 +29,13 @@ export default function Quiz({
   const shuffleOptions = (options) => options.sort(() => Math.random() - 0.5);
 
   useEffect(() => {
+    // Shuffle options every time the question changes
     setShuffledOptions(shuffleOptions(question.options));
-    setCurrentSelection(selectedOptions || null);
-  }, [question]);
+
+    // Get the previously selected option for the current question
+    const prevAnswer = allAnswers.find((answer) => answer.questionId === question.id);
+    setCurrentSelection(prevAnswer ? prevAnswer.selectedOption : null);
+  }, [question, allAnswers]);
 
   const slideAnimation = {
     initial: { y: currentIndex % 2 === 0 ? 50 : -50, opacity: 0 },
@@ -47,6 +49,7 @@ export default function Quiz({
     const newSelection = currentSelection === option ? null : option;
     setCurrentSelection(newSelection);
 
+    // Update the answer for the current question
     setAllAnswers((prevAnswers) => {
       const updatedAnswers = prevAnswers.map((answer) =>
         answer.questionId === question.id
@@ -54,6 +57,7 @@ export default function Quiz({
           : answer
       );
 
+      // If no previous answer exists for this question, add it to the array
       if (!updatedAnswers.some((answer) => answer.questionId === question.id)) {
         updatedAnswers.push({ questionId: question.id, selectedOption: newSelection });
       }
@@ -61,79 +65,68 @@ export default function Quiz({
     });
   };
 
-  const  onSuccess = ( response ) =>
-  {
-    dispatch( { type: 'GET_QUIZ_ANSWERS_SERVER', payload: response.data } );
-    dispatch( {
+  const onSuccess = (response) => {
+    dispatch({ type: 'GET_QUIZ_ANSWERS_SERVER', payload: response.data });
+    dispatch({
       type: 'GET_ATTEMPT_ID',
       payload: { quizId: data?.data?.id, attemptId: response.data.attempt_id },
-    } );
+    });
 
-    // let percentageAsNumber = Number();
     let result = {
       correctCount: 0,
       wrongCount: 0,
       totalMarks: 0,
       percentage: Number(response.data.percentage),
+      quizMarks: data.data.stats.total_marks,
     };
 
-    allAnswers.forEach( answer =>
-    {
-      const correctAnswer = response.data.correct_answers.find( u => u.question_id === answer.questionId );
-  
-      if ( correctAnswer )
-      {
-        if ( correctAnswer.answer === answer.selectedOption )
-        {
+    allAnswers.forEach((answer) => {
+      const correctAnswer = response.data.correct_answers.find(
+        (u) => u.question_id === answer.questionId
+      );
+
+      if (correctAnswer) {
+        if (correctAnswer.answer === answer.selectedOption) {
           result.correctCount++;
           result.totalMarks += correctAnswer.marks;
-        } else
-        {
+        } else {
           result.wrongCount++;
         }
       }
-    } );
-    // console.log( result );
-    dispatch( { type: "GET_SUBMIT_INFO", payload: result } );
+    });
 
-  };
-  const onError = ( error ) =>
-  {
-    console.error( error );
-    toast.error( 'Something went wrong. Please try again.');
+    dispatch({ type: 'GET_SUBMIT_INFO', payload: result });
   };
 
   const quizMutation = usePostData({
     url: `http://localhost:5000/api/quizzes/${data?.data?.id}/attempt`,
     onSuccess,
-    onError
-    
   });
 
   const onSubmit = () => {
-    if (!currentSelection) {
-      toast.error( 'Please select an option to proceed.' );
-      console.log('error')
+    if (currentSelection === null || currentSelection === undefined) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Select option to proceed!',
+      });
       return;
     }
 
     if (currentIndex + 1 === totalQuestions) {
       handleQuizSubmission();
-      const answersPayload = allAnswers.reduce( ( acc, answer ) =>
-      {
-        acc[ answer.questionId ] = answer.selectedOption;
+      const answersPayload = allAnswers.reduce((acc, answer) => {
+        acc[answer.questionId] = answer.selectedOption;
         return acc;
-      }, {} );
+      }, {});
 
-      quizMutation.mutate( { answers: answersPayload } );
-
+      quizMutation.mutate({ answers: answersPayload });
     } else {
       onNext(currentSelection);
       setShuffledOptions(shuffleOptions(question.options));
     }
   };
 
-  // Confirm and submit quiz
   const handleQuizSubmission = () => {
     Swal.fire({
       title: 'Are you sure you want to submit?',
@@ -147,13 +140,16 @@ export default function Quiz({
       if (result.isConfirmed) {
         dispatch({ type: 'GET_QUIZ_ANSWERS', payload: allAnswers });
         dispatch({ type: 'GET_SINGLE_QUIZ', payload: data.data });
-        
+
         onModalNext();
         Swal.fire('Submitted!', 'Your quiz has been submitted.', 'success');
       } else {
-        toast('Please review your answers or start again.', {
-          icon: '📰',
-          style: { border: '1px solid #007bff', padding: '16px', color: '#007bff' },
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: '🕹️🤗  This time do better!!',
+          showConfirmButton: false,
+          timer: 1500,
         });
         resetQuiz();
       }
@@ -161,11 +157,8 @@ export default function Quiz({
   };
 
   return (
-    <motion.div className="bg-white p-6 rounded-md" { ...slideAnimation }>
-      <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
+    <motion.div className="bg-white p-6 rounded-md" {...slideAnimation}>
+      <Toaster position="top-center" reverseOrder={false} />
       <h3 className="text-2xl font-semibold mb-5">
         {currentIndex + 1}. {question.question}
       </h3>

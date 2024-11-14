@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
+ 
 // import React from 'react';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -10,7 +10,7 @@ export default function ResultBoard ({onClose})
 {
     const { state } = useQuiz();
 
-    const { quizAnswerServer } = state;
+    const { submissionInfo, singleQuiz  } = state;
 
     // const totalQuizMarks = quizAnswerServer.submittedAnswers.total_marks;
 
@@ -20,9 +20,9 @@ export default function ResultBoard ({onClose})
                 {/* <img src="./assets/logo-white.svg" className="max-h-11 fixed left-6 top-6 z-50" /> */}
                 <div className="text-white">
                     <div>
-                        <h2 className="text-4xl font-bold mb-2">React Hooks Quiz
+                        <h2 className="text-4xl font-bold mb-2"> {singleQuiz.title}
                         </h2>
-                        <p>A quiz on React hooks like useState, useEffect, and useContext. </p>
+                        <p> {singleQuiz.description} </p>
                     </div>
 
                     <div className="my-6 items-center  flex flex-wrap">
@@ -34,12 +34,12 @@ export default function ResultBoard ({onClose})
                                 </div>
 
                                 <div>
-                                    <p className="font-semibold text-2xl my-0">8</p>
+                                    <p className="font-semibold text-2xl my-0">{ submissionInfo.correctCount }</p>
                                     <p className="text-gray-300">Correct</p>
                                 </div>
 
                                 <div>
-                                    <p className="font-semibold text-2xl my-0">2</p>
+                                    <p className="font-semibold text-2xl my-0">{ submissionInfo.wrongCount }</p>
                                     <p className="text-gray-300">Wrong</p>
                                 </div>
                             </div>
@@ -52,15 +52,15 @@ export default function ResultBoard ({onClose})
 
                         <div className=" bg-primary/80 rounded-md border border-white/20 flex items-center p-4">
                             <div className="flex-1">
-                                <p className="text-2xl font-bold">5/ <span>{ 30 }</span> </p>
+                                <p className="text-2xl font-bold">{ submissionInfo.totalMarks }/ <span>{ submissionInfo?.quizMarks }</span> </p>
                                 <p>Your Mark</p>
                             </div>
                             <div style={{ width: 150, height: 150 }}>
-                                <CircularProgressbarWithChildren strokeWidth={20}   value={ 66 }>
+                                <CircularProgressbarWithChildren strokeWidth={ 20 } value={ submissionInfo.percentage }>
                                 {/* Put any JSX content in here that you'd like. It'll be vertically and horizonally centered. */ }
                                 <img style={ { width: 40, marginTop: -5 } } src="https://i.imgur.com/b9NyUGm.png" alt="doge" />
                                 <div style={ { fontSize: 12, marginTop: -5 } }>
-                                    <strong>66%</strong>
+                                        <strong>{ submissionInfo.percentage }%</strong>
                                 </div>
                             </CircularProgressbarWithChildren>
                             </div>

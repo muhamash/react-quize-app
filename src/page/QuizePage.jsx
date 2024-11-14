@@ -46,6 +46,7 @@ export default function QuizPage({onModalNext}) {
     setQuestionIndex( ( prevIndex ) => prevIndex + 1 );
   };
 
+  console.log(allAnswers)
   const handlePrevious = () => {
     if (questionIndex > 0) {
       setQuestionIndex((prevIndex) => prevIndex - 1);
@@ -90,9 +91,6 @@ export default function QuizPage({onModalNext}) {
                       onPrevious={ handlePrevious }
                       currentIndex={ questionIndex }
                       totalQuestions={ singleQuiz.data.questions.length }
-                      selectedOptions={ allAnswers.find(
-                        ( answer ) => answer.questionId === singleQuiz.data.questions[ questionIndex ].id
-                      )?.selectedOption || [] }
                       resetQuiz={ resetQuiz }
                       allAnswers={ allAnswers }
                       setAllAnswers={ setAllAnswers }
