@@ -46,7 +46,6 @@ export default function QuizPage({onModalNext}) {
     setQuestionIndex( ( prevIndex ) => prevIndex + 1 );
   };
 
-  console.log(allAnswers)
   const handlePrevious = () => {
     if (questionIndex > 0) {
       setQuestionIndex((prevIndex) => prevIndex - 1);

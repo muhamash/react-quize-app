@@ -37,18 +37,14 @@ function App ()
                   <Route path="/" element={ <HomePage /> } />
                   <Route path="/leaderBoard" element={ <LeaderBoard /> } />
                 </Route>
-                {/* <Route element={ <QuizLayout /> }>
-                  <Route path="/quizzes" element={ <QuizPage /> } />
-                  <Route path="/result" element={ <ResultPage /> } />
-                </Route> */}
               </Route>
 
               {/* Private Routes for Admins */ }
               <Route element={ <PrivateRoute requiredRole="admin" /> }>
                 <Route element={ <AdminLayout /> }>
-                  <Route path="/dashBoard" element={ <DashBoard /> } />
+                  {/* <Route path="/dashBoard" element={ <DashBoard /> } />
                   <Route path="/addQuiz" element={ <AddQuizCardPage /> } />
-                  <Route path="/createQuiz" element={ <CreateQuiz /> } />
+                  <Route path="/createQuiz" element={ <CreateQuiz /> } /> */}
                 </Route>
               </Route>
 
@@ -58,6 +54,9 @@ function App ()
               </Route>
               <Route path="/login" element={ <Login /> } />
               <Route path="/registration" element={ <RegistrationPage /> } />
+              <Route path="/dashBoard" element={ <DashBoard /> } />
+              <Route path="/addQuiz" element={ <AddQuizCardPage /> } />
+              <Route path="/createQuiz" element={ <CreateQuiz /> } />
             </Routes>
           </QuizProvider>
         </Fragment>

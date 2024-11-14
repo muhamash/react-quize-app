@@ -7,17 +7,20 @@ export default function AuthProvider({ children }) {
     const [auth, setAuth] = useState(null);
     const [loading, setLoading] = useState(true);  
 
-    useEffect(() => {
-        const loadAuth = async () => {
-            const storedAuth = await localforage.getItem('auth');
-            if (storedAuth) {
-                setAuth(storedAuth);
+    useEffect( () =>
+    {
+        const loadAuth = async () =>
+        {
+            const storedAuth = await localforage.getItem( 'auth' );
+            if ( storedAuth )
+            {
+                setAuth( storedAuth );
             }
-            setLoading(false);
+            setLoading( false );
         };
 
         loadAuth();
-    }, []);
+    }, [] );
 
     useEffect(() => {
         if (auth) {

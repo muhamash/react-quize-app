@@ -5,7 +5,8 @@ const actionTypes = {
     GET_QUIZ_ANSWERS_SERVER: 'GET_QUIZ_ANSWERS_SERVER',
     GET_LEADER_DATA: "GET_LEADER_DATA",
     GET_SINGLE_QUIZ: "GET_SINGLE_QUIZ",
-    GET_SUBMIT_INFO: "GET_SUBMIT_INFO"
+    GET_SUBMIT_INFO: "GET_SUBMIT_INFO",
+    GET_USER_INFO: "GET_USER_INFO"
 };
 
 const initialState = {
@@ -15,13 +16,16 @@ const initialState = {
     quizAnswerServer: [],
     leaderBoard: [],
     singleQuiz: [],
-    submissionInfo:[]
+    submissionInfo: [],
+    userInfo:[]
 };
 
 const quizReducer = (state, action) => {
     switch (action.type) {
         case actionTypes.SET_QUIZZES:
             return { ...state, quizzes: action.payload };
+        case actionTypes.GET_USER_INFO:
+            return { ...state, userInfo: action.payload };
 
         case actionTypes.GET_SINGLE_QUIZ:
             return { ...state, singleQuiz: action.payload };

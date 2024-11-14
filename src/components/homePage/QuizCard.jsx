@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import { motion, useInView } from 'framer-motion';
 import React from 'react';
-import { useNavigate } from "react-router-dom";
 import { GridLoader } from 'react-spinners';
 import useQuiz from '../../hooks/useQuiz';
 import QuizPage from '../../page/QuizePage';
 import ResultPage from '../../page/ResultPage';
+
 
 const Loader = () => (
   <div className="w-full flex items-center justify-center p-3">
@@ -26,11 +26,11 @@ const QuizCard = ({ quiz }) => {
   const [loading, setLoading] = React.useState(true);
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true });
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { state } = useQuiz();
   const [modalStep, setModalStep] = React.useState(-1);
 
-  console.log(state.quizAttempts, state?.quizAttempts, quiz.id);
+  // console.log(state.quizAttempts, state?.quizAttempts, quiz.id);
 
   const handleClick = () =>
   {
@@ -40,7 +40,7 @@ const QuizCard = ({ quiz }) => {
   
     if ( hasAttemptedQuiz )
     {
-      navigate( "/leaderBoard" );
+      setModalStep( 1 );
     } else
     {
       setModalStep( 0 );

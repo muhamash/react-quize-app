@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Toaster } from 'react-hot-toast';
+import { HashLoader } from 'react-spinners';
 import Swal from 'sweetalert2';
 import { usePostData } from '../../hooks/usePostData';
 import useQuiz from '../../hooks/useQuiz';
@@ -20,7 +21,6 @@ export default function Quiz({
   onModalNext,
   data,
 }) {
-  const [shuffledOptions, setShuffledOptions] = useState([]);
   const [currentSelection, setCurrentSelection] = useState(null);
   const { handleSubmit } = useForm();
   const { dispatch } = useQuiz();
@@ -28,14 +28,14 @@ export default function Quiz({
   // Helper to shuffle options
   const shuffleOptions = (options) => options.sort(() => Math.random() - 0.5);
 
-  useEffect(() => {
-    // Shuffle options every time the question changes
-    setShuffledOptions(shuffleOptions(question.options));
+  // Memoize shuffled options
+  const shuffledOptions = useMemo(() => shuffleOptions([...question.options]), [question.options]);
 
-    // Get the previously selected option for the current question
+  // Memoize previous answer for the current question
+  useMemo(() => {
     const prevAnswer = allAnswers.find((answer) => answer.questionId === question.id);
     setCurrentSelection(prevAnswer ? prevAnswer.selectedOption : null);
-  }, [question, allAnswers]);
+  }, [question.id, allAnswers]);
 
   const slideAnimation = {
     initial: { y: currentIndex % 2 === 0 ? 50 : -50, opacity: 0 },
@@ -49,7 +49,6 @@ export default function Quiz({
     const newSelection = currentSelection === option ? null : option;
     setCurrentSelection(newSelection);
 
-    // Update the answer for the current question
     setAllAnswers((prevAnswers) => {
       const updatedAnswers = prevAnswers.map((answer) =>
         answer.questionId === question.id
@@ -57,7 +56,6 @@ export default function Quiz({
           : answer
       );
 
-      // If no previous answer exists for this question, add it to the array
       if (!updatedAnswers.some((answer) => answer.questionId === question.id)) {
         updatedAnswers.push({ questionId: question.id, selectedOption: newSelection });
       }
@@ -115,15 +113,8 @@ export default function Quiz({
 
     if (currentIndex + 1 === totalQuestions) {
       handleQuizSubmission();
-      const answersPayload = allAnswers.reduce((acc, answer) => {
-        acc[answer.questionId] = answer.selectedOption;
-        return acc;
-      }, {});
-
-      quizMutation.mutate({ answers: answersPayload });
     } else {
       onNext(currentSelection);
-      setShuffledOptions(shuffleOptions(question.options));
     }
   };
 
@@ -141,8 +132,15 @@ export default function Quiz({
         dispatch({ type: 'GET_QUIZ_ANSWERS', payload: allAnswers });
         dispatch({ type: 'GET_SINGLE_QUIZ', payload: data.data });
 
+        const answersPayload = allAnswers.reduce((acc, answer) => {
+          acc[answer.questionId] = answer.selectedOption;
+          return acc;
+        }, {});
+
+        quizMutation.mutate( { answers: answersPayload } );
+        quizMutation.isPending ?? <HashLoader color="#4e1f9b" size={100} speedMultiplier={2} />
+        Swal.fire( 'Submitted!', 'Your quiz has been submitted.', 'success' );
         onModalNext();
-        Swal.fire('Submitted!', 'Your quiz has been submitted.', 'success');
       } else {
         Swal.fire({
           position: 'top-end',
@@ -184,7 +182,7 @@ export default function Quiz({
             </button>
           )}
           <button type="submit" className="text-center bg-primary text-white py-2 px-4 rounded-md">
-            {currentIndex + 1 === totalQuestions ? 'Submit' : 'Next'}
+            {currentIndex + 1 === totalQuestions ? 'Submit' : quizMutation.isPending ? "submitting..!!" : 'Next'}
           </button>
         </div>
       </form>
