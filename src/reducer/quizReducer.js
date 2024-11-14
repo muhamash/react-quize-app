@@ -4,7 +4,8 @@ const actionTypes = {
     GET_QUIZ_ANSWERS: 'GET_QUIZ_ANSWERS',
     GET_QUIZ_ANSWERS_SERVER: 'GET_QUIZ_ANSWERS_SERVER',
     GET_LEADER_DATA: "GET_LEADER_DATA",
-    GET_SINGLE_QUIZ:"GET_SINGLE_QUIZ"
+    GET_SINGLE_QUIZ: "GET_SINGLE_QUIZ",
+    GET_SUBMIT_INFO: "GET_SUBMIT_INFO"
 };
 
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
     quizAttempts: [],
     quizAnswerServer: [],
     leaderBoard: [],
-    singleQuiz:[]
+    singleQuiz: [],
+    submissionInfo:[]
 };
 
 const quizReducer = (state, action) => {
@@ -23,6 +25,8 @@ const quizReducer = (state, action) => {
 
         case actionTypes.GET_SINGLE_QUIZ:
             return { ...state, singleQuiz: action.payload };
+        case actionTypes.GET_SUBMIT_INFO:
+            return { ...state, submissionInfo: action.payload };
 
         case actionTypes.GET_ATTEMPT_ID: {
             const { quizId, attemptId } = action.payload;

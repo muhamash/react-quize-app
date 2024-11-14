@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { usePostData } from '../../hooks/usePostData';
 import useQuiz from '../../hooks/useQuiz';
@@ -63,19 +63,44 @@ export default function Quiz({
 
   const  onSuccess = ( response ) =>
   {
-    console.log( response );
     dispatch( { type: 'GET_QUIZ_ANSWERS_SERVER', payload: response.data } );
     dispatch( {
       type: 'GET_ATTEMPT_ID',
       payload: { quizId: data?.data?.id, attemptId: response.data.attempt_id },
     } );
+
+    // let percentageAsNumber = Number();
+    let result = {
+      correctCount: 0,
+      wrongCount: 0,
+      totalMarks: 0,
+      percentage: Number(response.data.percentage),
+    };
+
+    allAnswers.forEach( answer =>
+    {
+      const correctAnswer = response.data.correct_answers.find( u => u.question_id === answer.questionId );
+  
+      if ( correctAnswer )
+      {
+        if ( correctAnswer.answer === answer.selectedOption )
+        {
+          result.correctCount++;
+          result.totalMarks += correctAnswer.marks;
+        } else
+        {
+          result.wrongCount++;
+        }
+      }
+    } );
+    // console.log( result );
+    dispatch( { type: "GET_SUBMIT_INFO", payload: result } );
+
   };
   const onError = ( error ) =>
   {
     console.error( error );
-    toast.error( 'Something went wrong. Please try again.', {
-      style: { border: '1px solid red', padding: '16px', color: 'red' },
-    } );
+    toast.error( 'Something went wrong. Please try again.');
   };
 
   const quizMutation = usePostData({
@@ -87,9 +112,8 @@ export default function Quiz({
 
   const onSubmit = () => {
     if (!currentSelection) {
-      toast.error('Please select an option to proceed.', {
-        style: { border: '1px solid #713200', padding: '16px', color: '#713200' },
-      });
+      toast.error( 'Please select an option to proceed.' );
+      console.log('error')
       return;
     }
 
@@ -102,7 +126,7 @@ export default function Quiz({
       }, {} );
 
       quizMutation.mutate( { answers: answersPayload } );
-      
+
     } else {
       onNext(currentSelection);
       setShuffledOptions(shuffleOptions(question.options));
@@ -137,7 +161,11 @@ export default function Quiz({
   };
 
   return (
-    <motion.div className="bg-white p-6 rounded-md" {...slideAnimation}>
+    <motion.div className="bg-white p-6 rounded-md" { ...slideAnimation }>
+      <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
       <h3 className="text-2xl font-semibold mb-5">
         {currentIndex + 1}. {question.question}
       </h3>

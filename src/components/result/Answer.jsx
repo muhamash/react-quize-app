@@ -39,7 +39,7 @@ export default function Answer({ data }) {
     const correctAnswer = state.quizAnswerServer.correct_answers.find( ( u ) => u.question_id === data.id )?.answer;
     const userSelection = userSelectedOption;
 
-    console.log(correctAnswer,  state.quizAnswerServer.correct_answers[0].question_id)
+    // console.log(correctAnswer,  state.quizAnswerServer.correct_answers[0].question_id)
 
     // console.log( state.quizAnswerServer.correct_answers);
 
