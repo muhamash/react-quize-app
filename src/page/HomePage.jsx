@@ -35,7 +35,7 @@ export default function HomePage() {
             <div className="container mx-auto pt-20">
                 { auth?.user && (
                     <ErrorBoundary>
-                        <UserCard userName={ auth?.user.full_name } />
+                        <UserCard userName={ auth?.user?.full_name } />
                     </ErrorBoundary>
                 ) }
                 <div className="bg-white p-6 rounded-md h-full">

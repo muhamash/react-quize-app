@@ -77,9 +77,9 @@ export default function QuizPage({onModalNext}) {
       <ErrorBoundary>
         <Toaster />
         <div className="max-w-8xl mx-auto h-[calc(100vh-10rem)]">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 h-full overflow-y-scroll">
             <QuizCounter user={ auth?.user.full_name } quizData={ singleQuiz.data } />
-            <div className="lg:col-span-2 bg-white">
+            <div className="lg:col-span-2 bg-white ">
               <Suspense fallback={ <p>Loading...</p> }>
                 <AnimatePresence mode="wait">
                   { singleQuiz.data.questions && (

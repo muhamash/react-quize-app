@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import useQuiz from '../../hooks/useQuiz';
 import { QuizOption } from './QuizOption';
@@ -12,7 +11,7 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
   const [shuffledOptions, setShuffledOptions] = useState([]);
   const [currentSelection, setCurrentSelection] = useState(selectedOptions || []);
   const { handleSubmit } = useForm();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { dispatch } = useQuiz();
 
   const shuffleOptions = (options) => {
@@ -103,11 +102,11 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
 
   return (
     <motion.div className="bg-white p-6 rounded-md" {...slideAnimation}>
-      <h3 className="text-2xl font-semibold">
+      <h3 className="text-2xl font-semibold mb-5">
         {currentIndex + 1}. {question.question}
       </h3>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           {shuffledOptions.map((option, index) => (
             <QuizOption
               key={index}
@@ -119,12 +118,12 @@ export default function Quiz({ question, onNext, onPrevious, currentIndex, total
         </div>
         <div className="flex justify-between items-center mt-6">
           {currentIndex > 0 && (
-            <button type="button" onClick={onPrevious} className="w-1/4 text-center bg-primary text-white py-2 px-4 rounded-md">
+            <button type="button" onClick={onPrevious} className="text-center bg-primary text-white py-2 px-4 rounded-md">
               Previous
             </button>
           )}
-          <button type="submit" className="w-1/4 text-center bg-primary text-white py-2 px-4 rounded-md">
-            {currentIndex + 1 === totalQuestions ? 'Submit Quiz' : 'Next Question'}
+          <button type="submit" className="text-center bg-primary text-white py-2 px-4 rounded-md">
+            {currentIndex + 1 === totalQuestions ? 'Submit' : 'Next'}
           </button>
         </div>
       </form>
