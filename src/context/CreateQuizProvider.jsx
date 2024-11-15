@@ -7,29 +7,33 @@ const initialState = {
     currentQuestion: null
 };
 
-const quizReducer = (state, action) => {
+function quizReducer(state, action) {
     switch (action.type) {
-        case 'ADD_QUESTION':
-            return { ...state, questions: [...state.questions, action.payload] };
+        case 'SET_CURRENT_QUESTION':
+            return { ...state, currentQuestion: action.payload };
         case 'EDIT_QUESTION':
             return {
                 ...state,
-                questions: state.questions.map(q => q.id === action.payload.id ? action.payload : q),
-                currentQuestion: null
+                questions: state.questions.map((q) =>
+                    q.id === action.payload.id ? action.payload : q
+                ),
+                currentQuestion: null,
             };
         case 'DELETE_QUESTION':
             return {
                 ...state,
-                questions: state.questions.filter(q => q.id !== action.payload)
+                questions: state.questions.filter((q) => q.id !== action.payload),
             };
-        case 'SET_CURRENT_QUESTION':
-            return { ...state, currentQuestion: action.payload };
-        case 'CLEAR_CURRENT_QUESTION':
-            return { ...state, currentQuestion: null };
+        case 'ADD_QUESTION':
+            return {
+                ...state,
+                questions: [...state.questions, action.payload],
+            };
         default:
             return state;
     }
-};
+}
+
 
 export const CreateQuizProvider = ({ children }) => {
     const [state, dispatch] = useReducer(quizReducer, initialState);

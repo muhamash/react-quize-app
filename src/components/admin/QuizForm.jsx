@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
@@ -5,8 +6,16 @@ import useCreateQuiz from '../../hooks/useCreateQuiz';
 
 export default function QuizForm() {
     const { state, dispatch } = useCreateQuiz();
+    const { currentQuestion } = state;
 
-    const { register, control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm( {
+    const {
+        register,
+        control,
+        handleSubmit,
+        reset,
+        watch,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             quizTitle: '',
             options: [
@@ -16,7 +25,16 @@ export default function QuizForm() {
                 { text: '', isCorrect: false },
             ],
         },
-    } );
+    });
+
+    useEffect(() => {
+        if (currentQuestion) {
+            reset({
+                quizTitle: currentQuestion.quizTitle,
+                options: currentQuestion.options,
+            });
+        }
+    }, [currentQuestion, reset]); // Dependency array includes `currentQuestion` and `reset`
 
     const { fields } = useFieldArray({
         control,
@@ -25,31 +43,38 @@ export default function QuizForm() {
 
     const selectedCorrectOptions = watch('options').filter((option) => option.isCorrect);
 
-    // Populate form when editing
-    if (state.currentQuestion) {
-        setValue('quizTitle', state.currentQuestion.quizTitle);
-        setValue('options', state.currentQuestion.options);
-    }
+    const handleReset = () => {
+        dispatch({ type: 'SET_CURRENT_QUESTION', payload: null });
+        reset({
+            quizTitle: '',
+            options: [
+                { text: '', isCorrect: false },
+                { text: '', isCorrect: false },
+                { text: '', isCorrect: false },
+                { text: '', isCorrect: false },
+            ],
+        });
+    };
 
     const onSubmit = (data) => {
         if (selectedCorrectOptions.length !== 1) {
-            Swal.fire( {
-                position: "top-end",
-                icon: "error",
-                title: "Select One checkbox as answer",
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Select One checkbox as the answer',
                 showConfirmButton: false,
-                timer: 1500
-            } );
+                timer: 1500,
+            });
             return;
         }
 
-        if (state.currentQuestion) {
-            dispatch({ type: 'EDIT_QUESTION', payload: { ...state.currentQuestion, ...data } });
+        if (currentQuestion) {
+            dispatch({ type: 'EDIT_QUESTION', payload: { id: currentQuestion.id, ...data } });
         } else {
             dispatch({ type: 'ADD_QUESTION', payload: { id: Date.now(), ...data } });
         }
 
-        reset();
+        handleReset();
     };
 
     return (
@@ -91,12 +116,14 @@ export default function QuizForm() {
                                 type="checkbox"
                                 {...register(`options.${index}.isCorrect`)}
                                 className="text-primary focus:ring-0 w-4 h-4"
+                                checked={watch(`options.${index}.isCorrect`)}
                             />
                             <input
                                 type="text"
                                 {...register(`options.${index}.text`, { required: 'Option text is required' })}
                                 className="w-full p-2 bg-transparent rounded-md text-foreground outline-none focus:ring-0"
                                 placeholder={`Option ${index + 1}`}
+                                defaultValue={option.text}
                             />
                             <p className="text-red-500 text-sm mt-1">{errors.options?.[index]?.text?.message}</p>
                         </div>
@@ -107,7 +134,7 @@ export default function QuizForm() {
                     type="submit"
                     className="w-full bg-primary text-white text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
                 >
-                    {state.currentQuestion ? 'Update Question' : 'Add Question'}
+                    {currentQuestion ? 'Update Question' : 'Add Question'}
                 </button>
             </div>
         </form>

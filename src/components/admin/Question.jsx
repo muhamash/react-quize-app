@@ -28,7 +28,7 @@ export default function Question({ question }) {
                         question?.options?.map( ( op, index ) => (
                             <label key={index} className="flex items-center space-x-3">
                                 <input
-                                    disabled
+                                    d
                                     type="radio"
                                     value={op.text}
                                     checked={ op.isCorrect === true }
