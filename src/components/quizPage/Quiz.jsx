@@ -132,10 +132,11 @@ export default function Quiz({
         dispatch({ type: 'GET_QUIZ_ANSWERS', payload: allAnswers });
         dispatch({ type: 'GET_SINGLE_QUIZ', payload: data.data });
 
-        const answersPayload = allAnswers.reduce((acc, answer) => {
-          acc[answer.questionId] = answer.selectedOption;
+        const answersPayload = allAnswers.reduce( ( acc, answer ) =>
+        {
+          acc[ answer.questionId ] = answer.selectedOption;
           return acc;
-        }, {});
+        }, {} );
 
         quizMutation.mutate( { answers: answersPayload } );
         quizMutation.isPending ?? <HashLoader color="#4e1f9b" size={100} speedMultiplier={2} />

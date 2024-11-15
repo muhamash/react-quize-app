@@ -6,11 +6,23 @@ import ErrorBoundary from "../components/common/ErrorBoundary";
 import QuizCard from '../components/homePage/QuizCard';
 import UserCard from "../components/homePage/UserCard";
 import useAuth from "../hooks/useAuth";
+import { useFetchData } from '../hooks/useFetchData';
 import useQuiz from "../hooks/useQuiz";
 
 export default function HomePage() {
     const { auth } = useAuth();
-    const { state, isLoading, error } = useQuiz();
+    const { state, dispatch } = useQuiz();
+
+    const {data ,isLoading, error } = useFetchData(
+        ['quizzes'],
+        'http://localhost:5000/api/quizzes',
+        {},
+    );
+
+    if ( data && state.quizzes.length === 0 )
+    {
+        dispatch({ type: "SET_QUIZZES", payload: data.data });
+    };
 
     if (isLoading) {
         return (
