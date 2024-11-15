@@ -7,7 +7,7 @@ import { initialState, quizReducer } from '../reducer/quizReducer';
 export default function QuizProvider ({children})
 {
     const [ state, dispatch ] = useReducer( quizReducer, initialState );
-    console.log(state)
+    // console.log(state)
     const {data ,isLoading, error } = useFetchData(
         ['quizzes'],
         'http://localhost:5000/api/quizzes',

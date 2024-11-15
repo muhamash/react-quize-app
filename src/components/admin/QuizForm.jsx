@@ -15,7 +15,7 @@ export default function QuizForm() {
         reset,
         watch,
         formState: { errors },
-    } = useForm({
+    } = useForm( {
         defaultValues: {
             quizTitle: '',
             options: [
@@ -25,21 +25,23 @@ export default function QuizForm() {
                 { text: '', isCorrect: false },
             ],
         },
-    });
+    } );
 
-    useEffect(() => {
-        if (currentQuestion) {
-            reset({
+    useEffect( () =>
+    {
+        if ( currentQuestion )
+        {
+            reset( {
                 quizTitle: currentQuestion.quizTitle,
                 options: currentQuestion.options,
-            });
+            } );
         }
-    }, [currentQuestion, reset]); // Dependency array includes `currentQuestion` and `reset`
+    }, [ currentQuestion, reset ] );
 
-    const { fields } = useFieldArray({
+    const { fields } = useFieldArray( {
         control,
         name: 'options',
-    });
+    } );
 
     const selectedCorrectOptions = watch('options').filter((option) => option.isCorrect);
 
@@ -97,7 +99,10 @@ export default function QuizForm() {
                     <input
                         type="text"
                         id="quizTitle"
-                        {...register('quizTitle', { required: 'Quiz title is required' })}
+                        { ...register( 'quizTitle', {
+                            required: 'Quiz title is required',
+                            validate: (value) => value.trim().length > 0 || "Quiz title cannot be empty",
+                         })}
                         className="w-full mt-2 p-2 border border-input rounded-md bg-background text-foreground"
                         placeholder="Enter quiz title"
                     />

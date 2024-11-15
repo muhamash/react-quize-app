@@ -39,7 +39,7 @@ export default function CreateQuiz ()
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-8 lg:gap-12">
                             <QuizForm />
-                            <div className="px-4 max-h-[800px] overflow-y-scroll">
+                            <div className="px-4 lg:h-[800px] h-[500px] my-5 overflow-y-scroll">
                                 {
                                     state?.questions?.map( ( question ) => (
                                         <Question key={ question.id } question={ question } />

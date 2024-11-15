@@ -11,7 +11,6 @@ import useQuiz from "../hooks/useQuiz";
 export default function HomePage() {
     const { auth } = useAuth();
     const { state, isLoading, error } = useQuiz();
-    
 
     if (isLoading) {
         return (

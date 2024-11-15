@@ -1,8 +1,12 @@
+/* eslint-disable react/prop-types */
 // import React from 'react';
+// import { useNavigate } from "react-router-dom";
 
-export default function AddQuizCard() {
+export default function AddQuizCard ({onClick})
+{
+    // const navigate = useNavigate();
     return (
-        <button  className="group">
+        <button onClick={onClick} className="group">
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 ">
                 <div className="text-buzzr-purple mb-4 group-hover:scale-105 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24"

@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+// PrivateRoute.js
 import { Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
@@ -9,9 +10,14 @@ export default function PrivateRoute({ requiredRole }) {
     return <Navigate to="/login" />;
   }
 
-  if (requiredRole && auth.user.role !== requiredRole) {
-    return <Navigate to="/" />;
+  const redirectMap = {
+    user: "/",
+    admin: "/dashboard",
+  };
+
+  if (requiredRole && auth?.user?.role !== requiredRole) {
+    return <Navigate to={redirectMap[requiredRole] || "/"} />;
   }
 
   return <Outlet />;
-};
+}

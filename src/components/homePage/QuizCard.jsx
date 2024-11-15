@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import { motion, useInView } from 'framer-motion';
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import { GridLoader } from 'react-spinners';
+import useAuth from '../../hooks/useAuth';
 import useQuiz from '../../hooks/useQuiz';
 import QuizPage from '../../page/QuizePage';
 import ResultPage from '../../page/ResultPage';
@@ -26,24 +28,29 @@ const QuizCard = ({ quiz }) => {
   const [loading, setLoading] = React.useState(true);
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true });
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { state } = useQuiz();
-  const [modalStep, setModalStep] = React.useState(-1);
+  const [ modalStep, setModalStep ] = React.useState( -1 );
+  const { auth } = useAuth();
 
   // console.log(state.quizAttempts, state?.quizAttempts, quiz.id);
 
   const handleClick = () =>
   {
-    const hasAttemptedQuiz = state?.quizAttempts?.some( ( attempt ) => attempt[ quiz.id ] );
-
-    // console.log( hasAttemptedQuiz );
-  
-    if ( hasAttemptedQuiz )
+    if ( auth )
     {
-      setModalStep( 1 );
+      const hasAttemptedQuiz = state?.quizAttempts?.some( ( attempt ) => attempt[ quiz.id ] );
+
+      if ( hasAttemptedQuiz )
+      {
+        setModalStep( 1 );
+      } else
+      {
+        setModalStep( 0 );
+      }
     } else
     {
-      setModalStep( 0 );
+      navigate( '/login' );
     }
   };
 

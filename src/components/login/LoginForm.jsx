@@ -52,7 +52,15 @@ const LoginForm = () =>
             const refreshToken = tokens.refreshToken;
             setAuth( { user, authToken, refreshToken } );
             // toast.success( `Hey ${user.full_name}, login access granted!!!` );
-            navigate( '/' );
+            
+            if ( user.role === 'user' )
+            {
+                navigate( '/' );
+            }
+
+            if (user.role === 'admin'){
+                navigate( '/dashboard' );
+            }
         }
     };
 
@@ -74,6 +82,7 @@ const LoginForm = () =>
 
     const submitForm = ( formData ) =>
     {
+        console.log(formData)
         loginMutation.mutate( formData, {
             headers: {
                 Authorization: `Bearer ${token}`
