@@ -5,7 +5,9 @@ import { AuthContext } from '../context/index';
 
 export default function AuthProvider({ children }) {
     const [auth, setAuth] = useState(null);
-    const [loading, setLoading] = useState(true);  
+    const [ loading, setLoading ] = useState( true );  
+    
+      console.log( auth );
 
     useEffect( () =>
     {

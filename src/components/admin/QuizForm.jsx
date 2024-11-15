@@ -1,6 +1,11 @@
 import { useFieldArray, useForm } from 'react-hook-form';
+import useCreateQuiz from '../../hooks/useCreateQuiz';
 
-export default function QuizForm() {
+export default function QuizForm ()
+{
+    const { state, dispatch } = useCreateQuiz();
+    const { currentQuestion } = state;
+
     const { register, control, handleSubmit } = useForm({
         defaultValues: {
             quizTitle: '',
@@ -19,7 +24,11 @@ export default function QuizForm() {
     });
 
     const onSubmit = (data) => {
-        console.log('Quiz Data:', data);
+        if (currentQuestion) {
+            dispatch({ type: 'EDIT_QUESTION', payload: { ...currentQuestion, ...data } });
+        } else {
+            dispatch({ type: 'ADD_QUESTION', payload: { id: Date.now(), ...data } });
+        }
     };
 
     return (
@@ -74,7 +83,7 @@ export default function QuizForm() {
                     type="submit"
                     className="w-full bg-primary text-white text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
                 >
-                    Save Quiz
+                    {currentQuestion ? 'Update Question' : 'Add Question'}
                 </button>
             </div>
         </form>

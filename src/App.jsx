@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { PacmanLoader } from 'react-spinners';
 import './App.css';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import { CreateQuizProvider } from './context/CreateQuizProvider';
 import QuizProvider from './context/QuizProvider';
 import AdminLayout from './layouts/AdminLayout';
 import MainLayout from './layouts/MainLayout';
@@ -30,34 +31,35 @@ function App ()
       }>
         <Fragment>
           <QuizProvider>
-            <Routes>
-              {/* Private Routes for Logged-in Users */ }
-              <Route element={ <PrivateRoute requiredRole="user" /> }>
+            <CreateQuizProvider>
+              <Routes>
+                {/* Private Routes for Logged-in Users */ }
+                <Route element={ <PrivateRoute requiredRole="user" /> }>
+                  <Route element={ <MainLayout /> }>
+                    <Route path="/" element={ <HomePage /> } />
+                    <Route path="/leaderBoard" element={ <LeaderBoard /> } />
+                  </Route>
+                </Route>
+
+                {/* Private Routes for Admins */ }
+                <Route element={ <PrivateRoute requiredRole="admin" /> }>
+                  <Route element={ <AdminLayout /> }>
+                    <Route path="/dashBoard" element={ <DashBoard /> } />
+                    <Route path="/addQuiz" element={ <AddQuizCardPage /> } />
+                    {/* <Route path="/createQuiz" element={ <CreateQuiz /> } /> */ }
+                  </Route>
+                </Route>
+
+                {/* Public Routes accessible to all users */ }
                 <Route element={ <MainLayout /> }>
                   <Route path="/" element={ <HomePage /> } />
-                  <Route path="/leaderBoard" element={ <LeaderBoard /> } />
                 </Route>
-              </Route>
-
-              {/* Private Routes for Admins */ }
-              <Route element={ <PrivateRoute requiredRole="admin" /> }>
-                <Route element={ <AdminLayout /> }>
-                  {/* <Route path="/dashBoard" element={ <DashBoard /> } />
-                  <Route path="/addQuiz" element={ <AddQuizCardPage /> } />
-                  <Route path="/createQuiz" element={ <CreateQuiz /> } /> */}
-                </Route>
-              </Route>
-
-              {/* Public Routes accessible to all users */ }
-              <Route element={ <MainLayout /> }>
-                <Route path="/" element={ <HomePage /> } />
-              </Route>
-              <Route path="/login" element={ <Login /> } />
-              <Route path="/registration" element={ <RegistrationPage /> } />
-              <Route path="/dashBoard" element={ <DashBoard /> } />
-              <Route path="/addQuiz" element={ <AddQuizCardPage /> } />
-              <Route path="/createQuiz" element={ <CreateQuiz /> } />
-            </Routes>
+                <Route path="/login" element={ <Login /> } />
+                <Route path="/registration" element={ <RegistrationPage /> } />
+                {/* <Route path="/dashBoard" element={ <DashBoard /> } /> */ }
+                <Route path="/createQuiz" element={ <CreateQuiz /> } />
+              </Routes>
+            </CreateQuizProvider>
           </QuizProvider>
         </Fragment>
       </Suspense>
