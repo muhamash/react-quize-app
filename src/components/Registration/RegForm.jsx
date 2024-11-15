@@ -77,7 +77,10 @@ const RegisterForm = () => {
                         id="name"
                         className="w-full px-4 py-3 rounded-lg border border-gray-300"
                         placeholder="John Doe"
-                        { ...register( 'name', { required: 'Full name is required' } ) }
+                        { ...register( 'name', {
+                            required: 'Full name is required',
+                            validate: ( value ) => value.trim().length > 0 || "name cannot be empty",
+                         } ) }
                     />
                     { errors.name && <p className="text-red-600">{ errors.name.message }</p> }
                 </div>
