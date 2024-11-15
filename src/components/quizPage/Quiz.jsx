@@ -64,11 +64,12 @@ export default function Quiz({
   };
 
   const onSuccess = (response) => {
-    dispatch({ type: 'GET_QUIZ_ANSWERS_SERVER', payload: response.data });
-    dispatch({
+    dispatch( { type: 'GET_QUIZ_ANSWERS_SERVER', payload: response.data } );
+    
+    dispatch( {
       type: 'GET_ATTEMPT_ID',
       payload: { quizId: data?.data?.id, attemptId: response.data.attempt_id },
-    });
+    } );
 
     let result = {
       correctCount: 0,

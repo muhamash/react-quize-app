@@ -10,7 +10,7 @@ export default function CreateQuiz ()
 {
     const { state } = useCreateQuiz();
 
-    console.log( state.questions );
+    console.log( state );
 
     return (
         <HelmetProvider>
@@ -47,9 +47,13 @@ export default function CreateQuiz ()
            
                             <div className="px-4 lg:h-[700px] h-[500px] my-5 overflow-y-scroll">
                                 {
-                                    state?.questions?.map( ( question ) => (
-                                        <Question key={ question.id } question={ question } />
-                                    ) )
+                                    state?.quizList?.Questions?.length > 0 ? (
+                                        state?.quizList?.Questions?.map( ( question ) => (
+                                            <Question key={ question.id } question={ question } />
+                                        ) )
+                                    ) : (
+                                        <p className="text-violet-600 font-mono text-md">No questions in there!</p>
+                                    )
                                 }
                             </div>
                         </div>

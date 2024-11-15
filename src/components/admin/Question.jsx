@@ -5,6 +5,7 @@ import useCreateQuiz from '../../hooks/useCreateQuiz';
 export default function Question({ question }) {
     const { dispatch } = useCreateQuiz();
 
+    // console.log( question);
     // Handle Delete action
     const handleDelete = React.useCallback(() => {
         dispatch({ type: 'DELETE_QUESTION', payload: question.id });
@@ -15,12 +16,13 @@ export default function Question({ question }) {
         dispatch({ type: 'SET_CURRENT_QUESTION', payload: question });
     }, [dispatch, question]);
 
+
     return (
         <form className="rounded-lg overflow-hidden shadow-sm mb-4">
             <div className="bg-white p-6 !pb-2">
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-lg font-semibold">
-                        { question.quizTitle } 
+                        { question.question } 
                     </h3>
                 </div>
                 <div className="space-y-2">
@@ -28,14 +30,14 @@ export default function Question({ question }) {
                         question?.options?.map( ( op, index ) => (
                             <label key={index} className="flex items-center space-x-3">
                                 <input
-                                    d
+                                    disabled
                                     type="radio"
-                                    value={op.text}
-                                    checked={ op.isCorrect === true }
+                                    value={op}
+                                    checked={ question.correctAnswer === op }
                                     className="form-radio text-buzzr-purple"
                                     readOnly
                                 />
-                                <span>{ op.text }</span>
+                                <span>{ op }</span>
                             </label>
                         ) )
                     }
