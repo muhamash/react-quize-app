@@ -49,12 +49,12 @@ export default function DashBoard ()
                     <div className='relative'>
                         <SideBar />
                     </div>
-                    <div className="flex-grow p-10">
+                    <div className="flex-grow p-3 md:p-10">
                         <header className="mb-8">
                             <h2 className="text-2xl font-semibold">Hey There 👋!</h2>
                             <h1 className="text-4xl font-bold">Welcome Back To Your Quiz Hub!</h1>
                         </header>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="flex flex-wrap gap-6 w-full">
                             <AddQuizCard onClick={ handleCardClick } />
                             {
                                 quizList.map( q => (

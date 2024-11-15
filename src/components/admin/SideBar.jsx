@@ -1,9 +1,15 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 export default function SideBar() {
     const [isOpen, setIsOpen] = useState(false);
+    const { auth, setAuth } = useAuth();
+    const location = useLocation(); 
 
-    const toggleSidebar = () => setIsOpen(!isOpen);
+    const toggleSidebar = () => setIsOpen( !isOpen );
+    
+    const isActive = (path) => location.pathname === path;
 
     return (
         <>
@@ -27,23 +33,47 @@ export default function SideBar() {
                 <nav className="flex-grow">
                     <ul className="space-y-2">
                         <li>
-                            <a href="#" className="block py-2 px-4 rounded-lg bg-buzzr-purple bg-white text-primary font-bold">Quizzes</a>
+                            <Link
+                                to="/dashboard"
+                                className={`block py-2 px-4 rounded-lg font-bold ${
+                                    isActive('/dashboard') ? 'bg-white text-primary' : 'text-gray-100 hover:bg-gray-100 hover:text-primary'
+                                }`}>
+                                DashBoard
+                            </Link>
                         </li>
                         <li>
-                            <a href="#" className="block py-2 px-4 rounded-lg text-gray-100 hover:bg-gray-100 hover:text-primary">Manage Roles</a>
+                            <Link
+                                to="/createQuiz"
+                                className={`block py-2 px-4 rounded-lg font-bold ${
+                                    isActive('/createQuiz') ? 'bg-white text-primary' : 'text-gray-100 hover:bg-gray-100 hover:text-primary'
+                                }`}>
+                                Quiz Details
+                            </Link>
                         </li>
                         <li>
-                            <a href="#" className="block py-2 px-4 rounded-lg text-gray-100 hover:bg-gray-100 hover:text-primary">Logout</a>
+                            <Link
+                                to="/manage-roles"
+                                className={`block py-2 px-4 rounded-lg ${
+                                    isActive('/manage-roles') ? 'bg-white text-primary' : 'text-gray-100 hover:bg-gray-100 hover:text-primary'
+                                }`}>
+                                Manage Roles
+                            </Link>
+                        </li>
+                        <li>
+                            <p
+                                onClick={() => setAuth({})}
+                                className="block py-2 px-4 rounded-lg text-gray-100 hover:bg-gray-100 hover:text-primary">
+                                Logout
+                            </p>
                         </li>
                     </ul>
                 </nav>
                 <div className="mt-auto flex items-center py-10">
                     <img src="../assets/avater.webp" alt="Mr Hasan" className="w-10 h-10 rounded-full mr-3 object-cover" />
-                    <span className="text-white font-semibold">Saad Hasan</span>
+                    <span className="text-white font-semibold">{auth?.user?.full_name}</span>
                 </div>
             </aside>
 
-            {/* Overlay for Mobile Drawer */}
             {isOpen && (
                 <div
                     onClick={toggleSidebar}

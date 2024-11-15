@@ -3,7 +3,7 @@
 
 export default function DashBoardCard({data, onClick}) {
     return (
-        <div onClick={onClick} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 group cursor-pointer">
+        <div onClick={onClick} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 group cursor-pointer w-[300px] h-[250px] overflow-hidden">
             <div className="text-buzzr-purple mb-4 group-hover:scale-105 transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
