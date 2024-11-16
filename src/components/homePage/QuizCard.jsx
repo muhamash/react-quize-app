@@ -78,17 +78,17 @@ const QuizCard = ({ quiz }) => {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={`rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] cursor-pointer group relative ${!modalStep ? 'hidden' : 'block'}`}
       >
-        <div className="group-hover:scale-105 absolute transition-all text-white text-center top-1/2 -translate-y-1/2 px-4">
+        {/* <div className="group-hover:scale-105 absolute transition-all text-white text-center top-1/2 -translate-y-1/2 px-4">
           <h1 className="text-5xl" style={{ fontFamily: 'Jaro' }}>
-            {quiz.title}
+            {quiz?.title}
           </h1>
-          <p className="mt-2 text-lg">{quiz.description}</p>
-        </div>
+          <p className="mt-2 text-lg">{quiz?.description}</p>
+        </div> */}
 
         {loading && <Loader />}
 
         <QuizImage
-          src="./assets/backgrounds/5.jpg"
+          src={quiz?.thumbnail}
           onLoad={() => setLoading(false)}
           isLoading={loading}
         />

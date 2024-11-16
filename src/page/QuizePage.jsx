@@ -82,21 +82,25 @@ export default function QuizPage({onModalNext}) {
             <div className="lg:col-span-2 bg-white ">
               <Suspense fallback={ <p>Loading...</p> }>
                 <AnimatePresence mode="wait">
-                  { singleQuiz.data.questions && (
-                    <Quiz
-                      key={ singleQuiz.data.questions[ questionIndex ].id }
-                      question={ singleQuiz.data.questions[ questionIndex ] }
-                      onNext={ handleNext }
-                      onPrevious={ handlePrevious }
-                      currentIndex={ questionIndex }
-                      totalQuestions={ singleQuiz.data.questions.length }
-                      resetQuiz={ resetQuiz }
-                      allAnswers={ allAnswers }
-                      setAllAnswers={ setAllAnswers }
-                      data={ singleQuiz }
-                      onModalNext={onModalNext }
+                  { singleQuiz?.data?.questions?.length == 0 ? (
+                    <p>No questions in there!!!</p>
+                  ):
+                    (
+                      <Quiz
+                      key = { singleQuiz.data.questions[ questionIndex ].id }
+                  question={ singleQuiz.data.questions[ questionIndex ] }
+                  onNext={ handleNext }
+                  onPrevious={ handlePrevious }
+                  currentIndex={ questionIndex }
+                  totalQuestions={ singleQuiz.data.questions.length }
+                  resetQuiz={ resetQuiz }
+                  allAnswers={ allAnswers }
+                  setAllAnswers={ setAllAnswers }
+                  data={ singleQuiz }
+                  onModalNext={ onModalNext }
                     />
-                  ) }
+                  )
+                  }
                 </AnimatePresence>
               </Suspense>
             </div>

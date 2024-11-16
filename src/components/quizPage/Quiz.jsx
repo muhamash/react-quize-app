@@ -26,16 +26,16 @@ export default function Quiz({
   const { dispatch } = useQuiz();
 
   // Helper to shuffle options
-  const shuffleOptions = (options) => options.sort(() => Math.random() - 0.5);
+  const shuffleOptions = (options) => options?.sort(() => Math.random() - 0.5);
 
   // Memoize shuffled options
   const shuffledOptions = useMemo(() => shuffleOptions([...question.options]), [question.options]);
 
   // Memoize previous answer for the current question
   useMemo(() => {
-    const prevAnswer = allAnswers.find((answer) => answer.questionId === question.id);
-    setCurrentSelection(prevAnswer ? prevAnswer.selectedOption : null);
-  }, [question.id, allAnswers]);
+    const prevAnswer = allAnswers.find((answer) => answer?.questionId === question?.id);
+    setCurrentSelection(prevAnswer ? prevAnswer?.selectedOption : null);
+  }, [question?.id, allAnswers]);
 
   const slideAnimation = {
     initial: { y: currentIndex % 2 === 0 ? 50 : -50, opacity: 0 },
@@ -50,25 +50,25 @@ export default function Quiz({
     setCurrentSelection(newSelection);
 
     setAllAnswers((prevAnswers) => {
-      const updatedAnswers = prevAnswers.map((answer) =>
-        answer.questionId === question.id
+      const updatedAnswers = prevAnswers?.map((answer) =>
+        answer?.questionId === question?.id
           ? { ...answer, selectedOption: newSelection }
           : answer
       );
 
-      if (!updatedAnswers.some((answer) => answer.questionId === question.id)) {
-        updatedAnswers.push({ questionId: question.id, selectedOption: newSelection });
+      if (!updatedAnswers?.some((answer) => answer?.questionId === question?.id)) {
+        updatedAnswers?.push({ questionId: question?.id, selectedOption: newSelection });
       }
       return updatedAnswers;
     });
   };
 
   const onSuccess = (response) => {
-    dispatch( { type: 'GET_QUIZ_ANSWERS_SERVER', payload: response.data } );
+    dispatch( { type: 'GET_QUIZ_ANSWERS_SERVER', payload: response?.data } );
     
     dispatch( {
       type: 'GET_ATTEMPT_ID',
-      payload: { quizId: data?.data?.id, attemptId: response.data.attempt_id },
+      payload: { quizId: data?.data?.id, attemptId: response.data?.attempt_id },
     } );
 
     let result = {
@@ -76,18 +76,18 @@ export default function Quiz({
       wrongCount: 0,
       totalMarks: 0,
       percentage: Number(response.data.percentage),
-      quizMarks: data.data.stats.total_marks,
+      quizMarks: data?.data?.stats?.total_marks,
     };
 
-    allAnswers.forEach((answer) => {
-      const correctAnswer = response.data.correct_answers.find(
-        (u) => u.question_id === answer.questionId
+    allAnswers?.forEach((answer) => {
+      const correctAnswer = response?.data?.correct_answers?.find(
+        (u) => u?.question_id === answer?.questionId
       );
 
       if (correctAnswer) {
-        if (correctAnswer.answer === answer.selectedOption) {
+        if (correctAnswer?.answer === answer.selectedOption) {
           result.correctCount++;
-          result.totalMarks += correctAnswer.marks;
+          result.totalMarks += correctAnswer?.marks;
         } else {
           result.wrongCount++;
         }
@@ -160,11 +160,11 @@ export default function Quiz({
     <motion.div className="bg-white p-6 rounded-md" {...slideAnimation}>
       <Toaster position="top-center" reverseOrder={false} />
       <h3 className="text-2xl font-semibold mb-5">
-        {currentIndex + 1}. {question.question}
+        {currentIndex + 1}. {question?.question}
       </h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-          {shuffledOptions.map((option, index) => (
+          {shuffledOptions?.map((option, index) => (
             <QuizOption
               key={index}
               option={option}

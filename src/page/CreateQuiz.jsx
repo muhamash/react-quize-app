@@ -12,7 +12,18 @@ export default function CreateQuiz ()
 
     console.log( state );
 
-    const quiz = state?.quizzes?.find( quiz => state?.quizEditResponse?.id === quiz.id );
+    // 
+    const quiz = state?.quizzes?.find( quiz =>
+    {
+        if ( state?.quizList?.status === 'draft' )
+        {
+            return state?.quizzes?.id === quiz.id;
+        }
+        else
+        {
+            return;
+        }
+    } );
 
     return (
         <HelmetProvider>

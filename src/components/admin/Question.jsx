@@ -1,8 +1,9 @@
+ 
 /* eslint-disable react/prop-types */
 import React from 'react';
 import useCreateQuiz from '../../hooks/useCreateQuiz';
 
-export default function Question({ question }) {
+export default function Question({ question, status }) {
     const { dispatch } = useCreateQuiz();
 
     // console.log( question);
@@ -22,17 +23,17 @@ export default function Question({ question }) {
             <div className="bg-white p-6 !pb-2">
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-lg font-semibold">
-                        { question.question } 
+                        { question.question }
                     </h3>
                 </div>
                 <div className="space-y-2">
                     {
                         question?.options?.map( ( op, index ) => (
-                            <label key={index} className="flex items-center space-x-3">
+                            <label key={ index } className="flex items-center space-x-3">
                                 <input
                                     disabled
                                     type="radio"
-                                    value={op}
+                                    value={ op }
                                     checked={ question.correctAnswer === op }
                                     className="form-radio text-buzzr-purple"
                                     readOnly
@@ -44,22 +45,26 @@ export default function Question({ question }) {
                     
                 </div>
             </div>
-            <div className="flex space-x-4 bg-primary/10 px-6 py-2">
-                <button
-                    type="button"
-                    onClick={ handleDelete }
-                    className="text-red-600 hover:text-red-800 font-medium"
-                >
-                    Delete
-                </button>
-                <button
-                    type="button"
-                    onClick={ handleEdit }
-                    className="text-primary hover:text-primary/80 font-medium"
-                >
-                    Edit Question
-                </button>
-            </div>
+            {
+                !status === 'published' && (
+                    <div className="flex space-x-4 bg-primary/10 px-6 py-2">
+                        <button
+                            type="button"
+                            onClick={ handleDelete }
+                            className="text-red-600 hover:text-red-800 font-medium"
+                        >
+                            Delete
+                        </button>
+                        <button
+                            type="button"
+                            onClick={ handleEdit }
+                            className="text-primary hover:text-primary/80 font-medium"
+                        >
+                            Edit Question
+                        </button>
+                    </div>
+                )
+            }
         </form>
     );
 }

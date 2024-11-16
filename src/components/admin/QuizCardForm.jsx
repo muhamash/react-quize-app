@@ -1,5 +1,4 @@
- 
-/* eslint-disable react/prop-types */
+ /* eslint-disable react/prop-types */
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -23,7 +22,7 @@ const QuizCardForm = ( { onClose } ) =>
   const onSuccess = ( response ) =>
   {
     console.log( response );
-    dispatch( { type: "SET_QUIZ_INFO", payload: response.data } );
+    dispatch( { type: "SET_QUIZ_INFO", payload: response?.data } );
     Swal.fire( {
       position: "top-end",
       icon: "success",
@@ -36,7 +35,7 @@ const QuizCardForm = ( { onClose } ) =>
   };
 
   const onError = (error) => {
-    alert(`Something went wrong: ${error.message}. Please try again!`);
+    alert(`Something went wrong: ${error?.message}. Please try again!`);
   };
 
   const quizCardPatch = usePatchData( {

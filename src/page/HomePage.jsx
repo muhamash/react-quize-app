@@ -57,7 +57,7 @@ export default function HomePage() {
                                 <p className="text-violet-800 font-mono">No quizzes found on the server! or there is no quizzes left!!!</p>
                             ) : (
                                 state?.quizzes?.map( ( quiz ) => (
-                                    <AnimatePresence key={ quiz.id }>
+                                    <AnimatePresence mode="wait" key={ quiz.id }>
                                         <ErrorBoundary>
                                              <QuizCard  quiz={ quiz } />
                                        </ErrorBoundary>
