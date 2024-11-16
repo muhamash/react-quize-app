@@ -24,6 +24,7 @@ export default function DashBoard() {
         if ( quiz )
         {
             dispatch( { type: "SET_QUIZ_LIST", payload: quiz } );
+            dispatch( { type: "SET_ALL_QUIZ", payload: quizList } );
             // navigate("/createQuiz");
         }
         setOpen( true );

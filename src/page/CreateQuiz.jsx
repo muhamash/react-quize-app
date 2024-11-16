@@ -12,6 +12,8 @@ export default function CreateQuiz ()
 
     console.log( state );
 
+    const quiz = state?.quizzes?.find( quiz => state?.quizEditResponse?.id === quiz.id );
+
     return (
         <HelmetProvider>
             <Helmet>
@@ -47,8 +49,8 @@ export default function CreateQuiz ()
            
                             <div className="px-4 lg:h-[700px] h-[500px] my-5 overflow-y-scroll">
                                 {
-                                    state?.quizList?.Questions?.length > 0 ? (
-                                        state?.quizList?.Questions?.map( ( question ) => (
+                                    quiz?.Questions?.length > 0 ? (
+                                        quiz?.Questions?.map( ( question ) => (
                                             <Question key={ question.id } question={ question } />
                                         ) )
                                     ) : (
