@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 // import React from 'react';
 
-export default function DashBoardCard({data, onClick}) {
+export default function DashBoardCard ( { data, onClick } )
+{
+    
     return (
         <div onClick={onClick} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 group cursor-pointer w-[300px] h-[250px] overflow-hidden">
             <div className="text-buzzr-purple mb-4 group-hover:scale-105 transition-all">

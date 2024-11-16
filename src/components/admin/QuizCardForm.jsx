@@ -21,9 +21,9 @@ const QuizCardForm = ( { onClose } ) =>
   const onSuccess = ( response ) =>
   {
     console.log( response );
-    dispatch({ type: "SET_QUIZ_LIST", payload: response.data });
+    // onClose();
     navigate( "/createQuiz" );
-    onClose();
+    dispatch({ type: "SET_QUIZ_INFO", payload: response.data });
   };
 
   const onError = (error) => {

@@ -28,30 +28,30 @@ export default function LeaderBoard() {
     {
         return attempts.map( ( leader ) =>
         {
-            const correctAnswers = leader.correct_answers;
-            const submittedAnswers = leader.submitted_answers;
+            const correctAnswers = leader?.correct_answers;
+            const submittedAnswers = leader?.submitted_answers;
       
             let totalMarks = 0;
 
             correctAnswers.forEach( ( correctAnswer ) =>
             {
-                const userAnswer = submittedAnswers.find(
-                    ( answer ) => answer.question_id === correctAnswer.question_id
+                const userAnswer = submittedAnswers?.find(
+                    ( answer ) => answer?.question_id === correctAnswer?.question_id
                 );
 
-                if ( userAnswer && userAnswer.answer === correctAnswer.answer )
+                if ( userAnswer && userAnswer?.answer === correctAnswer?.answer )
                 {
-                    totalMarks += correctAnswer.marks;
+                    totalMarks += correctAnswer?.marks;
                 }
             } );
 
             return { ...leader, totalMarks };
-        } ).sort( ( a, b ) => b.totalMarks - a.totalMarks );
+        } ).sort( ( a, b ) => b?.totalMarks - a?.totalMarks );
     };
 
     const sortedLeaderboard = leaderBoard?.data?.attempts ? calculateScores( leaderBoard.data.attempts ) : [];
 
-    const userRank = sortedLeaderboard.findIndex( leader => leader.user.id === auth.user.id ) + 1;
+    const userRank = sortedLeaderboard?.findIndex( leader => leader?.user?.id === auth?.user?.id ) + 1;
     
 
   if (isLoading) {
@@ -86,11 +86,11 @@ export default function LeaderBoard() {
                             <h1 className="text-2xl font-bold">LeaderBoard</h1>
                             <p className="mb-6 text-violet-800">{ leaderBoard.data.quiz.title }</p>
                             <ul className="space-y-4 max-h-[400px] overflow-y-scroll">
-                                { sortedLeaderboard.map( ( leader, index ) => (
+                                { sortedLeaderboard?.map( ( leader, index ) => (
                                     <RightCard
-                                        user={ leader.user }
-                                        key={ leader.user.id }
-                                        totalMarks={ leader.totalMarks }
+                                        user={ leader?.user }
+                                        key={ leader?.user?.id }
+                                        totalMarks={ leader?.totalMarks }
                                         isTopFive={ index < 5 } 
                                     />
                                 ) ) }
