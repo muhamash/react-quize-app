@@ -2,6 +2,8 @@
 /* eslint-disable react/prop-types */
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
 import useCreateQuiz from "../../hooks/useCreateQuiz";
 import { usePatchData } from "../../hooks/usePatchData";
 import { usePostData } from "../../hooks/usePostData";
@@ -22,6 +24,13 @@ const QuizCardForm = ( { onClose } ) =>
   {
     console.log( response );
     dispatch( { type: "SET_QUIZ_INFO", payload: response.data } );
+    Swal.fire( {
+      position: "top-end",
+      icon: "success",
+      title: "Your work has been saved",
+      showConfirmButton: false,
+      timer: 1000
+    } );
     onClose();
     navigate( "/createQuiz" );
   };

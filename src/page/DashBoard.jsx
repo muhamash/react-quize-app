@@ -2,11 +2,14 @@
 import { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { HashLoader } from "react-spinners";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
 import AddQuizCard from "../components/admin/AddQuizCard";
 import DashBoardCard from "../components/admin/DashBoardCard";
 import QuizCardForm from "../components/admin/QuizCardForm";
 import SideBar from "../components/admin/SideBar";
 import useCreateQuiz from "../hooks/useCreateQuiz";
+import { useDelete } from "../hooks/useDelete";
 import { useFetchData } from "../hooks/useFetchData";
 
 export default function DashBoard() {
@@ -30,9 +33,49 @@ export default function DashBoard() {
         setOpen( true );
     };
 
+    const onSuccess = () =>
+    {
+        Swal.fire( {
+            title: "Deleted!",
+            text: "Quiz has been deleted!!",
+            icon: "success"
+        } );
+    }
+
+    const onError = () =>
+    {
+        Swal.fire( {
+            title: "Error",
+            text: "Can't deleted!!!",
+            icon: "error"
+        } );
+    }
+
+    const quizDelete = useDelete( {
+        queryKey: [`quizListAdmin`],
+        url: ``,
+        onSuccess,
+        onError
+    })
+
     const onDelete = (id) =>
     {
-        alert( id );
+        Swal.fire( {
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#5f149d",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        } ).then( ( result ) =>
+        {
+            if ( result.isConfirmed )
+            {
+                quizDelete.mutate( { url: `http://localhost:5000/api/admin/quizzes/${id}` } );
+
+            }
+        } );
     }
 
     const handleOpen = () => setOpen( true );
