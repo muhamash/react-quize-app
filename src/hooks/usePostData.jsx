@@ -1,9 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAxios from './useAxios';
 
-export const usePostData = ( { url, onSuccess, onError } ) =>
+export const usePostData = ( { queryKey, url, onSuccess, onError } ) =>
 {
     const { api } = useAxios();
+    const queryClient = useQueryClient();
     
     return useMutation( {
         mutationFn: async ( payload ) =>
@@ -14,6 +15,7 @@ export const usePostData = ( { url, onSuccess, onError } ) =>
         onSuccess: ( data ) =>
         {
             if ( onSuccess ) onSuccess( data );
+            queryClient.invalidateQueries( queryKey );
         },
         onError: ( error ) =>
         {

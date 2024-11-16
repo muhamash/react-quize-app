@@ -22,6 +22,10 @@ export default function DashBoard() {
         `http://localhost:5000/api/admin/quizzes`
     );
 
+    if (quizList && state?.quizzes !== quizList) {
+        dispatch({ type: "SET_ALL_QUIZ", payload: quizList });
+    };
+
     const handleEditCardClick = (id) => {
         const quiz = quizList?.find((q) => q?.id === id);
         if (quiz) {
@@ -29,8 +33,22 @@ export default function DashBoard() {
             {
                 dispatch( { type: "SET_QUIZ_LIST", payload: quiz } );
                 setOpenQuestion(true);
-            } else {
-                dispatch({ type: "SET_QUIZ_LIST", payload: quiz });
+            } else
+            {
+                // console.log(quiz?.Questions)
+                dispatch( { type: "SET_QUIZ_LIST", payload: quiz } );
+
+                quiz?.Questions?.forEach( ( question ) =>
+                {
+                    dispatch( {
+                        type: "ADD_QUESTION",
+                        payload: {
+                            id: quiz?.id,
+                            question: question,
+                        },
+                    } );
+                } );
+
                 setOpen(true);
             }
         }

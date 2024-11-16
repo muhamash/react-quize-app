@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 import useCreateQuiz from '../../hooks/useCreateQuiz';
+import { usePostData } from '../../hooks/usePostData';
 
 export default function QuizForm() {
     const { state, dispatch } = useCreateQuiz();
@@ -15,68 +16,72 @@ export default function QuizForm() {
         reset,
         watch,
         formState: { errors },
-    } = useForm( {
+    } = useForm({
         defaultValues: {
-            quizTitle: '',
-            options: [
-                { text: '', isCorrect: false },
-                { text: '', isCorrect: false },
-                { text: '', isCorrect: false },
-                { text: '', isCorrect: false },
-            ],
+            quizTitle: currentQuestion?.question || '',
+            options: currentQuestion?.options || Array(4).fill({ text: '', isCorrect: false }),
         },
-    } );
+    });
 
-    useEffect( () =>
-    {
-        if ( currentQuestion )
-        {
-            reset( {
-                quizTitle: currentQuestion.question,
-                options: currentQuestion.options,
-            } );
-        }
-    }, [ currentQuestion, reset ] );
+    const { fields } = useFieldArray({ control, name: 'options' });
 
-    const { fields } = useFieldArray( {
-        control,
-        name: 'options',
-    } );
+    const selectedCorrectOptions = useMemo(() => 
+        watch('options').filter((option) => option.isCorrect), 
+        [watch]
+    );
 
-    const selectedCorrectOptions = watch('options').filter((option) => option.isCorrect);
+    const onSuccess = (response) => {
+        dispatch( {
+            type: 'ADD_QUESTION', payload: {
+                id: state?.quizEditResponse?.id,
+                question: response.data
+        } });
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Question saved successfully!',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        reset();
+    };
 
-    const handleReset = () => {
-        dispatch({ type: 'SET_CURRENT_QUESTION', payload: null });
-        reset({
-            quizTitle: '',
-            options: [
-                { text: '', isCorrect: false },
-                { text: '', isCorrect: false },
-                { text: '', isCorrect: false },
-                { text: '', isCorrect: false },
-            ],
+    const onError = (error) => {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `Error: ${error.message}`,
+            showConfirmButton: false,
+            timer: 1500,
         });
     };
+
+    const addQuizMutation = usePostData( {
+        queryKey: [`quizListAdmin`],
+        url: `http://localhost:5000/api/admin/quizzes/${state?.quizEditResponse?.id}/questions`,
+        onSuccess,
+        onError,
+    } );
 
     const onSubmit = (data) => {
         if (selectedCorrectOptions.length !== 1) {
             Swal.fire({
                 position: 'top-end',
                 icon: 'error',
-                title: 'Select One checkbox as the answer',
+                title: 'Select exactly one correct answer.',
                 showConfirmButton: false,
                 timer: 1500,
             });
             return;
         }
 
-        if (currentQuestion) {
-            dispatch({ type: 'EDIT_QUESTION', payload: { id: currentQuestion.id, ...data } });
-        } else {
-            dispatch({ type: 'ADD_QUESTION', payload: { id: Date.now(), ...data } });
-        }
-
-        handleReset();
+        const correctAnswerText = data.options.find( ( opt ) => opt.isCorrect )?.text;
+        
+        addQuizMutation.mutate({
+            question: data?.quizTitle,
+            options: data?.options?.map((opt) => opt?.text),
+            correctAnswer: correctAnswerText,
+        });
     };
 
     return (

@@ -10,12 +10,12 @@ import { usePostData } from "../../hooks/usePostData";
 const QuizCardForm = ( { onClose } ) =>
 {
   const { dispatch, state } = useCreateQuiz();
-  const { register, handleSubmit, formState: { errors }} = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm( {
     defaultValues: {
       title: state?.quizList?.title || "",
-      description: state?.quizList?.description || "" ,
+      description: state?.quizList?.description || "",
     },
-  });
+  } );
 
   const navigate = useNavigate();
 

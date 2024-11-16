@@ -13,17 +13,8 @@ export default function CreateQuiz ()
     console.log( state );
 
     // 
-    const quiz = state?.quizzes?.find( quiz =>
-    {
-        if ( state?.quizList?.status === 'draft' )
-        {
-            return state?.quizzes?.id === quiz.id;
-        }
-        else
-        {
-            return;
-        }
-    } );
+    const quizQuestions = state?.addQuestions[ state?.quizEditResponse?.id ];
+    console.log( quizQuestions, state.addQuestions);
 
     return (
         <HelmetProvider>
@@ -60,8 +51,8 @@ export default function CreateQuiz ()
            
                             <div className="px-4 lg:h-[700px] h-[500px] my-5 overflow-y-scroll">
                                 {
-                                    quiz?.Questions?.length > 0 ? (
-                                        quiz?.Questions?.map( ( question ) => (
+                                    quizQuestions?.length > 0 ? (
+                                        quizQuestions?.map( ( question ) => (
                                             <Question key={ question.id } question={ question } />
                                         ) )
                                     ) : (

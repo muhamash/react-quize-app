@@ -1,5 +1,5 @@
 const initialState = {
-    questions: [],
+    addQuestions: {},
     currentQuestion: null,
     quizEditResponse: [],
     quizzes: [],
@@ -21,7 +21,7 @@ function quizReducer ( state, action )
         case 'EDIT_QUESTION':
             return {
                 ...state,
-                questions: state.questions.map((q) =>
+                addQuestions: state.questions.map((q) =>
                     q.id === action.payload.id ? action.payload : q
                 ),
                 currentQuestion: null,
@@ -31,11 +31,32 @@ function quizReducer ( state, action )
                 ...state,
                 questions: state.questions.filter((q) => q.id !== action.payload),
             };
-        case 'ADD_QUESTION':
+        case 'ADD_QUESTION': {
+            const { id, question } = action.payload;
+
+            // Retrieve existing questions for the quiz
+            const existingQuizQuestions = state.addQuestions[ id ] || [];
+
+            // Check for duplicate question by ID
+            const isDuplicate = existingQuizQuestions.some(
+                ( q ) => q.id === question.id
+            );
+
+            if ( isDuplicate )
+            {
+                return state; // Do nothing if the question already exists
+            }
+
+            // Append the new question to the existing array
             return {
                 ...state,
-                questions: [...state.questions, action.payload],
+                addQuestions: {
+                    ...state.addQuestions,
+                    [ id ]: [ ...existingQuizQuestions, question ],
+                },
             };
+        };
+        
         default:
             return state;
     }
