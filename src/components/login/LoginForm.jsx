@@ -122,7 +122,7 @@ const LoginForm = () =>
                 { errors.password && <p className="text-red-600">{ errors.password.message }</p> }
             </div>
 
-            <div className="mb-6 flex gap-2 items-center">
+            {/* <div className="mb-6 flex gap-2 items-center">
                 <input
                     type="checkbox"
                     id="admin"
@@ -132,7 +132,7 @@ const LoginForm = () =>
                 <label htmlFor="admin" className="block">
                     Login as Admin
                 </label>
-            </div>
+            </div> */}
             { errors.random && <p className="text-red-600">{ errors.random.message }</p> }
             <button
                 type="submit"

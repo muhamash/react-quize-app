@@ -10,7 +10,7 @@ import useCreateQuiz from "../hooks/useCreateQuiz";
 import { useFetchData } from "../hooks/useFetchData";
 
 export default function DashBoard() {
-    const [open, setOpen] = useState(false);
+    const [ open, setOpen ] = useState( false );
     const { dispatch } = useCreateQuiz();
     const { data: quizList, isLoading, error } = useFetchData(
         `quizListAdmin`,
@@ -18,21 +18,28 @@ export default function DashBoard() {
     );
     // const navigate = useNavigate();
 
-    const handleCardClick = (id) => {
-        const quiz = quizList?.find((q) => q?.id === id);
-        if (quiz) {
-            dispatch({ type: "SET_QUIZ_LIST", payload: quiz });
+    const handleEditCardClick = ( id ) =>
+    {
+        const quiz = quizList?.find( ( q ) => q?.id === id );
+        if ( quiz )
+        {
+            dispatch( { type: "SET_QUIZ_LIST", payload: quiz } );
             // navigate("/createQuiz");
         }
         setOpen( true );
     };
+
+    const onDelete = (id) =>
+    {
+        alert( id );
+    }
 
     const handleOpen = () => setOpen( true );
     
     const handleClose = () =>
     {
         dispatch({ type: "SET_QUIZ_LIST", payload: null });
-        setOpen(false);
+        setOpen( false );
     }
 
     if (isLoading) {
@@ -73,11 +80,12 @@ export default function DashBoard() {
                         <div className="flex flex-wrap gap-6 w-full">
                             <AddQuizCard onClick={handleOpen} />
                             {quizList?.length > 0 ? (
-                                quizList.map((q) => (
+                                quizList?.map((q) => (
                                     <DashBoardCard
                                         key={q.id}
-                                        onClick={() => handleCardClick(q.id)}
-                                        data={q}
+                                        onEdit={() => handleEditCardClick(q.id)}
+                                        data={ q }
+                                        onDelete={()=>onDelete(q.id)}
                                     />
                                 ))
                             ) : (
