@@ -7,7 +7,7 @@ import useCreateQuiz from '../../hooks/useCreateQuiz';
 import { usePatchData } from '../../hooks/usePatchData';
 import { usePostData } from '../../hooks/usePostData';
 
-export default function QuizForm({editQuestionData}) {
+export default function QuizForm({editQuestionData, setEditQuestionData}) {
     const { state, dispatch } = useCreateQuiz();
 
     const totalQuestions = state?.addQuestions[ state?.quizEditResponse?.id ];
@@ -71,6 +71,7 @@ export default function QuizForm({editQuestionData}) {
             quizTitle: '',
             options: Array( 4 ).fill( { text: '', isCorrect: false } ),
         } );
+        setEditQuestionData( "" );
     };
 
     const onError = ( error ) =>
@@ -103,7 +104,7 @@ export default function QuizForm({editQuestionData}) {
             Swal.fire({
                 position: 'top-end',
                 icon: 'error',
-                title: 'Select exactly one correct answer.',
+                title: `Select exactly ${editQuestionData ? "re-select" : ""} one  correct answer.`,
                 showConfirmButton: false,
                 timer: 1500,
             });
@@ -129,12 +130,12 @@ export default function QuizForm({editQuestionData}) {
 
     return (
         <form onSubmit={ handleSubmit( onSubmit ) } className="space-y-4">
-            <h2 className="text-3xl font-bold mb-4">Binary Tree Quiz</h2>
+            <h2 className="text-3xl font-bold mb-4">{ state?.quizEditResponse?.title }</h2>
             <div className="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded-full inline-block mb-4">
                 Total number of questions: { totalQuestions?.length }
             </div>
-            <p className="text-gray-600 mb-4">
-                Test understanding of binary tree traversal methods, tree properties, and algorithms.
+            <p className="text-violet-700 mb-4">
+                { state?.quizEditResponse?.description }
             </p>
 
             <div className="space-y-4">

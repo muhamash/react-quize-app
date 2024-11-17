@@ -11,7 +11,7 @@ export default function CreateQuiz ()
     const [ editQuestionData, setEditQuestionData ] = React.useState( "" );
     const { state } = useCreateQuiz();
 
-    console.log( state );
+    console.log( state.quizEditResponse );
 
     const quizQuestions = state?.addQuestions[ state?.quizEditResponse?.id ];
     // console.log( quizQuestions, state.addQuestions);
@@ -42,7 +42,8 @@ export default function CreateQuiz ()
                             </ol>
                         </nav>
                         <div className='py-5'>
-                            <button className='bg-violet-600 text-white px-4 py-2 rounded-md shadow-md'>
+                            <button
+                                className='bg-violet-600 text-white px-4 py-2 rounded-md shadow-md'>
                                 Publish quiz
                             </button>
                         </div>
