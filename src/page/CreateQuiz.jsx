@@ -1,20 +1,65 @@
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
 import Question from "../components/admin/Question";
 import QuizForm from "../components/admin/QuizForm";
 import SideBar from "../components/admin/SideBar";
 import useCreateQuiz from '../hooks/useCreateQuiz';
+import { usePatchData } from '../hooks/usePatchData';
 
 export default function CreateQuiz ()
 {
     const [ editQuestionData, setEditQuestionData ] = React.useState( "" );
     const { state } = useCreateQuiz();
+    const navigate = useNavigate();
 
-    console.log( state.quizEditResponse );
+    // console.log( state.quizEditResponse );
 
     const quizQuestions = state?.addQuestions[ state?.quizEditResponse?.id ];
     // console.log( quizQuestions, state.addQuestions);
+
+     const onSuccess = ( response ) =>
+    {
+        console.log( response );
+        Swal.fire( {
+            position: 'top-end',
+            icon: 'success',
+            title: `Question successfully published!`,
+            showConfirmButton: false,
+            timer: 1500,
+        } );
+         
+        navigate( "/dashboard" ); 
+    };
+
+    const onError = ( error ) =>
+    {
+        Swal.fire( {
+            position: 'top-end',
+            icon: 'error',
+            title: `Error: ${error.message}`,
+            showConfirmButton: false,
+            timer: 1500,
+        } );
+    };
+
+    const publishQuiz = usePatchData( {
+        queryKey: [ `quizListAdmin` ],
+        url: `http://localhost:5000/api/admin/quizzes/${state?.quizEditResponse?.id}`,
+        onSuccess,
+        onError,
+    } );
+
+    const handlePublish = () =>
+    {
+        publishQuiz.mutate( {
+            title: state?.quizEditResponse?.title,
+            description: state?.quizEditResponse?.description,
+            status: "published",
+        } );
+    }
 
     return (
         <HelmetProvider>
@@ -23,9 +68,9 @@ export default function CreateQuiz ()
                     Create your quiz
                 </title>
             </Helmet>
-            <div className="bg-[#F5F3FF] min-h-screen flex">
+            <div className="bg-[#F5F3FF] min-h-screen w-full flex justify-center">
                 <SideBar />
-                <div className="md:flex-grow px-4 sm:px-6 lg:px-8 py-8">
+                <div className="md:flex-grow px-4 w-full sm:px-6 lg:px-8 py-8">
                     <div>
                         <nav className="text-sm mb-4" aria-label="Breadcrumb">
                             <ol className="list-none p-0 inline-flex">
@@ -42,7 +87,9 @@ export default function CreateQuiz ()
                             </ol>
                         </nav>
                         <div className='py-5'>
+                            <p className="text-violet-800 text-lg px-3 py-1 mb-3 rounded-md shadow-sm bg-slate-300 w-fit">Quiz Status : <span className="font-semibold">{state?.quizEditResponse?.status }</span></p>
                             <button
+                                onClick={handlePublish}
                                 className='bg-violet-600 text-white px-4 py-2 rounded-md shadow-md'>
                                 Publish quiz
                             </button>

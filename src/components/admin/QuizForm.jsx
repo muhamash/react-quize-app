@@ -50,7 +50,7 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
 
     const onSuccess = ( response ) =>
     {
-        console.log( response );
+        // console.log( response );
 
         dispatch( {
             type: 'ADD_QUESTION', payload: {

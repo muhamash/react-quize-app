@@ -5,7 +5,7 @@ import { CreateQuizContext } from './index';
 
 export const CreateQuizProvider = ({ children }) => {
     const [ state, dispatch ] = useReducer( quizReducer, initialState );
-    console.log( state );
+    // console.log( state );
 
     const contextValue = useMemo( () => ( { state, dispatch } ), [ state ] );
 

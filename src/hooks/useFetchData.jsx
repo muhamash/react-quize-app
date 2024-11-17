@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useQuery } from '@tanstack/react-query';
 import useAxios from '../hooks/useAxios';
 
@@ -10,7 +11,7 @@ export const useFetchData = ( key, url, id= null ) =>
         queryFn: async (context) =>
         {
             const response = await api.get( url );
-            console.log( 'Fetched Data:', response.data.data, context.queryKey );
+            // console.log( 'Fetched Data:', response.data.data, context.queryKey );
             return response.data;
         },
         onError: ( error, variable ) =>
