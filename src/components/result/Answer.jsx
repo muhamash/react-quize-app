@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
 import useQuiz from '../../hooks/useQuiz';
 import { SelectionTracker } from './Radio';
@@ -38,7 +39,7 @@ export default function Answer({ data }) {
                             : 'bg-rose-400'
                     } p-3 rounded-md`}
                 >
-                    {data.options.map((option, index) => (
+                    {data?.options?.map((option, index) => (
                         <SelectionTracker
                             key={index}
                             label={option}

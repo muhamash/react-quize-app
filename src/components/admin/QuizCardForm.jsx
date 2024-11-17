@@ -21,7 +21,7 @@ const QuizCardForm = ( { onClose } ) =>
 
   const onSuccess = ( response ) =>
   {
-    console.log( response );
+    // console.log( response );
     dispatch( { type: "SET_QUIZ_INFO", payload: response?.data } );
     Swal.fire( {
       position: "top-end",

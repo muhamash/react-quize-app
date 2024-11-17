@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Link } from 'react-router-dom';

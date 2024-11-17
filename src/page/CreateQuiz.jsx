@@ -12,9 +12,8 @@ export default function CreateQuiz ()
 
     console.log( state );
 
-    // 
     const quizQuestions = state?.addQuestions[ state?.quizEditResponse?.id ];
-    console.log( quizQuestions, state.addQuestions);
+    // console.log( quizQuestions, state.addQuestions);
 
     return (
         <HelmetProvider>

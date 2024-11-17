@@ -55,18 +55,18 @@ export default function DashBoard() {
     };
 
     const onSuccess = () =>
-        Swal.fire({
+        Swal.fire( {
             title: "Deleted!",
             text: "Quiz has been deleted!!",
             icon: "success",
-        });
+        } );
 
     const onError = () =>
-        Swal.fire({
+        Swal.fire( {
             title: "Error",
             text: "Can't delete!!!",
             icon: "error",
-        });
+        } );
 
     const quizDelete = useDelete({
         queryKey: [`quizListAdmin`],
@@ -140,7 +140,7 @@ export default function DashBoard() {
                                 Welcome Back To Your Quiz Hub!
                             </h1>
                         </header>
-                        <div className="flex flex-wrap gap-6 w-full">
+                        <div className="flex flex-wrap justify-center items-center gap-6 w-full mx-auto overflow-y-scroll h-[750px]">
                             <AddQuizCard onClick={ handleOpen } />
                             { quizList?.length > 0 ? (
                                 quizList.map( ( q ) => (

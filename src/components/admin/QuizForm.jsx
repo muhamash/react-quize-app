@@ -9,6 +9,8 @@ export default function QuizForm() {
     const { state, dispatch } = useCreateQuiz();
     const { currentQuestion } = state;
 
+    // console.log(currentQuestion)
+
     const {
         register,
         control,
