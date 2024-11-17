@@ -19,7 +19,7 @@ export default function HomePage() {
         {},
     );
 
-    if ( data && state.quizzes.length === 0 )
+    if ( data && state?.quizzes?.length === 0 )
     {
         dispatch({ type: "SET_QUIZZES", payload: data.data });
     };

@@ -33,12 +33,15 @@ const QuizCard = ({ quiz }) => {
   const [ modalStep, setModalStep ] = React.useState( -1 );
   const { auth } = useAuth();
 
-  // console.log(state.quizAttempts, state?.quizAttempts, quiz.id);
+  // console.log( state.singleQuiz );
+
+  // console.log( quiz );
 
   const handleClick = () =>
   {
     if ( auth )
     {
+      // const hasAttemptedQuiz = state?.quizzes?.find(quiz => quiz)
       const hasAttemptedQuiz = state?.quizAttempts?.some( ( attempt ) => attempt[ quiz.id ] );
 
       if ( hasAttemptedQuiz )

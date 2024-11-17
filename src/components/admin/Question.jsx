@@ -1,4 +1,3 @@
- 
 /* eslint-disable react/prop-types */
 import React from 'react';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -6,7 +5,8 @@ import 'sweetalert2/src/sweetalert2.scss';
 import useCreateQuiz from '../../hooks/useCreateQuiz';
 import { useDelete } from '../../hooks/useDelete';
 
-export default function Question({ question, status }) {
+export default function Question ( { question, status, setEditQuestionData } )
+{
     const { dispatch, state } = useCreateQuiz();
 
     // console.log(state.quizEditResponse, question.id)
@@ -67,14 +67,12 @@ export default function Question({ question, status }) {
         } );
     }, [ deleteQuestion, question.id ] );
 
-    
-
     // Handle Edit action
     const handleEdit = React.useCallback( () =>
     {
         // console.log( question );
-        dispatch( { type: 'SET_CURRENT_QUESTION', payload: question } );
-    }, [ dispatch, question ] );
+        setEditQuestionData( question );
+    }, [ question , setEditQuestionData] );
 
 
     return (

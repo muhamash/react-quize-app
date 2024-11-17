@@ -18,14 +18,21 @@ function quizReducer ( state, action )
             return { ...state, quizzes: action.payload };
         case 'SET_QUIZ_LIST':
             return { ...state, quizList: action.payload };
-        case 'EDIT_QUESTION':
+        
+        case 'EDIT_QUESTION': {
+            const updatedQuestions = state.addQuestions[ action.payload.quizId ]?.map( ( q ) =>
+                q.id === action.payload.id ? action.payload : q
+            );
+
             return {
                 ...state,
-                addQuestions: state.questions.map((q) =>
-                    q.id === action.payload.id ? action.payload : q
-                ),
-                currentQuestion: null,
+                addQuestions: {
+                    ...state.addQuestions,
+                    [ action.payload.quizId ]: updatedQuestions,
+                },
+                currentQuestion: null, // Reset current question
             };
+        };
         
         case 'DELETE_QUESTION': {
             const { quizId, questionId } = action.payload;
@@ -55,25 +62,18 @@ function quizReducer ( state, action )
         case 'ADD_QUESTION': {
             const { id, question } = action.payload;
 
-            // Retrieve existing questions for the quiz
+            //  questions for the quiz
             const existingQuizQuestions = state.addQuestions[ id ] || [];
 
-            // Check for duplicate question by ID
-            const isDuplicate = existingQuizQuestions.some(
-                ( q ) => q.id === question.id
-            );
+            // Replace the old question if it exists, or append the new one if not
+            const updatedQuestions = existingQuizQuestions.filter( ( q ) => q.id !== question.id );
+            updatedQuestions.push( question );
 
-            if ( isDuplicate )
-            {
-                return state; // Do nothing if the question already exists
-            }
-
-            // Append the new question to the existing array
             return {
                 ...state,
                 addQuestions: {
                     ...state.addQuestions,
-                    [ id ]: [ ...existingQuizQuestions, question ],
+                    [ id ]: updatedQuestions,
                 },
             };
         };

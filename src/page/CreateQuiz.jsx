@@ -1,4 +1,4 @@
-// import React from 'react'
+import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import Question from "../components/admin/Question";
@@ -8,6 +8,7 @@ import useCreateQuiz from '../hooks/useCreateQuiz';
 
 export default function CreateQuiz ()
 {
+    const [ editQuestionData, setEditQuestionData ] = React.useState( "" );
     const { state } = useCreateQuiz();
 
     console.log( state );
@@ -46,13 +47,16 @@ export default function CreateQuiz ()
                             </button>
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-8 lg:gap-12">
-                            <QuizForm />
-           
+
+                            <QuizForm editQuestionData={ editQuestionData } setEditQuestionData={setEditQuestionData}/>
+
                             <div className="px-4 lg:h-[700px] h-[500px] my-5 overflow-y-scroll">
                                 {
                                     quizQuestions?.length > 0 ? (
                                         quizQuestions?.map( ( question ) => (
-                                            <Question key={ question.id } question={ question } />
+                                            <Question key={ question.id } question={ question }
+                                            setEditQuestionData={setEditQuestionData}
+                                            />
                                         ) )
                                     ) : (
                                         <p className="text-violet-600 font-mono text-md">No questions in there!</p>

@@ -1,4 +1,4 @@
- /* eslint-disable react/prop-types */
+/* eslint-disable react/prop-types */
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -125,7 +125,7 @@ const QuizCardForm = ( { onClose } ) =>
           <button
             type="submit"
             className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-            disabled={quizCardMutation.isLoading}
+            disabled={quizCardMutation.isPending}
           >
             {quizCardMutation.isPending || quizCardPatch.isPending ? "Submitting..." : "Next"}
           </button>

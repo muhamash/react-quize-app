@@ -9,6 +9,7 @@ import useQuiz from '../hooks/useQuiz';
 
 export default function LeaderBoard() {
   const { state } = useQuiz();
+  
   const { data: leaderBoard, isLoading, error } = useFetchData(
     ['leaderBoard', state?.quizzes[0]?.id],
     `http://localhost:5000/api/quizzes/${state?.quizzes[0]?.id}/attempts`
