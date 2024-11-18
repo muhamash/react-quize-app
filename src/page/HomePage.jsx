@@ -1,6 +1,7 @@
 import { AnimatePresence } from "framer-motion";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 // import { Toaster toast } from 'react-hot-toast';
+import { useState } from 'react';
 import { HashLoader } from 'react-spinners';
 import ErrorBoundary from "../components/common/ErrorBoundary";
 import QuizCard from '../components/homePage/QuizCard';
@@ -12,6 +13,8 @@ import useQuiz from "../hooks/useQuiz";
 export default function HomePage() {
     const { auth } = useAuth();
     const { state, dispatch } = useQuiz();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; 
 
     const {data ,isLoading, error } = useFetchData(
         ['quizzes'],
@@ -24,6 +27,22 @@ export default function HomePage() {
         dispatch({ type: "SET_QUIZZES", payload: data.data });
     };
 
+    const totalPages = Math.ceil((state?.quizzes?.length || 0) / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentQuizzes = state?.quizzes?.slice( startIndex, startIndex + itemsPerPage );
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+    
     if (isLoading) {
         return (
             <div className="w-screen h-screen flex items-center justify-center">
@@ -53,19 +72,35 @@ export default function HomePage() {
                     <h3 className="text-2xl font-bold mb-6">Participate In Quizzes</h3>
                     <ErrorBoundary>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            { state?.quizzes?.length === 0 ? (
+                            { currentQuizzes?.length === 0 ? (
                                 <p className="text-violet-800 font-mono">No quizzes found on the server! or there is no quizzes left!!!</p>
                             ) : (
-                                state?.quizzes?.map( ( quiz ) => (
+                                currentQuizzes?.map( ( quiz ) => (
                                     <AnimatePresence mode="wait" key={ quiz.id }>
                                         <ErrorBoundary>
-                                             <QuizCard  quiz={ quiz } />
-                                       </ErrorBoundary>
+                                            <QuizCard quiz={ quiz } />
+                                        </ErrorBoundary>
                                     </AnimatePresence>
                                 ) )
                             ) }
                         </div>
                     </ErrorBoundary>
+                </div>
+                {/* pagination */}
+                <div className="flex justify-center items-center gap-4 pt-5">
+                    <button
+                        onClick={ handlePrevPage }
+                        disabled={ currentPage === 1 }
+                        className="px-3 py-1 text-sm bg-green-700 rounded disabled:opacity-50 text-white cursor-pointer">
+                        Previous
+                    </button>
+                            
+                    <button
+                        onClick={ handleNextPage }
+                        disabled={ currentPage === totalPages }
+                        className="px-3 py-1 text-sm bg-cyan-700 rounded disabled:opacity-50 text-white cursor-pointer">
+                        Next
+                    </button>
                 </div>
             </div>
         </HelmetProvider>

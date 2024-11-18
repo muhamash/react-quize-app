@@ -50,7 +50,7 @@ export default function SideBar() {
                                 Quiz Details
                             </Link>
                         </li>
-                        <li>
+                        {/* <li>
                             <Link
                                 to="/manage-roles"
                                 className={`block py-2 px-4 rounded-lg ${
@@ -58,11 +58,11 @@ export default function SideBar() {
                                 }`}>
                                 Manage Roles
                             </Link>
-                        </li>
+                        </li> */}
                         <li>
                             <p
                                 onClick={() => setAuth({})}
-                                className="block py-2 px-4 rounded-lg text-gray-100 hover:bg-gray-100 hover:text-primary">
+                                className="block py-2 px-4 rounded-lg text-gray-100 hover:bg-gray-100 hover:text-primary cursor-pointer">
                                 Logout
                             </p>
                         </li>

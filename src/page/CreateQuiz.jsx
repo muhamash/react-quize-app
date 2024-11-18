@@ -15,7 +15,8 @@ export default function CreateQuiz ()
     const { state } = useCreateQuiz();
     const navigate = useNavigate();
 
-    // console.log( state.quizEditResponse );
+
+    console.log( state );
 
     const quizQuestions = state?.addQuestions[ state?.quizEditResponse?.id ];
     // console.log( quizQuestions, state.addQuestions);
@@ -54,12 +55,37 @@ export default function CreateQuiz ()
 
     const handlePublish = () =>
     {
-        publishQuiz.mutate( {
-            title: state?.quizEditResponse?.title,
-            description: state?.quizEditResponse?.description,
-            status: "published",
-        } );
-    }
+        if ( quizQuestions?.length === 0 )
+        {
+            Swal.fire( {
+                title: "warning",
+                text: "Add at least one question",
+                icon: "warning",
+            } );
+        }
+        else
+        {
+            Swal.fire( {
+                title: "Are you sure?",
+                text: "You are publishing  this quiz!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#5f149d",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, publish it!",
+            } ).then( ( result ) =>
+            {
+                if ( result.isConfirmed )
+                {
+                    publishQuiz.mutate( {
+                        title: state?.quizEditResponse?.title,
+                        description: state?.quizEditResponse?.description,
+                        status: "published",
+                    } );
+                }
+            } );
+        }
+    };
 
     return (
         <HelmetProvider>

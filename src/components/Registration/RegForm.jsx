@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -21,10 +21,11 @@ const RegisterForm = () => {
     
     const onSuccess = ( response ) =>
     {
+        console.log(response)
         let timerInterval;
         Swal.fire( {
             title: "Registration completed!!!",
-            html: `Welcoming you as a new user!!`,
+            html: `Welcoming you as a new ${response?.data?.role === 'admin' ? " admin" : "user"}!!`,
             timer: 2000,
             timerProgressBar: true,
             didOpen: () =>
@@ -62,8 +63,17 @@ const RegisterForm = () => {
         onError
     } );
     
-    const onSubmit = (data) => {
-        registrationMutation.mutate( { full_name: data.name, email: data.email, password: data.password } );
+    const onSubmit = ( data ) =>
+    {
+        console.log( data )
+        if ( data.admin )
+        {
+            registrationMutation.mutate( { full_name: data.name, email: data.email, password: data.password, role: "admin" } );
+        }
+        else
+        {
+            registrationMutation.mutate( { full_name: data.name, email: data.email, password: data.password  } );
+        }
     };
 
     return (

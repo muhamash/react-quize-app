@@ -1,22 +1,18 @@
-/* eslint-disable no-unused-vars */
 import { useQuery } from '@tanstack/react-query';
 import useAxios from '../hooks/useAxios';
 
-export const useFetchData = ( key, url, id= null ) =>
-{
+export const useFetchData = (key, url, params = {}) => {
     const { api } = useAxios();
 
-    return useQuery( {
-        queryKey: [key, id],
-        queryFn: async (context) =>
-        {
-            const response = await api.get( url );
-            // console.log( 'Fetched Data:', response.data.data, context.queryKey );
+    return useQuery({
+        queryKey: [key, params],
+        queryFn: async () => {
+            const response = await api.get(url, { params });
             return response.data;
         },
-        onError: ( error, variable ) =>
-        {
-            console.log(error, variable)
-        }
-    } );
-}
+        keepPreviousData: true,
+        onError: (error, variables) => {
+            console.error('Error fetching data:', error, variables);
+        },
+    });
+};

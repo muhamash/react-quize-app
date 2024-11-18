@@ -1,4 +1,5 @@
-import { useState } from "react"; // import useEffect
+import { AnimatePresence } from 'framer-motion';
+import { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { HashLoader } from "react-spinners";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -11,12 +12,15 @@ import SideBar from "../components/admin/SideBar";
 import useCreateQuiz from "../hooks/useCreateQuiz";
 import { useDelete } from "../hooks/useDelete";
 import { useFetchData } from "../hooks/useFetchData";
+import { usePatchData } from '../hooks/usePatchData';
 
 export default function DashBoard() {
     const [open, setOpen] = useState(false);
     const [openQuestion, setOpenQuestion] = useState(false);
-    const { dispatch, state } = useCreateQuiz();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; 
 
+    const { dispatch, state } = useCreateQuiz();
     const { data: quizList, isLoading, error } = useFetchData(
         `quizListAdmin`,
         `http://localhost:5000/api/admin/quizzes`
@@ -24,49 +28,72 @@ export default function DashBoard() {
 
     if (quizList && state?.quizzes !== quizList) {
         dispatch({ type: "SET_ALL_QUIZ", payload: quizList });
+    }
+
+    const totalPages = Math.ceil((quizList?.length || 0) / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentQuizzes = quizList?.slice(startIndex, startIndex + itemsPerPage);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
     };
 
     const handleEditCardClick = (id) => {
         const quiz = quizList?.find((q) => q?.id === id);
         if (quiz) {
-            if ( quiz?.status === "published" )
-            {
-                dispatch( { type: "SET_QUIZ_LIST", payload: quiz } );
+            if (quiz?.status === "published") {
+                dispatch({ type: "SET_QUIZ_LIST", payload: quiz });
                 setOpenQuestion(true);
-            } else
-            {
-                // console.log(quiz?.Questions)
-                dispatch( { type: "SET_QUIZ_LIST", payload: quiz } );
-
-                quiz?.Questions?.forEach( ( question ) =>
-                {
-                    dispatch( {
+            } else {
+                dispatch({ type: "SET_QUIZ_LIST", payload: quiz });
+                quiz?.Questions?.forEach((question) => {
+                    dispatch({
                         type: "ADD_QUESTION",
                         payload: {
                             id: quiz?.id,
                             question: question,
                         },
-                    } );
-                } );
-
+                    });
+                });
                 setOpen(true);
             }
         }
     };
 
-    const onSuccess = () =>
-        Swal.fire( {
-            title: "Deleted!",
-            text: "Quiz has been deleted!!",
-            icon: "success",
-        } );
+    const onSuccess = (response) => {
+        if (response?.data?.status === "draft") {
+            dispatch({ type: "SET_QUIZ_LIST", payload: response.data });
+            Swal.fire({
+                title: "Oka!",
+                text: "Quiz has been drafted!",
+                icon: "success",
+            });
+            setOpenQuestion(false);
+        }
 
-    const onError = () =>
-        Swal.fire( {
+        if (response.data === 1) {
+            Swal.fire({
+                title: "Deleted!",
+                text: "Quiz has been deleted!",
+                icon: "success",
+            });
+        }
+    };
+
+    const onError = (error) =>
+        Swal.fire({
             title: "Error",
-            text: "Can't delete!!!",
+            text: `Error: ${error.message}`,
             icon: "error",
-        } );
+        });
 
     const quizDelete = useDelete({
         queryKey: [`quizListAdmin`],
@@ -97,16 +124,27 @@ export default function DashBoard() {
 
     const handleClose = () => {
         dispatch({ type: "SET_QUIZ_LIST", payload: null });
-    
-        if ( openQuestion === true && open === false )
-        {
-            setOpenQuestion( false );
 
+        if (openQuestion === true && open === false) {
+            setOpenQuestion(false);
+        } else {
+            setOpen(false);
         }
-        else
-        {
-            setOpen( false );
-        }
+    };
+
+    const publishQuiz = usePatchData({
+        queryKey: [`quizListAdmin`],
+        url: `http://localhost:5000/api/admin/quizzes/${state?.quizList?.id}`,
+        onSuccess,
+        onError,
+    });
+
+    const handleDraft = () => {
+        publishQuiz.mutate({
+            title: state?.quizList?.title,
+            description: state?.quizList?.description,
+            status: "draft",
+        });
     };
 
     if (isLoading) {
@@ -141,40 +179,69 @@ export default function DashBoard() {
                             </h1>
                         </header>
                         <div className="flex flex-wrap justify-center items-center gap-6 w-full mx-auto overflow-y-scroll h-[750px]">
-                            <AddQuizCard onClick={ handleOpen } />
-                            { quizList?.length > 0 ? (
-                                quizList.map( ( q ) => (
-                                    <DashBoardCard
-                                        key={ q.id }
-                                        onEdit={ () => handleEditCardClick( q.id ) }
-                                        data={ q }
-                                        onDelete={ () => onDelete( q.id ) }
-                                    />
-                                ) )
+                            <AddQuizCard onClick={handleOpen} />
+                            {currentQuizzes?.length > 0 ? (
+                                currentQuizzes.map((q) => (
+                                    <AnimatePresence key={q.id} mode="wait">
+                                        <DashBoardCard
+                                            onEdit={() => handleEditCardClick(q.id)}
+                                            data={q}
+                                            onDelete={() => onDelete(q.id)}
+                                        />
+                                    </AnimatePresence>
+                                ))
                             ) : (
                                 <p>No quizzes found. Click &#34;Add Quiz&#34; to create one!</p>
-                            ) }
+                            )}
+                        </div>
+                        {/* pagination */}
+                        <div className="flex absolute left-[50%] right-[50%] justify-center items-center gap-4 pt-2">
+                            <button
+                                onClick={handlePrevPage}
+                                disabled={currentPage === 1}
+                                className="px-3 py-1 text-sm bg-green-700 rounded disabled:opacity-50 text-white cursor-pointer">
+                                Previous
+                            </button>
+                            
+                            <button
+                                onClick={handleNextPage}
+                                disabled={currentPage === totalPages}
+                                className="px-3 py-1 text-sm bg-cyan-700 rounded disabled:opacity-50 text-white cursor-pointer">
+                                Next
+                            </button>
                         </div>
                     </div>
                 </div>
             </HelmetProvider>
-            { open && <QuizCardForm onClose={ handleClose } /> }
-            { openQuestion && (
-                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex flex-col  gap-5 items-center justify-center backdrop-blur-sm p-3">
-                    <button className="bg-red-700 text-white rounded-md shadow-md px-3 py-2 m-5 self-end" onClick={ handleClose }>
-                            close
-                        </button>
+            {open && <QuizCardForm onClose={handleClose} />}
+            {openQuestion && (
+                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex flex-col gap-5 items-center justify-center backdrop-blur-sm p-3">
+                    <button
+                        className="bg-red-700 text-white rounded-md shadow-md px-3 py-2 m-5 self-end"
+                        onClick={handleClose}>
+                        Close
+                    </button>
+                    <button
+                        onClick={handleDraft}
+                        className="bg-violet-700 text-white px-4 py-2 rounded-md shadow-md self-end">
+                        Draft quiz
+                    </button>
                     <div className="bg-slate-400 p-5 overflow-y-scroll h-[700px] rounded-md">
-                        { state?.quizList?.Questions?.length === 0 ? (
+                        {state?.quizList?.Questions?.length === 0 ? (
                             <p>No questions in this quiz!</p>
                         ) : (
-                            state?.quizList?.Questions?.map( ( q ) => (
-                                <Question key={ q.id } question={ q } status={ state?.quizList?.status } onClose={ handleClose } />
-                            ) )
-                        ) }
+                            state?.quizList?.Questions?.map((q) => (
+                                <Question
+                                    key={q.id}
+                                    question={q}
+                                    status={state?.quizList?.status}
+                                    onClose={handleClose}
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
-            ) }
+            )}
         </>
     );
 }

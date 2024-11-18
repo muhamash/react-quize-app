@@ -142,7 +142,7 @@ export default function Nav() {
                             <li className="bg-green-800 p-1 rounded-md shadow-md">{ auth.user.full_name }</li>
                             <li className="bg-green-800 p-1 rounded-md shadow-md">{ auth.user.email }</li>
                             <li>
-                                <Link to={ location.pathname === '/leaderboard' ? '/' : "/leaderboard" } className="hover:text-slate-300">{ location.pathname === '/leaderboard' ? "Back to home" : 'Leader board' }</Link>
+                                <Link to={ location.pathname === '/leaderboard' && '/'  } className="hover:text-slate-300">{ location.pathname === '/leaderboard' && "Back to home" }</Link>
                             </li>
                             <li>
                                 <button
