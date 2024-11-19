@@ -14,7 +14,7 @@ export default function HomePage() {
     const { auth } = useAuth();
     const { state, dispatch } = useQuiz();
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; 
+    const itemsPerPage = 8; 
 
     const {data ,isLoading, error } = useFetchData(
         ['quizzes'],

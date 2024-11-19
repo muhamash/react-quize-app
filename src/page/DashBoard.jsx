@@ -123,7 +123,7 @@ export default function DashBoard() {
     const handleOpen = () => setOpen(true);
 
     const handleClose = () => {
-        dispatch({ type: "SET_QUIZ_LIST", payload: null });
+        // dispatch({ type: "SET_QUIZ_LIST", payload: null });
 
         if (openQuestion === true && open === false) {
             setOpenQuestion(false);

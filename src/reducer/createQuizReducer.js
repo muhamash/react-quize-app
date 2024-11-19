@@ -3,7 +3,7 @@ const initialState = {
     currentQuestion: null,
     quizEditResponse: [],
     quizzes: [],
-    quizList:[],
+    quizList: [],
 };
 
 
@@ -30,31 +30,28 @@ function quizReducer ( state, action )
                     ...state.addQuestions,
                     [ action.payload.quizId ]: updatedQuestions,
                 },
-                currentQuestion: null, // Reset current question
+                currentQuestion: null,
             };
         };
         
         case 'DELETE_QUESTION': {
             const { quizId, questionId } = action.payload;
 
-            // Ensure the quiz exists in addQuestions
             if ( !state.addQuestions[ quizId ] )
             {
                 console.warn( `Quiz with ID ${quizId} not found.` );
                 return state;
             }
 
-            // Filter out the question to be deleted
             const updatedQuestions = state.addQuestions[ quizId ].filter(
                 ( q ) => q.id !== questionId
             );
 
-            // Update the state with the modified questions
             return {
                 ...state,
                 addQuestions: {
                     ...state.addQuestions,
-                    [ quizId ]: updatedQuestions, // Update the specific quiz's questions
+                    [ quizId ]: updatedQuestions,
                 },
             };
         };
@@ -62,10 +59,8 @@ function quizReducer ( state, action )
         case 'ADD_QUESTION': {
             const { id, question } = action.payload;
 
-            //  questions for the quiz
             const existingQuizQuestions = state.addQuestions[ id ] || [];
 
-            // Replace the old question if it exists, or append the new one if not
             const updatedQuestions = existingQuizQuestions.filter( ( q ) => q.id !== question.id );
             updatedQuestions.push( question );
 

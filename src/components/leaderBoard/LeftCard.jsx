@@ -15,7 +15,7 @@ export default function LeftCard ({rank})
                 <img src="./assets/avater.webp" alt="Profile Pic"
                     className="w-20 h-20 rounded-full border-4 border-white mb-4 object-cover" />
                 <h2 className="text-2xl font-bold">{auth.user.full_name}</h2>
-                <p className="text-xl">{ rank }th position</p>
+                <p className="text-xl">No. { rank } in position</p>
             </div>
             <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="text-center">

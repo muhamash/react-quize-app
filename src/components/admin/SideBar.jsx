@@ -41,15 +41,6 @@ export default function SideBar() {
                                 DashBoard
                             </Link>
                         </li>
-                        <li>
-                            <Link
-                                to="/createQuiz"
-                                className={`block py-2 px-4 rounded-lg font-bold ${
-                                    isActive('/createQuiz') ? 'bg-white text-primary' : 'text-gray-100 hover:bg-gray-100 hover:text-primary'
-                                }`}>
-                                Quiz Details
-                            </Link>
-                        </li>
                         {/* <li>
                             <Link
                                 to="/manage-roles"

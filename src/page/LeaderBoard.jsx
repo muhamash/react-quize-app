@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { HashLoader } from 'react-spinners';
@@ -8,52 +9,56 @@ import { useFetchData } from '../hooks/useFetchData';
 import useQuiz from '../hooks/useQuiz';
 
 export default function LeaderBoard() {
-  const { state } = useQuiz();
+  const { state, dispatch } = useQuiz();
   
   const { data: leaderBoard, isLoading, error } = useFetchData(
-    ['leaderBoard', state?.quizzes[0]?.id],
-    `http://localhost:5000/api/quizzes/${state?.quizzes[0]?.id}/attempts`
+    ['leaderBoard', state?.singleQuiz?.id],
+    `http://localhost:5000/api/quizzes/${state?.singleQuiz?.id}/attempts`
   );
     
-    const { auth } = useAuth();
+  console.log(state?.singleQuiz)
+  const { auth } = useAuth();
 
   const navigate = useNavigate();
-  const goToHomePage = () => {
-    navigate('/');
+
+  const goToHomePage = () =>
+  {
+    navigate( '/' );
   };
-    
-    // calculate auth.user.id position or rank based on marks!
 
-  // Function to calculate total marks for each user
-    const calculateScores = ( attempts ) =>
+  const calculateScores = ( attempts ) =>
+  {
+    return attempts.map( ( leader ) =>
     {
-        return attempts.map( ( leader ) =>
-        {
-            const correctAnswers = leader?.correct_answers;
-            const submittedAnswers = leader?.submitted_answers;
+      const correctAnswers = leader?.correct_answers;
+      const submittedAnswers = leader?.submitted_answers;
       
-            let totalMarks = 0;
+      let totalMarks = 0;
 
-            correctAnswers.forEach( ( correctAnswer ) =>
-            {
-                const userAnswer = submittedAnswers?.find(
-                    ( answer ) => answer?.question_id === correctAnswer?.question_id
-                );
+      correctAnswers.forEach( ( correctAnswer ) =>
+      {
+        const userAnswer = submittedAnswers?.find(
+          ( answer ) => answer?.question_id === correctAnswer?.question_id
+        );
 
-                if ( userAnswer && userAnswer?.answer === correctAnswer?.answer )
-                {
-                    totalMarks += correctAnswer?.marks;
-                }
-            } );
+        if ( userAnswer && userAnswer?.answer === correctAnswer?.answer )
+        {
+          totalMarks += correctAnswer?.marks;
+        }
+      } );
 
-            return { ...leader, totalMarks };
-        } ).sort( ( a, b ) => b?.totalMarks - a?.totalMarks );
-    };
+      return { ...leader, totalMarks };
+    } ).sort( ( a, b ) => b?.totalMarks - a?.totalMarks );
+  };
 
-    const sortedLeaderboard = leaderBoard?.data?.attempts ? calculateScores( leaderBoard.data.attempts ) : [];
+  const sortedLeaderboard = leaderBoard?.data?.attempts ? calculateScores( leaderBoard.data.attempts ) : [];
 
-    const userRank = sortedLeaderboard?.findIndex( leader => leader?.user?.id === auth?.user?.id ) + 1;
-    
+  const userRank = sortedLeaderboard?.findIndex( leader => leader?.user?.id === auth?.user?.id ) + 1;
+  
+  // if ( leaderBoard )
+  // {
+  //   dispatch( { type: 'GET_SINGLE_QUIZ', payload: null } );
+  // } 
 
   if (isLoading) {
     return (
@@ -85,7 +90,7 @@ export default function LeaderBoard() {
                         {/* Right Column */ }
                         <div>
                             <h1 className="text-2xl font-bold">LeaderBoard</h1>
-                            <p className="mb-6 text-violet-800">{ leaderBoard.data.quiz.title }</p>
+                            <p className="mb-6 text-violet-800">{ leaderBoard?.data?.quiz?.title }</p>
                             <ul className="space-y-4 max-h-[400px] overflow-y-scroll">
                                 { sortedLeaderboard?.map( ( leader, index ) => (
                                     <RightCard

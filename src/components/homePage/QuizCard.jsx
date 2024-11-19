@@ -4,6 +4,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { GridLoader } from 'react-spinners';
 import useAuth from '../../hooks/useAuth';
+import { useFetchData } from '../../hooks/useFetchData';
 import useQuiz from '../../hooks/useQuiz';
 import QuizPage from '../../page/QuizePage';
 import ResultPage from '../../page/ResultPage';
@@ -33,9 +34,10 @@ const QuizCard = ({ quiz }) => {
   const [ modalStep, setModalStep ] = React.useState( -1 );
   const { auth } = useAuth();
 
-  // console.log( state.singleQuiz );
-
-  // console.log( quiz );
+  const { data: singleQuiz, isLoading, error } = useFetchData(
+    `singleQuiz_${quiz.id}`,
+    `http://localhost:5000/api/quizzes/${quiz.id}`,
+  );
 
   const handleClick = () =>
   {
@@ -43,6 +45,7 @@ const QuizCard = ({ quiz }) => {
     {
       // const hasAttemptedQuiz = state?.quizzes?.find(quiz => quiz)
       const hasAttemptedQuiz = state?.quizAttempts?.some( ( attempt ) => attempt[ quiz.id ] );
+
 
       if ( hasAttemptedQuiz )
       {
@@ -55,6 +58,8 @@ const QuizCard = ({ quiz }) => {
     {
       navigate( '/login' );
     }
+
+    // dispatch({ type: 'GET_SINGLE_QUIZ', payload: quiz });
   };
 
   const handleModalNext = () => {
@@ -62,12 +67,13 @@ const QuizCard = ({ quiz }) => {
   };
 
   const closeModal = () => {
-    setModalStep(-1);
+    setModalStep( -1 );
+    // dispatch({ type: 'GET_SINGLE_QUIZ', payload: null });
   };
 
   const modalComponents = [
-    <QuizPage key="quiz" onModalNext={handleModalNext} />,
-    <ResultPage key="result" onClose={closeModal} />,
+    <QuizPage key="quiz" singleQuiz={singleQuiz} isLoading={isLoading} error={error} onModalNext={handleModalNext} />,
+    <ResultPage singleQuiz={singleQuiz} isLoading={isLoading} error={error}  id={quiz.id} key="result" onClose={closeModal} />,
   ];
 
   return (
@@ -81,12 +87,12 @@ const QuizCard = ({ quiz }) => {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={`rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] cursor-pointer group relative ${!modalStep ? 'hidden' : 'block'}`}
       >
-        {/* <div className="group-hover:scale-105 absolute transition-all text-white text-center top-1/2 -translate-y-1/2 px-4">
+        <div className="group-hover:scale-105 absolute transition-all text-white text-center top-1/2 -translate-y-1/2 px-4">
           <h1 className="text-5xl" style={{ fontFamily: 'Jaro' }}>
             {quiz?.title}
           </h1>
           <p className="mt-2 text-lg">{quiz?.description}</p>
-        </div> */}
+        </div>
 
         {loading && <Loader />}
 

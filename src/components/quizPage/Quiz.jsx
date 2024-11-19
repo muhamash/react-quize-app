@@ -25,7 +25,6 @@ export default function Quiz({
   const { handleSubmit } = useForm();
   const { dispatch } = useQuiz();
 
-  // Helper to shuffle options
   const shuffleOptions = (options) => options?.sort(() => Math.random() - 0.5);
 
   // Memoize shuffled options
@@ -64,7 +63,12 @@ export default function Quiz({
   };
 
   const onSuccess = (response) => {
-    dispatch( { type: 'GET_QUIZ_ANSWERS_SERVER', payload: response?.data } );
+    dispatch( {
+      type: 'GET_QUIZ_ANSWERS_SERVER', payload: {
+        quizId: data?.data?.id,
+        quizAnswerServerData: response.data.correct_answers,
+      }
+    } );
     
     dispatch( {
       type: 'GET_ATTEMPT_ID',
@@ -72,6 +76,7 @@ export default function Quiz({
     } );
 
     let result = {
+      totalQuestions: response?.data?.submitted_answers?.length,
       correctCount: 0,
       wrongCount: 0,
       totalMarks: 0,
@@ -94,7 +99,12 @@ export default function Quiz({
       }
     });
 
-    dispatch({ type: 'GET_SUBMIT_INFO', payload: result });
+    dispatch( {
+      type: 'GET_SUBMIT_INFO', payload: {
+        quizId: data?.data?.id,
+        submissionInformation: result
+      }
+    } );
   };
 
   const quizMutation = usePostData({
@@ -130,8 +140,13 @@ export default function Quiz({
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch({ type: 'GET_QUIZ_ANSWERS', payload: allAnswers });
-        dispatch({ type: 'GET_SINGLE_QUIZ', payload: data.data });
+        dispatch( {
+          type: 'GET_QUIZ_ANSWERS', payload: {
+            quizId: data?.data?.id,
+            quizAnswersData: allAnswers
+          }
+        } );
+        // dispatch({ type: 'GET_SINGLE_QUIZ', payload: data.data });
 
         const answersPayload = allAnswers.reduce( ( acc, answer ) =>
         {

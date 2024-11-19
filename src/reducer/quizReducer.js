@@ -27,15 +27,29 @@ const quizReducer = (state, action) => {
         case actionTypes.GET_USER_INFO:
             return { ...state, userInfo: action.payload };
 
-        case actionTypes.GET_SINGLE_QUIZ:
-            return { ...state, singleQuiz: action.payload };
-        case actionTypes.GET_SUBMIT_INFO:
-            return { ...state, submissionInfo: action.payload };
+        case actionTypes.GET_SINGLE_QUIZ: {
+            const { quizId, singleQuizData } = action.payload;
+            return {
+                ...state, singleQuiz: [
+                    ...state.singleQuiz,
+                    { [ quizId ]: singleQuizData }
+                ]
+            };
+        }
+        
+        case actionTypes.GET_SUBMIT_INFO: {
+            const { quizId, submissionInformation } = action.payload;
+            return {
+                ...state,
+                submissionInfo: [
+                    ...state.submissionInfo,
+                    { [ quizId ]: submissionInformation }
+                ]
+            };
+        }
 
         case actionTypes.GET_ATTEMPT_ID: {
             const { quizId, attemptId } = action.payload;
-
-            // Add new quizId: attemptId pair to the array
             return {
                 ...state,
                 quizAttempts: [
@@ -44,23 +58,28 @@ const quizReducer = (state, action) => {
                 ]
             };
         }
-            
-        // case actionTypes.GET_LEADER_DATA: {
-        //     const { quizId, leaderData } = action.payload;
-            
-        //     return {
-        //         ...state,
-        //         leaderBoard: [
-        //             { [ quizId ]: leaderData }
-        //         ]
-        //     };
-        // }
 
-        case actionTypes.GET_QUIZ_ANSWERS:
-            return { ...state, quizAnswers: action.payload };
+        case actionTypes.GET_QUIZ_ANSWERS: {
+            const { quizId, quizAnswersData } = action.payload;
+            return {
+                ...state,
+                quizAnswers: [
+                    ...state.quizAnswers,
+                    { [ quizId ]: quizAnswersData }
+                ]
+            };
+        };
 
-        case actionTypes.GET_QUIZ_ANSWERS_SERVER:
-            return { ...state, quizAnswerServer: action.payload };
+        case actionTypes.GET_QUIZ_ANSWERS_SERVER: {
+            const { quizId, quizAnswerServerData } = action.payload;
+            return {
+                ...state,
+                quizAnswerServer: [
+                    ...state.quizAnswerServer,
+                    { [ quizId ]: quizAnswerServerData }
+                ]
+            };
+        };
 
         default:
             return state;
