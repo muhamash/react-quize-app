@@ -1,7 +1,6 @@
 import { AnimatePresence } from "framer-motion";
-import { Helmet, HelmetProvider } from 'react-helmet-async';
-// import { Toaster toast } from 'react-hot-toast';
 import { useState } from 'react';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { HashLoader } from 'react-spinners';
 import ErrorBoundary from "../components/common/ErrorBoundary";
 import QuizCard from '../components/homePage/QuizCard';
@@ -61,7 +60,6 @@ export default function HomePage() {
                 <title>Quizzes - Home</title>
                 <meta name="description" content="Welcome to the home page!" />
             </Helmet>
-            {/* <Toaster position="top-right" reverseOrder={false} /> */ }
             <div className="container mx-auto pt-20">
                 { auth?.user && (
                     <ErrorBoundary>

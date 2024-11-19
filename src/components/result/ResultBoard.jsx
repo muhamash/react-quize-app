@@ -19,6 +19,7 @@ export default function ResultBoard({ onClose, id
     
     const handleClose = () =>
     {
+        dispatch( { type: "GET_SINGLE_QUIZ", payload: id } );
         onClose();
     }
 

@@ -6,7 +6,6 @@ const actionTypes = {
     GET_LEADER_DATA: "GET_LEADER_DATA",
     GET_SINGLE_QUIZ: "GET_SINGLE_QUIZ",
     GET_SUBMIT_INFO: "GET_SUBMIT_INFO",
-    GET_USER_INFO: "GET_USER_INFO"
 };
 
 const initialState = {
@@ -24,19 +23,8 @@ const quizReducer = (state, action) => {
     switch (action.type) {
         case actionTypes.SET_QUIZZES:
             return { ...state, quizzes: action.payload };
-        case actionTypes.GET_USER_INFO:
-            return { ...state, userInfo: action.payload };
-
-        case actionTypes.GET_SINGLE_QUIZ: {
-            const { quizId, singleQuizData } = action.payload;
-            return {
-                ...state, singleQuiz: [
-                    ...state.singleQuiz,
-                    { [ quizId ]: singleQuizData }
-                ]
-            };
-        }
-        
+        case actionTypes.GET_SINGLE_QUIZ:
+            return { ...state, singleQuiz: action.payload };
         case actionTypes.GET_SUBMIT_INFO: {
             const { quizId, submissionInformation } = action.payload;
             return {
@@ -47,7 +35,6 @@ const quizReducer = (state, action) => {
                 ]
             };
         }
-
         case actionTypes.GET_ATTEMPT_ID: {
             const { quizId, attemptId } = action.payload;
             return {
@@ -58,7 +45,6 @@ const quizReducer = (state, action) => {
                 ]
             };
         }
-
         case actionTypes.GET_QUIZ_ANSWERS: {
             const { quizId, quizAnswersData } = action.payload;
             return {
@@ -69,7 +55,6 @@ const quizReducer = (state, action) => {
                 ]
             };
         };
-
         case actionTypes.GET_QUIZ_ANSWERS_SERVER: {
             const { quizId, quizAnswerServerData } = action.payload;
             return {
@@ -80,7 +65,6 @@ const quizReducer = (state, action) => {
                 ]
             };
         };
-
         default:
             return state;
     }

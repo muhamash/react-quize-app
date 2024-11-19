@@ -12,11 +12,11 @@ export default function LeaderBoard() {
   const { state, dispatch } = useQuiz();
   
   const { data: leaderBoard, isLoading, error } = useFetchData(
-    ['leaderBoard', state?.singleQuiz?.id],
-    `http://localhost:5000/api/quizzes/${state?.singleQuiz?.id}/attempts`
+    ['leaderBoard', state?.singleQuiz],
+    `http://localhost:5000/api/quizzes/${state?.singleQuiz}/attempts`
   );
     
-  console.log(state?.singleQuiz)
+  // console.log(state)
   const { auth } = useAuth();
 
   const navigate = useNavigate();
@@ -55,10 +55,6 @@ export default function LeaderBoard() {
 
   const userRank = sortedLeaderboard?.findIndex( leader => leader?.user?.id === auth?.user?.id ) + 1;
   
-  // if ( leaderBoard )
-  // {
-  //   dispatch( { type: 'GET_SINGLE_QUIZ', payload: null } );
-  // } 
 
   if (isLoading) {
     return (
