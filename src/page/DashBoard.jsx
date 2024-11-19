@@ -53,7 +53,8 @@ export default function DashBoard() {
                 dispatch({ type: "SET_QUIZ_LIST", payload: quiz });
                 setOpenQuestion(true);
             } else {
-                dispatch({ type: "SET_QUIZ_LIST", payload: quiz });
+                dispatch( { type: "SET_QUIZ_LIST", payload: quiz } );
+                
                 quiz?.Questions?.forEach((question) => {
                     dispatch({
                         type: "ADD_QUESTION",
@@ -123,7 +124,7 @@ export default function DashBoard() {
     const handleOpen = () => setOpen(true);
 
     const handleClose = () => {
-        // dispatch({ type: "SET_QUIZ_LIST", payload: null });
+        dispatch({ type: "SET_QUIZ_LIST", payload: null });
 
         if (openQuestion === true && open === false) {
             setOpenQuestion(false);
@@ -213,7 +214,8 @@ export default function DashBoard() {
                     </div>
                 </div>
             </HelmetProvider>
-            {open && <QuizCardForm onClose={handleClose} />}
+            { open && <QuizCardForm onClose={ handleClose } /> }
+            
             {openQuestion && (
                 <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex flex-col gap-5 items-center justify-center backdrop-blur-sm p-3">
                     <button

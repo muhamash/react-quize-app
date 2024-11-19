@@ -189,7 +189,7 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
                     type="submit"
                     className="w-full bg-primary text-white text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
                 >
-                    { editQuestionData ? 'Update Question' : 'Add Question' }
+                    { editQuestionData ? `${editQuestionPatch.isPending ? "Updating..." : "Update Question"}` : `${addQuizMutation.isPending ? "Adding..." : "Add Question"}` }
                 </button>
             </div>
         </form>

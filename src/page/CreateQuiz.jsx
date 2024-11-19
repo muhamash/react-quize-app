@@ -55,13 +55,15 @@ export default function CreateQuiz ()
 
     const handlePublish = () =>
     {
-        if ( quizQuestions?.length === 0 )
+        if ( !quizQuestions )
         {
             Swal.fire( {
                 title: "warning",
                 text: "Add at least one question",
                 icon: "warning",
             } );
+
+            return;
         }
         else
         {
@@ -117,7 +119,7 @@ export default function CreateQuiz ()
                             <button
                                 onClick={handlePublish}
                                 className='bg-violet-600 text-white px-4 py-2 rounded-md shadow-md'>
-                                Publish quiz
+                                {publishQuiz.isPending ? "working..." : "Publish quiz"}
                             </button>
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-8 lg:gap-12">

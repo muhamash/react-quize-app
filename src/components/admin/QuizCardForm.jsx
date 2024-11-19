@@ -21,7 +21,6 @@ const QuizCardForm = ( { onClose } ) =>
 
   const onSuccess = ( response ) =>
   {
-    // console.log( response );
     dispatch( { type: "SET_QUIZ_INFO", payload: response?.data } );
     Swal.fire( {
       position: "top-end",
@@ -31,6 +30,7 @@ const QuizCardForm = ( { onClose } ) =>
       timer: 1000
     } );
     onClose();
+    dispatch({ type: "SET_QUIZ_LIST", payload: null });
     navigate( "/createQuiz" );
   };
 
@@ -52,6 +52,25 @@ const QuizCardForm = ( { onClose } ) =>
 
   const onSubmit = ( data ) =>
   {
+    const isDataUnchanged =
+      state?.quizList?.title === data.title &&
+      state?.quizList?.description === data.description;
+
+    if ( isDataUnchanged )
+    {
+      Swal.fire( {
+        position: "top-end",
+        icon: "info",
+        title: "No changes detected",
+        showConfirmButton: false,
+        timer: 1000,
+      } );
+
+      navigate( "/createQuiz" );
+      dispatch( { type: "SET_QUIZ_LIST", payload: null } );
+      return;
+    }
+    
     if ( state?.quizList?.id )
     {
       quizCardPatch.mutate( {
@@ -67,6 +86,8 @@ const QuizCardForm = ( { onClose } ) =>
         description: data.description,
       } );
     }
+
+    dispatch({ type: "SET_QUIZ_LIST", payload: null });
   };
 
   return (
