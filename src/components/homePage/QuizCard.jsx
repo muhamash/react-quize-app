@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { motion, useInView } from 'framer-motion';
-import React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GridLoader } from 'react-spinners';
 import useAuth from '../../hooks/useAuth';
 import { useFetchData } from '../../hooks/useFetchData';
@@ -9,10 +9,9 @@ import useQuiz from '../../hooks/useQuiz';
 import QuizPage from '../../page/QuizePage';
 import ResultPage from '../../page/ResultPage';
 
-
 const Loader = () => (
   <div className="w-full flex items-center justify-center p-3">
-    <GridLoader color="#4f197f" margin={20} size={30} width={10} />
+    <GridLoader color="#4f197f" size={30} />
   </div>
 );
 
@@ -26,68 +25,69 @@ const QuizImage = ({ src, onLoad, isLoading }) => (
 );
 
 const QuizCard = ({ quiz }) => {
-  const [loading, setLoading] = React.useState(true);
-  const ref = React.useRef(null);
+  const [loading, setLoading] = useState(true);
+  const [modalStep, setModalStep] = useState(-1);
+  const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   const navigate = useNavigate();
   const { state } = useQuiz();
-  const [ modalStep, setModalStep ] = React.useState( -1 );
   const { auth } = useAuth();
+  const [hovered, setHovered] = useState(false);
 
   const { data: singleQuiz, isLoading, error } = useFetchData(
-    `singleQuiz_${quiz.id}`,
-    `http://localhost:5000/api/quizzes/${quiz.id}`,
+    modalStep >= 0 ? `singleQuiz_${quiz.id}` : null,
+    modalStep >= 0 ? `http://localhost:5000/api/quizzes/${quiz.id}` : null
   );
 
-  const handleClick = () =>
-  {
-    if ( auth )
-    {
-      // const hasAttemptedQuiz = state?.quizzes?.find(quiz => quiz)
-      const hasAttemptedQuiz = state?.quizAttempts?.some( ( attempt ) => attempt[ quiz.id ] );
-
-
-      if ( hasAttemptedQuiz )
-      {
-        setModalStep( 1 );
-      } else
-      {
-        setModalStep( 0 );
-      }
-    } else
-    {
-      navigate( '/login' );
+  const handleClick = () => {
+    if (auth) {
+      const hasAttemptedQuiz = state?.quizAttempts?.[auth.user?.id]?.[quiz?.id] !== undefined;
+      setModalStep(hasAttemptedQuiz ? 1 : 0);
+    } else {
+      navigate('/login');
     }
-
-    // dispatch({ type: 'GET_SINGLE_QUIZ', payload: quiz });
   };
 
-  const handleModalNext = () => {
-    setModalStep(1);
-  };
-
-  const closeModal = () => {
-    setModalStep( -1 );
-    // dispatch({ type: 'GET_SINGLE_QUIZ', payload: null });
-  };
+  const closeModal = () => setModalStep(-1);
 
   const modalComponents = [
-    <QuizPage key="quiz" singleQuiz={singleQuiz} isLoading={isLoading} error={error} onModalNext={handleModalNext} />,
-    <ResultPage singleQuiz={singleQuiz} isLoading={isLoading} error={error}  id={quiz.id} key="result" onClose={closeModal} />,
+    <QuizPage key="quiz" singleQuiz={singleQuiz} isLoading={isLoading} error={error} onModalNext={() => setModalStep(1)} />,
+    <ResultPage key="result" singleQuiz={singleQuiz} isLoading={isLoading} error={error} id={quiz.id} onClose={closeModal} />,
   ];
 
   return (
     <>
       <motion.div
-        onClick={handleClick}
         ref={ref}
+        onClick={handleClick}
         initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         exit={{ x: -100 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] cursor-pointer group relative ${!modalStep ? 'hidden' : 'block'}`}
+        transition={ { duration: 0.6, ease: 'easeOut' } }
+        onMouseEnter={ () => setHovered( true ) }
+        onMouseLeave={ () => setHovered( false ) }
+        className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] cursor-pointer relative"
       >
-        <div className="group-hover:scale-105 absolute transition-all text-white text-center top-1/2 -translate-y-1/2 px-4">
+        {hovered && (
+          <motion.div
+            initial={{ x: -200 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 200 }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+            className="absolute inset-0 bg-black/30 bg-opacity-50 backdrop-blur-md flex items-center z-20 p-1 justify-center  transition-opacity"
+          >
+            <motion.p
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              className="text-white text-xl font-semibold text-center"
+            >
+              {auth && state?.quizAttempts?.[auth.user?.id]?.[quiz?.id] !== undefined ? "You have done the quiz see result!" : "Participate the quiz?"}
+            </motion.p>
+          </motion.div>
+        )}
+
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center group-hover:scale-105 transition-all">
           <h1 className="text-5xl" style={{ fontFamily: 'Jaro' }}>
             {quiz?.title}
           </h1>

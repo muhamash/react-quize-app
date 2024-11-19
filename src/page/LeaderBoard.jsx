@@ -10,15 +10,15 @@ import useQuiz from '../hooks/useQuiz';
 
 export default function LeaderBoard() {
   const { state, dispatch } = useQuiz();
-  
-  const { data: leaderBoard, isLoading, error } = useFetchData(
-    ['leaderBoard', state?.singleQuiz],
-    `http://localhost:5000/api/quizzes/${state?.singleQuiz}/attempts`
-  );
-    
-  // console.log(state)
   const { auth } = useAuth();
+  const userId = auth?.user?.id;
 
+  const { data: leaderBoard, isLoading, error } = useFetchData(
+    [ 'leaderBoard', state?.singleQuiz ],
+    `http://localhost:5000/api/quizzes/${state?.singleQuiz[userId]}/attempts`
+  );
+
+  // console.log(state)
   const navigate = useNavigate();
 
   const goToHomePage = () =>

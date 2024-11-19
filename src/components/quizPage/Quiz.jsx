@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Toaster } from 'react-hot-toast';
-import { HashLoader } from 'react-spinners';
 import Swal from 'sweetalert2';
+import useAuth from '../../hooks/useAuth';
 import { usePostData } from '../../hooks/usePostData';
 import useQuiz from '../../hooks/useQuiz';
 import { QuizOption } from './QuizOption';
@@ -24,6 +24,7 @@ export default function Quiz({
   const [currentSelection, setCurrentSelection] = useState(null);
   const { handleSubmit } = useForm();
   const { dispatch } = useQuiz();
+  const { auth } = useAuth();
 
   const shuffleOptions = (options) => options?.sort(() => Math.random() - 0.5);
 
@@ -44,27 +45,31 @@ export default function Quiz({
   };
 
   // Handle selection change
-  const handleOptionChange = (option) => {
+  const handleOptionChange = ( option ) =>
+  {
     const newSelection = currentSelection === option ? null : option;
-    setCurrentSelection(newSelection);
+    setCurrentSelection( newSelection );
 
-    setAllAnswers((prevAnswers) => {
-      const updatedAnswers = prevAnswers?.map((answer) =>
+    setAllAnswers( ( prevAnswers ) =>
+    {
+      const updatedAnswers = prevAnswers?.map( ( answer ) =>
         answer?.questionId === question?.id
           ? { ...answer, selectedOption: newSelection }
           : answer
       );
 
-      if (!updatedAnswers?.some((answer) => answer?.questionId === question?.id)) {
-        updatedAnswers?.push({ questionId: question?.id, selectedOption: newSelection });
+      if ( !updatedAnswers?.some( ( answer ) => answer?.questionId === question?.id ) )
+      {
+        updatedAnswers?.push( { questionId: question?.id, selectedOption: newSelection } );
       }
       return updatedAnswers;
-    });
+    } );
   };
 
   const onSuccess = (response) => {
     dispatch( {
       type: 'GET_QUIZ_ANSWERS_SERVER', payload: {
+        userId: auth?.user?.id,
         quizId: data?.data?.id,
         quizAnswerServerData: response.data.correct_answers,
       }
@@ -72,7 +77,7 @@ export default function Quiz({
     
     dispatch( {
       type: 'GET_ATTEMPT_ID',
-      payload: { quizId: data?.data?.id, attemptId: response.data?.attempt_id },
+      payload: {  userId: auth?.user?.id, quizId: data?.data?.id, attemptId: response.data?.attempt_id }
     } );
 
     let result = {
@@ -101,6 +106,7 @@ export default function Quiz({
 
     dispatch( {
       type: 'GET_SUBMIT_INFO', payload: {
+        userId: auth?.user?.id,
         quizId: data?.data?.id,
         submissionInformation: result
       }
@@ -142,11 +148,11 @@ export default function Quiz({
       if (result.isConfirmed) {
         dispatch( {
           type: 'GET_QUIZ_ANSWERS', payload: {
+            userId: auth?.user?.id,
             quizId: data?.data?.id,
             quizAnswersData: allAnswers
           }
         } );
-        // dispatch({ type: 'GET_SINGLE_QUIZ', payload: data.data });
 
         const answersPayload = allAnswers.reduce( ( acc, answer ) =>
         {
@@ -155,7 +161,6 @@ export default function Quiz({
         }, {} );
 
         quizMutation.mutate( { answers: answersPayload } );
-        quizMutation.isPending ?? <HashLoader color="#4e1f9b" size={100} speedMultiplier={2} />
         Swal.fire( 'Submitted!', 'Your quiz has been submitted.', 'success' );
         onModalNext();
       } else {

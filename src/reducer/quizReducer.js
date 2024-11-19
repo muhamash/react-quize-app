@@ -3,7 +3,6 @@ const actionTypes = {
     GET_ATTEMPT_ID: 'GET_ATTEMPT_ID',
     GET_QUIZ_ANSWERS: 'GET_QUIZ_ANSWERS',
     GET_QUIZ_ANSWERS_SERVER: 'GET_QUIZ_ANSWERS_SERVER',
-    GET_LEADER_DATA: "GET_LEADER_DATA",
     GET_SINGLE_QUIZ: "GET_SINGLE_QUIZ",
     GET_SUBMIT_INFO: "GET_SUBMIT_INFO",
 };
@@ -13,58 +12,85 @@ const initialState = {
     quizAnswers: [],
     quizAttempts: [],
     quizAnswerServer: [],
-    leaderBoard: [],
     singleQuiz: [],
     submissionInfo: [],
-    userInfo:[]
 };
 
-const quizReducer = (state, action) => {
-    switch (action.type) {
+const quizReducer = ( state, action ) =>
+{
+    switch ( action.type )
+    {
         case actionTypes.SET_QUIZZES:
             return { ...state, quizzes: action.payload };
-        case actionTypes.GET_SINGLE_QUIZ:
-            return { ...state, singleQuiz: action.payload };
+        case actionTypes.GET_SINGLE_QUIZ: {
+            const { userId, singleQuizId } = action.payload;
+            return {
+                ...state, singleQuiz: {
+                    ...state.singleQuiz,
+                    [ userId ]: singleQuizId
+                }
+            };
+        }
+        
         case actionTypes.GET_SUBMIT_INFO: {
-            const { quizId, submissionInformation } = action.payload;
+            const { userId, quizId, submissionInformation } = action.payload;
+
             return {
                 ...state,
-                submissionInfo: [
-                    ...state.submissionInfo,
-                    { [ quizId ]: submissionInformation }
-                ]
+                submissionInfo: {
+                    ...state.submissionInfo, 
+                    [ userId ]: {
+                        ...state.submissionInfo[ userId ],
+                        [ quizId ]: submissionInformation,
+                    },
+                },
             };
-        }
+        };
+            
         case actionTypes.GET_ATTEMPT_ID: {
-            const { quizId, attemptId } = action.payload;
+            const { userId, quizId, attemptId } = action.payload;
             return {
                 ...state,
-                quizAttempts: [
+                quizAttempts: {
                     ...state.quizAttempts,
-                    { [quizId]: attemptId }
-                ]
+                    [ userId ]: {
+                        ...state.quizAttempts[ userId ],
+                        [ quizId ]: attemptId,
+                    },
+                },
             };
-        }
+        };
+            
         case actionTypes.GET_QUIZ_ANSWERS: {
-            const { quizId, quizAnswersData } = action.payload;
+            const { userId, quizId, quizAnswersData } = action.payload;
+
             return {
                 ...state,
-                quizAnswers: [
+                quizAnswers: {
                     ...state.quizAnswers,
-                    { [ quizId ]: quizAnswersData }
-                ]
+                    [ userId ]: {
+                        ...state.quizAnswers[ userId ],
+                        [ quizId ]: quizAnswersData, 
+                    },
+                },
             };
         };
+            
         case actionTypes.GET_QUIZ_ANSWERS_SERVER: {
-            const { quizId, quizAnswerServerData } = action.payload;
+            const { userId, quizId, quizAnswerServerData } = action.payload;
+
             return {
                 ...state,
-                quizAnswerServer: [
+                quizAnswerServer: {
                     ...state.quizAnswerServer,
-                    { [ quizId ]: quizAnswerServerData }
-                ]
+                    [ userId ]: {
+                        ...state.quizAnswerServer[ userId ],
+                        [ quizId ]: quizAnswerServerData,  
+                    },
+                },
             };
         };
+            
         default:
             return state;
     }

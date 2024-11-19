@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { useMemo } from 'react';
 import { HashLoader } from 'react-spinners';
+import useAuth from '../../hooks/useAuth';
 import useQuiz from '../../hooks/useQuiz';
 import { SelectionTracker } from './Radio';
 
@@ -14,38 +14,26 @@ const slideAnimation = {
 
 export default function Answer({ data, quizId }) {
     const { state } = useQuiz();
+    const { auth } = useAuth();
+    const userId = auth?.user?.id;
 
-
-    const userSelections = useMemo(
-        () => state?.quizAnswers?.find((ans) => ans[quizId]),
-        [state.quizAnswers, quizId]
+    const userSelections = state.quizAnswers?.[ userId ]?.[ quizId ]?.find(
+        ans => ans.questionId === data.id
     );
 
-    const correctAnswers = useMemo(
-        () => state?.quizAnswerServer?.find((quiz) => quiz[quizId]),
-        [state.quizAnswerServer, quizId]
+    const correctAnswers = state.quizAnswerServer?.[ userId ]?.[ quizId ]?.find(
+        quiz => quiz.question_id === data.id
     );
+    const isCorrect = correctAnswers?.answer === userSelections?.selectedOption && correctAnswers?.answer?.length === userSelections?.selectedOption?.length;
 
-    const userSelectedOption = userSelections?.[quizId]?.find(
-        (u) => u?.questionId === data.id
-    )?.selectedOption;
-
-    const correctAnswer = correctAnswers?.[quizId]?.find(
-        (u) => u?.question_id === data?.id
-    )?.answer;
-
-    const isCorrect =
-        correctAnswer === userSelectedOption &&
-        correctAnswer?.length === userSelectedOption?.length;
-    
-    
-    if (!data && !state?.quizAnswerServer) {
+    if (!state.quizAnswers?.[userId]?.[quizId] || !state.quizAnswerServer?.[userId]?.[quizId]) {
         return (
-            <div className="w-screen h-screen flex items-center justify-center">
+            <div className="flex items-center justify-center">
                 <HashLoader color="#4e1f9b" size={ 100 } speedMultiplier={ 2 } />
+                <p className="mt-4 text-center text-gray-600">Loading or no data found...</p>
             </div>
         );
-    }
+    };
 
     return (
         <motion.div
@@ -57,9 +45,9 @@ export default function Answer({ data, quizId }) {
                     <h3 className="text-lg font-semibold">{data.question}</h3>
                 </div>
                 <div
-                    className={`space-y-2 ${
+                    className={`space-y-2 p-3 rounded-md ${
                         isCorrect ? 'bg-green-500' : 'bg-rose-400'
-                    } p-3 rounded-md`}
+                    }`}
                 >
                     {data?.options?.map((option, index) => (
                         <SelectionTracker
@@ -67,9 +55,9 @@ export default function Answer({ data, quizId }) {
                             label={option}
                             name={option}
                             value={option}
-                            checked={userSelectedOption === option}
-                            isUserSelection={userSelectedOption === option}
-                            isCorrectAnswer={correctAnswer === option}
+                            checked={userSelections?.selectedOption === option}
+                            isUserSelection={userSelections?.selectedOption === option}
+                            isCorrectAnswer={correctAnswers?.answer === option}
                         />
                     ))}
                     <div className="bg-violet-500 p-2 my-2">

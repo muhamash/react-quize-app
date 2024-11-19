@@ -28,13 +28,13 @@ export default function ResultPage({ onClose, id, singleQuiz, isLoading, error }
                 <title>Your results</title>
             </Helmet>
             <ErrorBoundary>
-                <div className="bg-background text-foreground w-fit h-fit py-1">
-                    <div className="flex flex-wrap overflow-hidden">
+                <div className="bg-background text-foreground mx-auto w-fit h-fit py-1">
+                    <div className="flex flex-col md:flex-row overflow-hidden">
                         <Suspense fallback={<p>Loading!!!!</p>}>
                             <ResultBoard id={id} onClose={onClose} />
                         </Suspense>
-                        <div className="flex items-center justify-center h-[700px] md:w-1/2">
-                            <div className="h-full w-full overflow-y-scroll">
+                        <div className="flex items-center justify-center h-full mt-3">
+                            <div className="w-fit overflow-y-scroll h-[390px] md:h-[700px]">
                                 <AnimatePresence mode="wait">
                                     <Suspense fallback={<p>Loading</p>}>
                                         <div className="px-4">
