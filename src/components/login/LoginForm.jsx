@@ -98,10 +98,10 @@ const LoginForm = () =>
                     Enter your username or email address
                 </label>
                 <input
-                    type="text"
+                    type="email"
                     id="email"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300"
-                    placeholder="Username or email address"
+                    placeholder="Email address"
                     { ...register( 'email', { required: 'Email is required' } ) }
                 />
                 { errors.username && <p className="text-red-600">{ errors.username.message }</p> }

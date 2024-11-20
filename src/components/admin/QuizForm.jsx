@@ -9,8 +9,8 @@ import { usePostData } from '../../hooks/usePostData';
 
 export default function QuizForm({editQuestionData, setEditQuestionData}) {
     const { state, dispatch } = useCreateQuiz();
-
-    const totalQuestions = state?.addQuestions[ state?.quizEditResponse?.id ];
+    
+    const totalQuestions = state?.addQuestions[ state?.quizEditResponse?.id ] ?? state?.addQuestions[ state?.quizList?.id ];
 
     const {
         register,
@@ -130,12 +130,12 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
 
     return (
         <form onSubmit={ handleSubmit( onSubmit ) } className="space-y-4">
-            <h2 className="text-3xl font-bold mb-4">{ state?.quizEditResponse?.title }</h2>
+            <h2 className="text-3xl font-bold mb-4">{ state?.quizEditResponse?.title ?? state?.quizList?.title }</h2>
             <div className="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded-full inline-block mb-4">
                 Total number of questions: { totalQuestions?.length }
             </div>
             <p className="text-violet-700 mb-4">
-                { state?.quizEditResponse?.description }
+                { state?.quizEditResponse?.description ?? state?.quizList?.description }
             </p>
 
             <div className="space-y-4">

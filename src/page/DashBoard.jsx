@@ -69,14 +69,17 @@ export default function DashBoard() {
         }
     };
 
-    const onSuccess = (response) => {
+    const { refetch } = useFetchData(`quizListAdmin`, `http://localhost:5000/api/admin/quizzes`);
+
+    const onSuccess = async (response) => {
         if (response?.data?.status === "draft") {
             dispatch({ type: "SET_QUIZ_LIST", payload: response.data });
             Swal.fire({
                 title: "Oka!",
                 text: "Quiz has been drafted!",
                 icon: "success",
-            });
+            } );
+            await refetch();
             setOpenQuestion(false);
         }
 

@@ -67,7 +67,6 @@ export default function Question ( { question, status, setEditQuestionData } )
         } );
     }, [ deleteQuestion, question.id ] );
 
-    // Handle Edit action
     const handleEdit = React.useCallback( () =>
     {
         // console.log( question );
