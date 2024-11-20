@@ -80,7 +80,7 @@ export default function DashBoard() {
                 icon: "success",
             } );
             await refetch();
-            setOpenQuestion(false);
+            handleClose();
         }
 
         if (response.data === 1) {
@@ -126,9 +126,10 @@ export default function DashBoard() {
 
     const handleOpen = () => setOpen(true);
 
-    const handleClose = () => {
-        dispatch({ type: "SET_QUIZ_LIST", payload: null });
-
+    const handleClose = () =>
+    {
+        dispatch( { type: "SET_QUIZ_LIST", payload: null } );
+        // dispatch( { type: "SET_QUIZ_INFO", payload: null } );
         if (openQuestion === true && open === false) {
             setOpenQuestion(false);
         } else {
@@ -148,7 +149,7 @@ export default function DashBoard() {
             title: state?.quizList?.title,
             description: state?.quizList?.description,
             status: "draft",
-        });
+        } );
     };
 
     if (isLoading) {

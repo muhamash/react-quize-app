@@ -15,13 +15,9 @@ export default function CreateQuiz ()
     const { state } = useCreateQuiz();
     const navigate = useNavigate();
 
-
-    console.log( state );
-
     const quizQuestions = state?.addQuestions[ state?.quizEditResponse?.id ];
-    // console.log( quizQuestions, state.addQuestions);
 
-     const onSuccess = ( response ) =>
+    const onSuccess = ( response ) =>
     {
         console.log( response );
         Swal.fire( {
@@ -32,7 +28,7 @@ export default function CreateQuiz ()
             timer: 1500,
         } );
          
-        navigate( "/dashboard" ); 
+        navigate( "/dashboard" );
     };
 
     const onError = ( error ) =>
@@ -55,7 +51,7 @@ export default function CreateQuiz ()
 
     const handlePublish = () =>
     {
-        if ( !quizQuestions )
+        if ( !quizQuestions || quizQuestions.length === 0)
         {
             Swal.fire( {
                 title: "warning",

@@ -30,7 +30,6 @@ const QuizCardForm = ( { onClose } ) =>
       timer: 1000
     } );
     onClose();
-    dispatch( { type: "SET_QUIZ_LIST", payload: null } );
     navigate( "/createQuiz" );
   };
 
@@ -51,11 +50,6 @@ const QuizCardForm = ( { onClose } ) =>
     onError,
   } );
 
-  const handleNext = () =>
-  {
-    dispatch( { type: "SET_QUIZ_LIST", payload: state?.quizList } );
-  }
-
   const onSubmit = ( data ) =>
   {
     if (
@@ -69,6 +63,7 @@ const QuizCardForm = ( { onClose } ) =>
         text: `Data unchanged`,
         icon: "info",
       } );
+      dispatch( { type: "SET_QUIZ_INFO", payload: state?.quizList } );
       onClose();
       navigate( "/createQuiz" );
       return;
@@ -138,10 +133,8 @@ const QuizCardForm = ( { onClose } ) =>
             />
             { errors.description && <p className="text-red-600">{ errors.description.message }</p> }
           </div>
-
-          {/* Submit Button */ }
+          
           <button
-            onClick={handleNext}
             type="submit"
             className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
             disabled={ quizCardMutation.isPending }

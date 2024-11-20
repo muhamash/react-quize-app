@@ -74,13 +74,13 @@ const QuizCard = ({ quiz }) => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 200 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
-            className="absolute inset-0 bg-black/30 bg-opacity-50 backdrop-blur-md flex items-center z-20 p-1 justify-center  transition-opacity"
+            className="absolute inset-0 bg-black/30 bg-opacity-50 backdrop-blur-md flex items-center z-20 p-2 justify-center  transition-opacity"
           >
             <motion.p
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, ease: 'easeInOut' }}
-              className="text-white text-xl font-semibold text-center"
+              className="text-white bg-yellow-600 text-md p-1  font-semibold text-center font-serif rounded-md shadow-2xl shadow-amber-500"
             >
               {auth && state?.quizAttempts?.[auth.user?.id]?.[quiz?.id] !== undefined ? "You have done the quiz see result!" : "Participate the quiz?"}
             </motion.p>

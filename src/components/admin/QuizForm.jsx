@@ -99,6 +99,16 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
         onError,
     } );
 
+    const uniqueOptionsValidation = ( options ) =>
+    {
+        if ( !Array.isArray( options ) )
+        {
+            return "Options must be unique.";
+        }
+        const optionTexts = options.map( ( opt ) => opt.text.trim() );
+        return new Set( optionTexts ).size === optionTexts.length || "Options must be unique.";
+    };
+
     const onSubmit = (data) => {
         if (selectedCorrectOptions?.length !== 1) {
             Swal.fire({
@@ -109,7 +119,19 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
                 timer: 1500,
             });
             return;
-        }
+        };
+
+        const uniqueOptionsError = uniqueOptionsValidation( data.options );
+        if (uniqueOptionsError !== true) {
+            Swal.fire( {
+                position: 'top-end',
+                icon: 'error',
+                title: uniqueOptionsError,
+                showConfirmButton: false,
+                timer: 1500,
+            } );
+            return;
+        };
 
         const correctAnswerText = data?.options?.find( ( opt ) => opt?.isCorrect )?.text;
         
@@ -127,6 +149,8 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
                 } )
         )
     };
+
+    const isPending = addQuizMutation.isPending || editQuestionPatch.isPending;
 
     return (
         <form onSubmit={ handleSubmit( onSubmit ) } className="space-y-4">
@@ -168,14 +192,17 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
                         >
                             <input
                                 type="checkbox"
-                                { ...register( `options.${index}.isCorrect` ) }
+                                { ...register( `options.${index}.isCorrect`, ) }
                                 className="text-primary focus:ring-0 w-4 h-4"
                                 checked={ watch( `options.${index}.isCorrect` ) || false }
                             />
 
                             <input
                                 type="text"
-                                { ...register( `options.${index}.text`, { required: 'Option text is required' } ) }
+                                { ...register( `options.${index}.text`, {
+                                    required: 'Option text is required',
+                                    validate: (value, formValues) => uniqueOptionsValidation(formValues.options),
+                                 } ) }
                                 className="w-full p-2 bg-transparent rounded-md text-foreground outline-none focus:ring-0"
                                 placeholder={ `Option ${index + 1}` }
                                 defaultValue={ option.text }
@@ -184,13 +211,13 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
                         </div>
                     ) ) }
                 </div>
-
                 <button
                     type="submit"
                     className="w-full bg-primary text-white text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition-colors"
                 >
-                    { editQuestionData ? `${editQuestionPatch.isPending ? "Updating..." : "Update Question"}` : `${addQuizMutation.isPending ? "Adding..." : "Add Question"}` }
+                    { isPending ? "Processing..." : editQuestionData ? "Update Question" : "Add Question" }
                 </button>
+
             </div>
         </form>
     );
