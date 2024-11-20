@@ -14,9 +14,10 @@ export default function ResultBoard({ onClose, id
     const { auth } = useAuth();
 
     const userId = auth?.user?.id;
-    // console.log(state.submissionInfo[userId][id])
+    // console.log(state)
     const findSubmitResult = state?.submissionInfo[userId];
-    // console.log( submissionInfo );
+    const findData = state?.quizzes?.find( quiz => quiz?.id === id );
+    // console.log( findData );
     const isLoading = !findSubmitResult || !singleQuiz;
     
     const handleClose = () =>
@@ -42,9 +43,9 @@ export default function ResultBoard({ onClose, id
     return (
         <div className="overflow-hidden mx-auto lg:flex lg:w-1/2 bg-primary h-max-[600px] flex-col justify-center p-5 relative rounded-md">
             <div className="text-white mx-auto">
-                <div>
-                    <h2 className="text-4xl font-bold mb-2">{singleQuiz?.data?.title}</h2>
-                    <p>{singleQuiz?.data?.description}</p>
+                <div className="w-fit mx-auto font-sans bg-violet-900 px-4 py-2 rounded-md shadow-lg shadow-black">
+                    <h2 className="text-2xl font-bold mb-2">{findData.title}</h2>
+                    <p className="text-md">{findData.description}</p>
                 </div>
                 <div className="my-6 justify-center items-center flex gap-3 flex-wrap">
                     <div>

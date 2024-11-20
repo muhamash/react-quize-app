@@ -30,14 +30,13 @@ export default function Answer({ data, quizId }) {
         return (
             <div className="flex items-center justify-center">
                 <HashLoader color="#4e1f9b" size={ 100 } speedMultiplier={ 2 } />
-                <p className="mt-4 text-center text-gray-600">Loading or no data found...</p>
             </div>
         );
     };
 
     return (
         <motion.div
-            className="rounded-lg overflow-hidden shadow-sm mb-4"
+            className="rounded-lg overflow-hidden shadow-md shadow-black/30 mb-4"
             {...slideAnimation}
         >
             <div className="bg-white p-6 !pb-2">

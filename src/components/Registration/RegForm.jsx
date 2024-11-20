@@ -65,7 +65,7 @@ const RegisterForm = () => {
     
     const onSubmit = ( data ) =>
     {
-        console.log( data )
+        // console.log( data )
         if ( data.admin )
         {
             registrationMutation.mutate( { full_name: data.name, email: data.email, password: data.password, role: "admin" } );

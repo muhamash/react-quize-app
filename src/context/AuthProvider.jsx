@@ -6,7 +6,7 @@ export default function AuthProvider({ children }) {
     const [auth, setAuth] = useState(null);
     // const [ loading, setLoading ] = useState( true );  
     
-      console.log( auth );
+    //   console.log( auth );
 
     // useEffect( () =>
     // {

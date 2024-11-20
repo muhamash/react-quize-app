@@ -82,7 +82,7 @@ const LoginForm = () =>
 
     const submitForm = ( formData ) =>
     {
-        console.log(formData)
+        // console.log(formData)
         loginMutation.mutate( formData, {
             headers: {
                 Authorization: `Bearer ${token}`
