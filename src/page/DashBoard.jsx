@@ -184,33 +184,33 @@ export default function DashBoard() {
                             </h1>
                         </header>
                         <div className="flex flex-wrap justify-center items-center gap-6 w-full mx-auto overflow-y-scroll h-[750px]">
-                            <AddQuizCard onClick={handleOpen} />
-                            {currentQuizzes?.length > 0 ? (
-                                currentQuizzes.map((q) => (
-                                    <AnimatePresence key={q.id} mode="wait">
+                            <AddQuizCard onClick={ handleOpen } />
+                            { currentQuizzes?.length > 0 ? (
+                                currentQuizzes.map( ( q ) => (
+                                    <AnimatePresence key={ q.id } mode="wait">
                                         <DashBoardCard
-                                            onEdit={() => handleEditCardClick(q.id)}
-                                            data={q}
-                                            onDelete={() => onDelete(q.id)}
+                                            onEdit={ () => handleEditCardClick( q.id ) }
+                                            data={ q }
+                                            onDelete={ () => onDelete( q.id ) }
                                         />
                                     </AnimatePresence>
-                                ))
+                                ) )
                             ) : (
                                 <p>No quizzes found. Click &#34;Add Quiz&#34; to create one!</p>
-                            )}
+                            ) }
                         </div>
-                        {/* pagination */}
+                        {/* pagination */ }
                         <div className="flex absolute left-[50%] right-[50%] justify-center items-center gap-4 pt-2">
                             <button
-                                onClick={handlePrevPage}
-                                disabled={currentPage === 1}
+                                onClick={ handlePrevPage }
+                                disabled={ currentPage === 1 }
                                 className="px-3 py-1 text-sm bg-green-700 rounded disabled:opacity-50 text-white cursor-pointer">
                                 Previous
                             </button>
                             
                             <button
-                                onClick={handleNextPage}
-                                disabled={currentPage === totalPages}
+                                onClick={ handleNextPage }
+                                disabled={ currentPage === totalPages }
                                 className="px-3 py-1 text-sm bg-cyan-700 rounded disabled:opacity-50 text-white cursor-pointer">
                                 Next
                             </button>
@@ -220,34 +220,36 @@ export default function DashBoard() {
             </HelmetProvider>
             { open && <QuizCardForm onClose={ handleClose } /> }
             
-            {openQuestion && (
-                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex flex-col gap-5 items-center justify-center backdrop-blur-sm p-3">
-                    <button
-                        className="bg-red-700 text-white rounded-md shadow-md px-3 py-2 m-5 self-end"
-                        onClick={handleClose}>
-                        Close
-                    </button>
-                    <button
-                        onClick={handleDraft}
-                        className="bg-violet-700 text-white px-4 py-2 rounded-md shadow-md self-end">
-                        Draft quiz
-                    </button>
+            { openQuestion && (
+                <div className="fixed  top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex flex-col gap-5 items-center justify-center backdrop-blur-sm p-3">
+                    <div className='bg-slate-700 p-5 shadow-lg rounded-md shadow-black hover:shadow-sm duration-200 transition-all'>
+                        <button
+                            className="bg-red-700 text-white rounded-md shadow-md px-3 py-2 m-5 hover:shadow-lg hover:shadow-black/50 self-end"
+                            onClick={ handleClose }>
+                            Close
+                        </button>
+                        <button
+                            onClick={ handleDraft }
+                            className="bg-violet-700 text-white px-4 py-2 rounded-md shadow-md hover:shadow-lg hover:shadow-black/50 self-end">
+                            { publishQuiz.isPending ? "working on.." : "Draft quiz" }
+                        </button>
+                    </div>
                     <div className="bg-slate-400 p-5 overflow-y-scroll h-[700px] rounded-md">
-                        {state?.quizList?.Questions?.length === 0 ? (
+                        { state?.quizList?.Questions?.length === 0 ? (
                             <p>No questions in this quiz!</p>
                         ) : (
-                            state?.quizList?.Questions?.map((q) => (
+                            state?.quizList?.Questions?.map( ( q ) => (
                                 <Question
-                                    key={q.id}
-                                    question={q}
-                                    status={state?.quizList?.status}
-                                    onClose={handleClose}
+                                    key={ q.id }
+                                    question={ q }
+                                    status={ state?.quizList?.status }
+                                    onClose={ handleClose }
                                 />
-                            ))
-                        )}
+                            ) )
+                        ) }
                     </div>
                 </div>
-            )}
+            ) }
         </>
     );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
@@ -19,7 +20,7 @@ export default function CreateQuiz ()
 
     const onSuccess = ( response ) =>
     {
-        console.log( response );
+        // console.log( response );
         Swal.fire( {
             position: 'top-end',
             icon: 'success',
@@ -114,7 +115,7 @@ export default function CreateQuiz ()
                             <p className="text-violet-800 text-lg px-3 py-1 mb-3 rounded-md shadow-sm bg-slate-300 w-fit">Quiz Status : <span className="font-semibold">{state?.quizEditResponse?.status }</span></p>
                             <button
                                 onClick={handlePublish}
-                                className='bg-violet-600 text-white px-4 py-2 rounded-md shadow-md'>
+                                className='bg-violet-600 shadow-md text-white px-4 py-2 rounded-md shadow-black/50'>
                                 {publishQuiz.isPending ? "working..." : "Publish quiz"}
                             </button>
                         </div>
