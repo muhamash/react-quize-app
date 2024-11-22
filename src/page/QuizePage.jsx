@@ -3,7 +3,6 @@
 import { AnimatePresence } from 'framer-motion';
 import { Suspense, useState } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { Toaster } from 'react-hot-toast';
 import { HashLoader } from 'react-spinners';
 import ErrorBoundary from '../components/common/ErrorBoundary';
 import Quiz from '../components/quizPage/Quiz';
@@ -69,10 +68,9 @@ export default function QuizPage({onModalNext, singleQuiz, isLoading, error}) {
         <title>Quiz Page</title>
       </Helmet>
       <ErrorBoundary>
-        <Toaster />
         <div className="max-w-8xl mx-auto h-[calc(100vh-10rem)]">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 h-full overflow-y-scroll">
-            <QuizCounter user={ auth?.user?.full_name } quizData={ singleQuiz?.data } />
+            <QuizCounter questionIndex={questionIndex} user={ auth?.user?.full_name } quizData={ singleQuiz?.data } />
             <div className="lg:col-span-2 bg-white ">
               <Suspense fallback={ <p>Loading...</p> }>
                 <AnimatePresence mode="wait">

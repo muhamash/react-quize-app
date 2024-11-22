@@ -3,6 +3,6 @@
 
 export default function Indicator ( { text } ) {
   return (
-    <span className="text-[10px] text-cyan-950 font-mono">{ text }</span>
+    <span className="text-[10px] text-gray-300 font-mono">{ text }</span>
   )
 }

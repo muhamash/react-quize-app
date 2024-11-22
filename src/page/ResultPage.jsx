@@ -1,14 +1,20 @@
- 
 /* eslint-disable react/prop-types */
 import { AnimatePresence } from 'framer-motion';
-import { Suspense } from 'react';
+import { useState } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { HashLoader } from 'react-spinners';
 import ErrorBoundary from '../components/common/ErrorBoundary';
 import Answer from "../components/result/Answer";
 import ResultBoard from "../components/result/ResultBoard";
 
-export default function ResultPage({ onClose, id, singleQuiz, isLoading, error }) {
+export default function ResultPage ( { onClose, id, singleQuiz, isLoading, error } )
+{
+    const [ openAnswer, setOpenAnswer ] = useState(false);
+
+    const handleAnswer = () =>
+    {
+        setOpenAnswer( !openAnswer )
+    };
 
     if (isLoading) {
     return (
@@ -25,24 +31,22 @@ export default function ResultPage({ onClose, id, singleQuiz, isLoading, error }
     return (
         <HelmetProvider>
             <Helmet>
-                <title>Your results</title>
+                <title>Your result - Result page</title>
             </Helmet>
             <ErrorBoundary>
                 <div className="bg-background text-foreground mx-auto w-fit h-fit py-1">
-                    <div className="flex flex-col md:flex-row overflow-hidden">
-                        <Suspense fallback={<p>Loading!!!!</p>}>
-                            <ResultBoard id={id} onClose={onClose} />
-                        </Suspense>
-                        <div className="flex items-center justify-center h-full mt-3">
-                            <div className="w-fit overflow-y-scroll h-[390px] md:h-[700px]">
+                    <div className="flex flex-col md:flex-row overflow-hidden items-center justify-center">
+                        <ResultBoard openAnswer={ openAnswer } id={ id } onClose={ onClose } handleAnswer={ handleAnswer } />
+                        <div className="flex items-center justify-center h-fit overflow-hidden mt-3">
+                            <div className={ `w-fit ${openAnswer === true ? "block md:hidden" : "hidden md:block"} md:h-[700px] flex flex-col items-center justify-center gap-3` }>
+                                <button onClick={ () => setOpenAnswer( !openAnswer ) } className={ `${openAnswer === true ? "block" : "hidden"} bg-violet-900 text-white shadow-md shadow-black/30 px-3 py-2 rounded-md` }>Back to the Result board</button>
+                                
                                 <AnimatePresence mode="wait">
-                                    <Suspense fallback={<p>Loading</p>}>
-                                        <div className="px-4">
-                                            {singleQuiz?.data?.questions?.map((data) => (
-                                                <Answer quizId={id} key={data.id} data={data} />
-                                            ))}
-                                        </div>
-                                    </Suspense>
+                                    <div className="px-4 overflow-y-scroll h-[700px]">
+                                        { singleQuiz?.data?.questions?.map( ( data ) => (
+                                            <Answer quizId={ id } key={ data.id } data={ data } />
+                                        ) ) }
+                                    </div>
                                 </AnimatePresence>
                             </div>
                         </div>

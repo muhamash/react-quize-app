@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Toaster } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
@@ -98,13 +97,12 @@ export default function Nav() {
 
     return (
         <motion.header
-            className="flex justify-between items-center mb-12 fixed top-0 left-0 right-0 z-10 bg-gradient-to-r from-gray-400 via-gray-700 to-black/20 backdrop-blur-sm py-3 md:px-[30px] px-3"
+            className="flex justify-between items-center mb-12 fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-400 via-gray-700 to-black/20 backdrop-blur-sm py-3 md:px-[30px] px-3"
             animate={ { y: isVisible ? 0 : -100 } }
             transition={ { type: 'spring', stiffness: 80, damping: 22 } }
             onMouseEnter={ handleMouseEnter }
             onMouseLeave={ handleMouseLeave }
         >
-            <Toaster position="top-right" reverseOrder={false} />
             <Link to="/">
                 <img src="./assets/logo.svg" className="h-7" alt="Logo" />
             </Link>

@@ -17,8 +17,8 @@ export function SelectionTracker({ label, name, value, checked, isUserSelection,
                     disabled
                     checked={checked}
                     className={`form-radio 
-                        ${isCorrectAnswer ? 'text-green-900 ring-2 ring-green-900' : ''} 
-                        ${isUserSelection && !isCorrectAnswer ? 'text-violet-900 ring-2 ring-violet-900' : ''} 
+                        ${isCorrectAnswer ? 'text-green-800 ring-2 ring-green-800' : ''} 
+                        ${isUserSelection && !isCorrectAnswer ? 'text-violet-700 ring-2 ring-violet-700' : ''} 
                         ${!isUserSelection && !isCorrectAnswer ? 'text-gray-100' : ''}
                     `}
                 />

@@ -39,14 +39,14 @@ export default function Answer({ data, quizId }) {
             className="rounded-lg overflow-hidden shadow-md shadow-black/30 mb-4"
             {...slideAnimation}
         >
-            <div className="bg-white p-6 !pb-2">
+            <div className={`${
+                        isCorrect ? 'bg-green-700' : 'bg-rose-700'
+                    } p-3 !pb-2`}>
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-lg font-semibold">{data.question}</h3>
                 </div>
                 <div
-                    className={`space-y-2 p-3 rounded-md ${
-                        isCorrect ? 'bg-green-500' : 'bg-rose-400'
-                    }`}
+                    className={`space-y-2 p-3 rounded-md bg-gradient-to-r from-slate-400 via-sky-700  bg-opacity-90 backdrop-blur-sm shadow-lg shadow-white/20 border-[1px] border-slate-400 `}
                 >
                     {data?.options?.map((option, index) => (
                         <SelectionTracker

@@ -120,7 +120,7 @@ const QuizCard = ( { quiz } ) =>
             animate={ { opacity: 1, x: 0 } }
             exit={ { opacity: 0, x: 200 } }
             transition={ { duration: 0.5, ease: 'easeInOut' } }
-            className="absolute inset-0 bg-black/30 bg-opacity-50 backdrop-blur-md flex items-center z-20 p-2 justify-center transition-opacity"
+            className="absolute inset-0 z-10 bg-black/30 bg-opacity-50 backdrop-blur-md flex items-center  p-2 justify-center transition-opacity"
           >
             { fetchingAttempt ? (
               <SyncLoader color="#508d72" size={10}/>
