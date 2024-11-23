@@ -191,6 +191,7 @@ export default function DashBoard() {
                     </div>
                 </div>
             </HelmetProvider>
+            
             { open && <QuizCardForm onClose={ handleClose } /> }
             
             { openQuestion && (
