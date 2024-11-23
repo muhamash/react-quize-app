@@ -27,7 +27,7 @@ export function SelectionTracker({ label, name, value, checked, isUserSelection,
                 </span>
                 {
                     isUserSelection && !isCorrectAnswer && (
-                        <Indicator text={'*** user selected option but wrong answer ***'}/>
+                        <Indicator text={'*** You have selected option but wrong answer ***'}/>
                     )
                 }
 
@@ -38,7 +38,7 @@ export function SelectionTracker({ label, name, value, checked, isUserSelection,
                 }
                 {
                     isUserSelection && isCorrectAnswer && (
-                        <Indicator text={'*** user selected the correct option ***'}/>
+                        <Indicator text={'*** You have selected the correct option ***'}/>
                     )
                 }
             </label>

@@ -7,10 +7,12 @@ export const useFetchData = (key, url, params = {}) => {
     return useQuery({
         queryKey: [key, params],
         queryFn: async () => {
-            const response = await api.get(url, { params });
+            const response = await api.get( url, { params } );
+            // console.log(response.data)
             return response.data;
         },
-        keepPreviousData: true,
+        // keepPreviousData: true,
+        staleTime: 10000,
         onError: (error, variables) => {
             console.error('Error fetching data:', error, variables);
         },

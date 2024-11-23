@@ -43,6 +43,8 @@ const QuizCard = ( { quiz } ) =>
     modalStep >= 0 ? `http://localhost:5000/api/quizzes/${quiz.id}` : null
   );
 
+  // const { refetch } = useFetchData( `quizzes`, `http://localhost:5000/api/quizzes` );
+
   const fetchAttemptData = async () =>
   {
     if ( auth )
@@ -61,6 +63,8 @@ const QuizCard = ( { quiz } ) =>
         setFetchingAttempt( false );
       }
     }
+
+    // await refetch();
   };
 
   const handleCardClick = () =>
@@ -129,16 +133,15 @@ const QuizCard = ( { quiz } ) =>
                 initial={ { scale: 0.8 } }
                 animate={ { scale: 1 } }
                 transition={ { duration: 0.5, ease: 'easeInOut' } }
-                className="text-white bg-yellow-600 text-md p-1 font-semibold text-center font-serif rounded-md shadow-2xl shadow-amber-500"
+                className="text-white m-3 bg-yellow-600 text-sm p-3 font-semibold text-center font-mono rounded-md shadow-2xl shadow-amber-500"
               >
                 { auth && attempt
-                  ? 'Great! You’ve already attempted this quiz. See results!'
-                  : 'Ready to participate?' }
+                  ? `Great! You’ve already attempted this quiz. See results!`
+                  : `Total questions: ${quiz.total_questions} ;  ${quiz.total_attempts} has participated; Ready to participate? ` }
               </motion.p>
             ) }
           </motion.div>
         ) }
-
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center group-hover:scale-105 transition-all">
           <h1 className="text-5xl" style={ { fontFamily: 'Jaro' } }>
             { quiz?.title }

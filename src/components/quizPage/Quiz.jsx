@@ -66,6 +66,13 @@ export default function Quiz({
     } );
   };
 
+  // const { refetch } = useFetchData( `quizzes`, `http://localhost:5000/api/quizzes` );
+
+  // const handleRefetch = async( ) =>
+  // {
+  //   await refetch;
+  // }
+
   const onSuccess = (response) => {
     dispatch( {
       type: 'GET_QUIZ_ANSWERS_SERVER', payload: {
@@ -111,11 +118,23 @@ export default function Quiz({
         submissionInformation: result
       }
     } );
+
+    // await refetch();
+    // console.log(handleRefetch, refetch)
   };
 
+  const onError = ( error ) =>
+  {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `${error}`,
+      });
+  }
   const quizMutation = usePostData({
     url: `http://localhost:5000/api/quizzes/${data?.data?.id}/attempt`,
     onSuccess,
+    onError
   });
 
   const onSubmit = () => {
@@ -164,13 +183,13 @@ export default function Quiz({
         Swal.fire( 'Submitted!', 'Your quiz has been submitted.', 'success' );
         onModalNext();
       } else {
-        Swal.fire({
+        Swal.fire( {
           position: 'top-end',
           icon: 'info',
           title: '🕹️🤗  This time do better!!',
           showConfirmButton: false,
           timer: 1500,
-        });
+        } );
         resetQuiz();
       }
     });

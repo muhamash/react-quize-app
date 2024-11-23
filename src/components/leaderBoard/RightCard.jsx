@@ -3,12 +3,17 @@ import useAuth from "../../hooks/useAuth";
 /* eslint-disable react/prop-types */
 export default function RightCard({ user, totalMarks, isTopFive }) {
   const { auth } = useAuth();
+
   const isCurrentUser = user.id === auth.user.id;
 
   return (
     <li
       className={`flex items-center justify-between p-2 rounded-lg ${
-        isCurrentUser ? 'bg-violet-500' : isTopFive ? 'bg-green-500' : ''
+        isCurrentUser && isTopFive
+          ? 'bg-violet-500' 
+          : isTopFive
+          ? 'bg-green-500'
+          : ''
       }`}
     >
       <div className="flex items-center">

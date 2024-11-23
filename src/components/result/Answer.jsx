@@ -54,7 +54,7 @@ export default function Answer({ data, quizId }) {
                             label={option}
                             name={option}
                             value={option}
-                            checked={userSelections?.selectedOption === option}
+                            checked={correctAnswers?.answer === option}
                             isUserSelection={userSelections?.selectedOption === option}
                             isCorrectAnswer={correctAnswers?.answer === option}
                         />
