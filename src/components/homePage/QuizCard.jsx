@@ -47,7 +47,7 @@ const QuizCard = ( { quiz } ) =>
   {
     if ( auth )
     {
-      setFetchingAttempt( true ); // Start fetching
+      setFetchingAttempt( true );
       try
       {
         const response = await api.get( `http://localhost:5000/api/quizzes/${quiz.id}` );
@@ -55,10 +55,10 @@ const QuizCard = ( { quiz } ) =>
       } catch ( error )
       {
         console.error( 'Failed to fetch attempt data:', error );
-        alert( error );
+        
       } finally
       {
-        setFetchingAttempt( false ); // End fetching
+        setFetchingAttempt( false );
       }
     }
   };
