@@ -22,21 +22,24 @@ export default function DashBoardCard({ data, onEdit }) {
                 icon: "success",
             });
         }
+        await refetch();
     };
 
     const onError = ( error ) =>
+    {
         Swal.fire( {
             title: "Error",
             text: `Error: ${error.message}`,
             icon: "error",
         } );
+    }
 
-    const quizDelete = useDelete({
-        queryKey: [`quizListAdmin`],
+    const quizDelete = useDelete( {
+        queryKey: [ `quizListAdmin` ],
         url: ``,
         onSuccess,
         onError,
-    });
+    } );
 
     const onDelete = (id) => {
         Swal.fire({

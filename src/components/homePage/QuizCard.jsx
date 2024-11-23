@@ -104,7 +104,7 @@ const QuizCard = ( { quiz } ) =>
         onClick={ handleCardClick }
         initial={ { opacity: 0, y: 30 } }
         animate={ isInView ? { opacity: 1, y: 0 } : {} }
-        exit={ { x: -100 } }
+        exit={ {opacity: 0 , y: -30 } }
         transition={ { duration: 0.6, ease: 'easeOut' } }
         onMouseEnter={ () =>
         {

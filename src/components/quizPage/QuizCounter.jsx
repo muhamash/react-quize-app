@@ -9,7 +9,7 @@ export default function QuizCounter({ user, quizData, questionIndex }) {
       ? ((questionIndex + 1) / totalQuestions) * 100
       : 100;
 
-    const customLabel = `${totalQuestions - questionIndex} more!`
+    const customLabel = `${totalQuestions - questionIndex - 1 ? `${totalQuestions - questionIndex - 1} more!` : "almost there!!!"}`
     
     return (
         <div className="lg:col-span-1 bg-white rounded-md p-6 h-full flex flex-col">

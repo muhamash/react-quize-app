@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { HashLoader } from 'react-spinners';
 import ErrorBoundary from "../components/common/ErrorBoundary";
+import Pagination from "../components/common/Pagination";
 import QuizCard from '../components/homePage/QuizCard';
 import UserCard from "../components/homePage/UserCard";
 import useAuth from "../hooks/useAuth";
@@ -29,18 +30,6 @@ export default function HomePage() {
     const totalPages = Math.ceil((state?.quizzes?.length || 0) / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentQuizzes = state?.quizzes?.slice( startIndex, startIndex + itemsPerPage );
-
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const handlePrevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
     
     if (isLoading) {
         return (
@@ -85,21 +74,7 @@ export default function HomePage() {
                     </ErrorBoundary>
                 </div>
                 {/* pagination */}
-                <div className="flex justify-center items-center gap-4 pt-5">
-                    <button
-                        onClick={ handlePrevPage }
-                        disabled={ currentPage === 1 }
-                        className="px-3 py-1 text-sm bg-green-700 rounded disabled:opacity-50 text-white cursor-pointer">
-                        Previous
-                    </button>
-                            
-                    <button
-                        onClick={ handleNextPage }
-                        disabled={ currentPage === totalPages }
-                        className="px-3 py-1 text-sm bg-cyan-700 rounded disabled:opacity-50 text-white cursor-pointer">
-                        Next
-                    </button>
-                </div>
+                <Pagination totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
             </div>
         </HelmetProvider>
     );

@@ -7,6 +7,7 @@ import { CreateQuizProvider } from './context/CreateQuizProvider';
 import QuizProvider from './context/QuizProvider';
 import AdminLayout from './layouts/AdminLayout';
 import MainLayout from './layouts/MainLayout';
+import NotFoundPage from './page/NotFoundPage';
 import PrivateRoute from './routes/PrivateRoute';
 
 // const AddQuizCardPage = lazy(() => import('./page/AddQuizCardPage'));
@@ -53,6 +54,9 @@ function App() {
                     <Route path="/createQuiz" element={<CreateQuiz />} />
                   </Route>
                 </Route>
+
+                 {/* Global Not Found Page */}
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </CreateQuizProvider>
           </QuizProvider>

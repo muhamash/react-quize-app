@@ -9,6 +9,7 @@ import DashBoardCard from "../components/admin/DashBoardCard";
 import Question from "../components/admin/Question";
 import QuizCardForm from "../components/admin/QuizCardForm";
 import SideBar from "../components/admin/SideBar";
+import Pagination from '../components/common/Pagination';
 import useCreateQuiz from "../hooks/useCreateQuiz";
 import { useFetchData } from "../hooks/useFetchData";
 import { usePatchData } from '../hooks/usePatchData';
@@ -17,7 +18,7 @@ export default function DashBoard() {
     const [open, setOpen] = useState(false);
     const [openQuestion, setOpenQuestion] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; 
+    const itemsPerPage = 8; 
 
     const { dispatch, state } = useCreateQuiz();
     const { data: quizList, isLoading, error } = useFetchData(
@@ -32,18 +33,6 @@ export default function DashBoard() {
     const totalPages = Math.ceil((quizList?.length || 0) / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentQuizzes = quizList?.slice(startIndex, startIndex + itemsPerPage);
-
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const handlePrevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
 
     const handleEditCardClick = (id) => {
         const quiz = quizList?.find((q) => q?.id === id);
@@ -173,21 +162,7 @@ export default function DashBoard() {
                             ) }
                         </div>
                         {/* pagination */ }
-                        <div className="flex absolute left-[50%] right-[50%] justify-center items-center gap-4 pt-2">
-                            <button
-                                onClick={ handlePrevPage }
-                                disabled={ currentPage === 1 }
-                                className="px-3 py-1 text-sm bg-green-700 rounded disabled:opacity-50 text-white cursor-pointer">
-                                Previous
-                            </button>
-                            
-                            <button
-                                onClick={ handleNextPage }
-                                disabled={ currentPage === totalPages }
-                                className="px-3 py-1 text-sm bg-cyan-700 rounded disabled:opacity-50 text-white cursor-pointer">
-                                Next
-                            </button>
-                        </div>
+                        <Pagination totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
                     </div>
                 </div>
             </HelmetProvider>
@@ -217,7 +192,6 @@ export default function DashBoard() {
                                     key={ q.id }
                                     question={ q }
                                     status={ state?.quizList?.status }
-                                    onClose={ handleClose }
                                 />
                             ) )
                         ) }
