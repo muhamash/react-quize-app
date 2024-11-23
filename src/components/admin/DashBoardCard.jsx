@@ -5,6 +5,7 @@ import { ClockLoader } from 'react-spinners';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 import { useDelete } from "../../hooks/useDelete";
+import { useFetchData } from "../../hooks/useFetchData";
 import DeleteIcon from "./DeleteIcon";
 import EditIcon from "./EditIcon";
 import QuizIconAdmin from "./QuizIconAdmin";
@@ -54,6 +55,8 @@ export default function DashBoardCard({ data, onEdit }) {
             }
         });
     };
+
+    const { refetch } = useFetchData( `quizListAdmin`, `http://localhost:5000/api/admin/quizzes` );
 
     return (
         <>
