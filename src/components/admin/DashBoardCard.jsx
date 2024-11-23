@@ -1,140 +1,118 @@
 /* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { ClockLoader } from 'react-spinners';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
+import { useDelete } from "../../hooks/useDelete";
+import DeleteIcon from "./DeleteIcon";
+import EditIcon from "./EditIcon";
+import QuizIconAdmin from "./QuizIconAdmin";
+import ShowIcon from "./ShowIcon";
 
-export default function DashBoardCard({ data, onEdit, onDelete }) {
-    const [hovered, setHovered] = useState(false);
+export default function DashBoardCard({ data, onEdit }) {
+    const [ hovered, setHovered ] = useState( false );
+
+    const onSuccess = async (response) => {
+        if (response.data === 1) {
+            Swal.fire({
+                title: "Deleted!",
+                text: "Quiz has been deleted!",
+                icon: "success",
+            });
+        }
+    };
+
+    const onError = ( error ) =>
+        Swal.fire( {
+            title: "Error",
+            text: `Error: ${error.message}`,
+            icon: "error",
+        } );
+
+    const quizDelete = useDelete({
+        queryKey: [`quizListAdmin`],
+        url: ``,
+        onSuccess,
+        onError,
+    });
+
+    const onDelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#5f149d",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                quizDelete.mutate({
+                    url: `http://localhost:5000/api/admin/quizzes/${id}`,
+                });
+            }
+        });
+    };
 
     return (
-        <motion.div
-            initial={ { opacity: 0, scale: 0.95 } }
-            animate={ { opacity: 1, scale: 1 } }
-            exit={ { opacity: 0, scale: 0.95 } }
-            transition={ { duration: 0.3 } }
-            className="relative p-6 rounded-lg shadow-sm shadow-violet-600 border border-gray-200 w-[300px] h-[250px] overflow-hidden hover:bg-slate-300 bg-white"
-            onMouseEnter={ () => setHovered( true ) }
-            onMouseLeave={ () => setHovered( false ) }
-        >
-            {/* card icon */}
-            <div className="text-buzzr-purple mb-4">
-                <svg
-                    version="1.1"
-                    id="Layer_1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlnsXlink="http://www.w3.org/1999/xlink"
-                    viewBox="0 0 512 512"
-                    xmlSpace="preserve"
-                    height={ 40 }
-                    width={40}
-                >
-                    <g>
-                        <rect x="256" y="398.746" style={ { fill: "#9AD14B" } } width="145.398" height="70.698" />
-                        <rect x="110.59" y="398.746" style={ { fill: "#9AD14B" } } width="145.41" height="70.698" />
-                    </g>
-                    <polygon style={ { fill: "#666666" } } points="401.402,42.555 401.402,398.745 256.004,398.745 110.593,398.745 110.593,42.555" />
-                    <path
-                        style={ { fill: "#9AD14B" } }
-                        d="M434.762,38.417v435.175c0,16.121-13.076,29.197-29.21,29.197H106.443
-        c-16.121,0-29.198-13.076-29.198-29.197V38.417c0-16.134,13.076-29.21,29.198-29.21h299.109
-        C421.685,9.207,434.762,22.284,434.762,38.417z M401.402,469.443v-70.698V42.555H110.593v356.19v70.698h145.41H401.402z"
-                    />
-                    <circle style={ { fill: "#FFFFFF" } } cx="375" cy="73.25" r="9.209" />
-                    <g>
-                        <path
-                            style={ { fill: "#333333" } }
-                            d="M405.553,0H106.447C85.266,0,68.035,17.232,68.035,38.412v435.175
-          c0,21.18,17.231,38.412,38.412,38.412h299.106c21.181,0,38.412-17.232,38.412-38.412V38.412C443.965,17.232,426.734,0,405.553,0z
-           M425.548,473.588c0,11.025-8.97,19.995-19.995,19.995H106.447c-11.025,0-19.995-8.97-19.995-19.995V38.412
-          c0-11.025,8.969-19.995,19.995-19.995h299.106c11.025,0,19.995,8.97,19.995,19.995L425.548,473.588L425.548,473.588z"
-                        />
-                        <path
-                            style={ { fill: "#333333" } }
-                            d="M401.407,33.35H110.593c-5.087,0-9.209,4.123-9.209,9.209v426.883c0,5.086,4.122,9.209,9.209,9.209
-          h290.814c5.087,0,9.209-4.123,9.209-9.209V42.559C410.615,37.473,406.494,33.35,401.407,33.35z M392.198,51.767V389.53H119.802
-          V51.767H392.198z M119.802,407.947h126.99v52.285h-126.99V407.947z M265.209,460.233v-52.285h126.99v52.285H265.209z"
-                        />
-                        <path
-                            style={ { fill: "#333333" } }
-                            d="M158.618,121.803h194.765c5.087,0,9.209-4.123,9.209-9.209c0-5.086-4.122-9.209-9.209-9.209H158.618
-          c-5.087,0-9.209,4.123-9.209,9.209C149.409,117.68,153.531,121.803,158.618,121.803z"
-                        />
-                        <path
-                            style={ { fill: "#333333" } }
-                            d="M158.618,175.163h194.765c5.087,0,9.209-4.123,9.209-9.209c0-5.086-4.122-9.209-9.209-9.209H158.618
-          c-5.087,0-9.209,4.123-9.209,9.209C149.409,171.04,153.531,175.163,158.618,175.163z"
-                        />
-                        <path
-                            style={ { fill: "#333333" } }
-                            d="M158.618,228.524h194.765c5.087,0,9.209-4.123,9.209-9.209s-4.122-9.209-9.209-9.209H158.618
-          c-5.087,0-9.209,4.123-9.209,9.209S153.531,228.524,158.618,228.524z"
-                        />
-                        <path
-                            style={ { fill: "#333333" } }
-                            d="M158.618,335.245h194.765c5.087,0,9.209-4.123,9.209-9.209c0-5.086-4.122-9.209-9.209-9.209H158.618
-          c-5.087,0-9.209,4.123-9.209,9.209C149.409,331.122,153.531,335.245,158.618,335.245z"
-                        />
-                        <path
-                            style={ { fill: "#333333" } }
-                            d="M158.618,281.884h194.765c5.087,0,9.209-4.123,9.209-9.209c0-5.086-4.122-9.209-9.209-9.209H158.618
-          c-5.087,0-9.209,4.123-9.209,9.209C149.409,277.761,153.531,281.884,158.618,281.884z"
-                        />
-                        <path
-                            style={ { fill: "#333333" } }
-                            d="M195.575,424.881h-24.556c-5.087,0-9.209,4.123-9.209,9.209c0,5.086,4.122,9.209,9.209,9.209h24.556
-          c5.087,0,9.209-4.123,9.209-9.209C204.784,429.004,200.661,424.881,195.575,424.881z"
-                        />
-                        <path
-                            style={ { fill: "#333333" } }
-                            d="M340.981,424.881h-24.556c-5.087,0-9.209,4.123-9.209,9.209c0,5.086,4.122,9.209,9.209,9.209h24.556
-          c5.087,0,9.209-4.123,9.209-9.209C350.19,429.004,346.068,424.881,340.981,424.881z"
-                        />
-                    </g>
-                    <path
-                        style={ { fill: "#FFFFFF" } }
-                        d="M375.004,378.006c-5.087,0-9.209-4.123-9.209-9.209V107.285c0-5.086,4.122-9.209,9.209-9.209
-          s9.209,4.123,9.209,9.209v261.512C384.212,373.883,380.091,378.006,375.004,378.006z"
-                    />
-                </svg>
-            </div>
-            <h3 className="font-semibold text-lg mb-2">{ data.title }</h3>
-            <p className="text-gray-600 text-sm">{ data.description }</p>
+        <>
+            {
+                quizDelete.isPending ? ( <ClockLoader size={100} color="#f3026e" /> ) :
+                    (
+                        <motion.div
+                            initial={ { opacity: 0, scale: 0.95 } }
+                            animate={ { opacity: 1, scale: 1 } }
+                            exit={ { opacity: 0, scale: 0.95 } }
+                            transition={ { duration: 0.3 } }
+                            className="relative p-6 rounded-lg border-[0.8px] border-slate-300 shadow-md shadow-slate-300  w-[300px] h-[250px] overflow-hidden hover:bg-slate-300 bg-white hover:shadow duration-150 transition-all"
+                            onMouseEnter={ () => setHovered( true ) }
+                            onMouseLeave={ () => setHovered( false ) }
+                        >
+                            {/* card icon */ }
+                            <div className="text-buzzr-purple mb-4">
+                                <QuizIconAdmin />
+                            </div>
+                            <h3 className="font-semibold text-lg mb-2">{ data.title }</h3>
+                            <p className="text-gray-600 text-sm">{ data.description }</p>
 
-            {/* Hover overlay */ }
-            { hovered && (
-                <motion.div
-                    initial={ { opacity: 0, y: 40 } }
-                    animate={ { opacity: 1, y: 0 } }
-                    exit={ { opacity: 0, y: 40 } }
-                    transition={ { duration: 0.3 } }
-                    className="absolute inset-0 flex flex-col gap-3 items-center justify-center bg-black/50 backdrop-blur-sm"
-                >
-                    <div className="flex gap-4">
-                        {
-                            data?.status === 'draft' ? (
-                                <svg onClick={ onEdit } className="bg-green-600 shadow-md rounded-md cursor-pointer hover:scale-125 duration-200 transition-all" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50px" height="50px"><path fill="#78a0cf" d="M13 27A2 2 0 1 0 13 31A2 2 0 1 0 13 27Z" /><path fill="#f1bc19" d="M77 12A1 1 0 1 0 77 14A1 1 0 1 0 77 12Z" /><path fill="#cee1f4" d="M50 13A37 37 0 1 0 50 87A37 37 0 1 0 50 13Z" /><path fill="#f1bc19" d="M83 11A4 4 0 1 0 83 19A4 4 0 1 0 83 11Z" /><path fill="#78a0cf" d="M87 22A2 2 0 1 0 87 26A2 2 0 1 0 87 22Z" /><path fill="#fbcd59" d="M81 74A2 2 0 1 0 81 78 2 2 0 1 0 81 74zM15 59A4 4 0 1 0 15 67 4 4 0 1 0 15 59z" /><path fill="#78a0cf" d="M25 85A2 2 0 1 0 25 89A2 2 0 1 0 25 85Z" /><path fill="#fff" d="M18.5 51A2.5 2.5 0 1 0 18.5 56A2.5 2.5 0 1 0 18.5 51Z" /><path fill="#f1bc19" d="M21 66A1 1 0 1 0 21 68A1 1 0 1 0 21 66Z" /><path fill="#fff" d="M80 33A1 1 0 1 0 80 35A1 1 0 1 0 80 33Z" /><g><path fill="#f1bc19" d="M65,28c3.86,0,7,3.14,7,7v30c0,3.86-3.14,7-7,7H35c-3.86,0-7-3.14-7-7V35c0-3.86,3.14-7,7-7H65" /><path fill="#472b29" d="M65,28.4c3.639,0,6.6,2.961,6.6,6.6v30c0,3.639-2.961,6.6-6.6,6.6H35c-3.639,0-6.6-2.961-6.6-6.6V35 c0-3.639,2.961-6.6,6.6-6.6H65 M65,27H35c-4.418,0-8,3.582-8,8v30c0,4.418,3.582,8,8,8h30c4.418,0,8-3.582,8-8V35 C73,30.582,69.418,27,65,27L65,27z" /><path fill="#fdfcee" d="M63,69H37c-3.309,0-6-2.691-6-6V37c0-3.309,2.691-6,6-6h26c3.309,0,6,2.691,6,6v26 C69,66.309,66.309,69,63,69z" /><path fill="#472b29" d="M63 69H37c-3.309 0-6-2.691-6-6V37c0-3.309 2.691-6 6-6h24.625C61.832 31 62 31.168 62 31.375s-.168.375-.375.375H37c-2.895 0-5.25 2.355-5.25 5.25v26c0 2.895 2.355 5.25 5.25 5.25h26c2.895 0 5.25-2.355 5.25-5.25V48.375c0-.207.168-.375.375-.375S69 48.168 69 48.375V63C69 66.309 66.309 69 63 69zM68.625 42c-.207 0-.375-.168-.375-.375v-1.278c0-.207.168-.375.375-.375S69 40.14 69 40.347v1.278C69 41.832 68.832 42 68.625 42z" /><path fill="#472b29" d="M68.625,47c-0.207,0-0.375-0.168-0.375-0.375v-3.25c0-0.207,0.168-0.375,0.375-0.375 S69,43.168,69,43.375v3.25C69,46.832,68.832,47,68.625,47z" /></g><g><path fill="#f1bc19" d="M57.687,39.376c-0.401,0-0.75,0.119-1,0.368L42.311,54.132c-0.463,0.465-1.438,3.042-2.149,4.922 c-0.322,0.851-0.597,1.574-0.757,1.933c-0.056,0.125-0.03,0.261,0.066,0.358l0.155,0.155c0.122,0.123,0.305,0.159,0.468,0.086 c0.417-0.188,1.188-0.481,2.083-0.82c1.907-0.724,4.256-1.615,4.702-2.061l14.377-14.39c0.743-0.744,0.323-2.376-0.936-3.637 C59.483,39.842,58.482,39.376,57.687,39.376z" /><path fill="#fdfcee" d="M42.311,54.132c-0.463,0.465-1.438,3.042-2.149,4.922c-0.322,0.851-0.597,1.574-0.757,1.933 c-0.056,0.125-0.03,0.261,0.066,0.358l0.155,0.155c0.122,0.123,0.305,0.159,0.468,0.086c0.417-0.188,1.188-0.481,2.083-0.82 c1.907-0.724,4.256-1.615,4.702-2.061l0.003-0.003L42.311,54.132z" /><path fill="#4a5397" d="M40.181,59.003c-0.006,0.017-0.013,0.035-0.02,0.052c-0.322,0.851-0.597,1.574-0.757,1.933 c-0.056,0.125-0.03,0.261,0.066,0.358l0.155,0.155c0.122,0.123,0.305,0.159,0.468,0.086c0.39-0.176,1.095-0.445,1.916-0.756 L40.181,59.003z" /><path fill="#7782ac" d="M55.385 41.048H58.193V47.5H55.385z" transform="rotate(-45.001 56.788 44.275)" /><path fill="#fcb9b9" d="M60.036,45.536l1.219-1.22c0.743-0.744,0.323-2.376-0.936-3.637 c-0.836-0.837-1.837-1.303-2.632-1.303c-0.401,0-0.75,0.119-1,0.368l-1.221,1.222L60.036,45.536z" /></g><g><path fill="#472b29" d="M57.69,39.75L57.69,39.75c0.722,0,1.628,0.458,2.364,1.194c1.208,1.21,1.459,2.583,0.936,3.107 L46.612,58.441c-0.389,0.389-2.893,1.339-4.55,1.968l-0.075,0.028c-0.875,0.332-1.63,0.619-2.097,0.798l-0.129-0.129 c0.173-0.394,0.454-1.136,0.751-1.92c0.62-1.639,1.658-4.382,2.064-4.789L56.952,40.01C57.125,39.837,57.373,39.75,57.69,39.75 M57.69,39c-0.501,0-0.944,0.155-1.268,0.479L42.046,53.867c-0.481,0.482-1.264,2.486-2.235,5.054 c-0.319,0.842-0.59,1.558-0.749,1.913c-0.119,0.265-0.063,0.569,0.142,0.775l0.156,0.156C39.513,61.919,39.715,62,39.921,62 c0.11,0,0.222-0.024,0.327-0.071c0.408-0.185,1.183-0.478,2.08-0.819c2.525-0.958,4.35-1.673,4.815-2.139l14.378-14.389 c0.905-0.906,0.494-2.736-0.936-4.167C59.668,39.497,58.586,39,57.69,39L57.69,39z" /><path fill="#472b29" d="M44.346 53.186H44.846V59.65H44.346z" transform="rotate(-45.001 44.59 56.416)" /><path fill="#472b29" d="M40.839 58.497H41.339V61.325H40.839z" transform="rotate(-45.001 41.088 59.912)" /><path fill="#472b29" d="M55.546 42.04H56.046V48.492H55.546z" transform="rotate(-45.001 55.796 45.267)" /><path fill="#472b29" d="M57.531 40.055H58.031V46.507H57.531z" transform="rotate(-45.001 57.781 43.282)" /><path fill="#472b29" d="M54.615 44.049L54.385 43.951 55.51 41.326 55.74 41.424zM55.49 44.799L55.26 44.701 56.385 42.076 56.615 42.174zM56.365 45.549L56.135 45.451 57.26 42.826 57.49 42.924zM57.144 46.522L56.915 46.424 58.135 43.576 58.365 43.674zM57.981 47.361L57.751 47.263 59.01 44.326 59.24 44.424z" /></g>
-                                </svg>
-                            ) :
-                                (
+                            {/* Hover overlay */ }
+                            { hovered && (
+                                <motion.div
+                                    initial={ { opacity: 0, y: 40 } }
+                                    animate={ { opacity: 1, y: 0 } }
+                                    exit={ { opacity: 0, y: 40 } }
+                                    transition={ { duration: 0.3 } }
+                                    className="absolute inset-0 flex flex-col gap-3 items-center justify-center bg-black/50 backdrop-blur-sm"
+                                >
+                                    <div className="flex gap-4">
+                                        {
+                                            data?.status === 'draft' ? (
+                                                <EditIcon onEdit={ onEdit } />
+                                            ) :
+                                                (
                                     
-                                    <svg onClick={ onEdit } className="bg-white cursor-pointer rounded-md shadow-md hover:scale-125 duration-200 transition-all" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="50px" height="50px"><path fill="#faefde" d="M23.24,4.94H52a3,3,0,0,1,3,3v48a3,3,0,0,1-3,3H14a3,3,0,0,1-3-3V17.18a3,3,0,0,1,.88-2.12l9.24-9.24A3,3,0,0,1,23.24,4.94Z" /><path fill="#fff7f0" d="M11 59L10.85 49.54 54.34 6.06 55 29 25 59 11 59zM10.85 39.15L45.06 4.94 50.81 5.19 11 45 10.85 39.15zM10.85 33.15L39 5 42 5 10.85 36.15 10.85 33.15z" /><path fill="#fff" d="M45.5 13L46.74 15.26 49 16.5 46.74 17.74 45.5 20 44.26 17.74 42 16.5 44.26 15.26 45.5 13zM30.42 11L31.27 12.56 32.84 13.42 31.27 14.27 30.42 15.84 29.56 14.27 28 13.42 29.56 12.56 30.42 11zM16.65 42L17.23 43.06 18.3 43.65 17.23 44.23 16.65 45.3 16.07 44.23 15 43.65 16.07 43.06 16.65 42z" /><path fill="#bbdef9" d="M23 5L23 17 11 17 23 5z" /><path fill="#8d6c9f" d="M53,4H23.66a5,5,0,0,0-3.54,1.46l-8.66,8.66A5,5,0,0,0,10,17.66V57a3,3,0,0,0,3,3H53a3,3,0,0,0,3-3V7A3,3,0,0,0,53,4ZM21.54,6.88A3,3,0,0,1,22,6.5V15a1,1,0,0,1-1,1H12.5a3,3,0,0,1,.38-.46ZM54,57a1,1,0,0,1-1,1H13a1,1,0,0,1-1-1V18h9a3,3,0,0,0,3-3V6H53a1,1,0,0,1,1,1Z" /><path fill="#8d6c9f" d="M45 22H41a1 1 0 0 0 0 2h4a1 1 0 0 0 0-2zM21 24H37a1 1 0 0 0 0-2H21a1 1 0 0 0 0 2zM21 28H41a1 1 0 0 0 0-2H21a1 1 0 0 0 0 2zM33 36H21a1 1 0 0 0 0 2H33a1 1 0 0 0 0-2zM43 32H21a1 1 0 0 0 0 2H43a1 1 0 0 0 0-2zM15 50a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0V51A1 1 0 0 0 15 50zM20 50a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0V51A1 1 0 0 0 20 50zM25 50a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0V51A1 1 0 0 0 25 50zM30 50a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0V51A1 1 0 0 0 30 50zM35 50a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0V51A1 1 0 0 0 35 50zM40 50a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0V51A1 1 0 0 0 40 50zM45 50a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0V51A1 1 0 0 0 45 50zM50 50a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0V51A1 1 0 0 0 50 50z" /></svg>
-                                )
-                        }
+                                                    <ShowIcon onEdit={ onEdit } />
+                                                )
+                                        }
 
-                        {
-                            data?.status === "draft" && (
-                                <svg onClick={ onDelete } className="bg-white cursor-pointer rounded-md shadow-md hover:scale-125 duration-200 transition-all" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50px" height="50px"><path fill="#f37e98" d="M25,30l3.645,47.383C28.845,79.988,31.017,82,33.63,82h32.74c2.613,0,4.785-2.012,4.985-4.617L75,30" /><path fill="#f15b6c" d="M65 38v35c0 1.65-1.35 3-3 3s-3-1.35-3-3V38c0-1.65 1.35-3 3-3S65 36.35 65 38zM53 38v35c0 1.65-1.35 3-3 3s-3-1.35-3-3V38c0-1.65 1.35-3 3-3S53 36.35 53 38zM41 38v35c0 1.65-1.35 3-3 3s-3-1.35-3-3V38c0-1.65 1.35-3 3-3S41 36.35 41 38zM77 24h-4l-1.835-3.058C70.442 19.737 69.14 19 67.735 19h-35.47c-1.405 0-2.707.737-3.43 1.942L27 24h-4c-1.657 0-3 1.343-3 3s1.343 3 3 3h54c1.657 0 3-1.343 3-3S78.657 24 77 24z" /><path fill="#1f212b" d="M66.37 83H33.63c-3.116 0-5.744-2.434-5.982-5.54l-3.645-47.383 1.994-.154 3.645 47.384C29.801 79.378 31.553 81 33.63 81H66.37c2.077 0 3.829-1.622 3.988-3.692l3.645-47.385 1.994.154-3.645 47.384C72.113 80.566 69.485 83 66.37 83zM56 20c-.552 0-1-.447-1-1v-3c0-.552-.449-1-1-1h-8c-.551 0-1 .448-1 1v3c0 .553-.448 1-1 1s-1-.447-1-1v-3c0-1.654 1.346-3 3-3h8c1.654 0 3 1.346 3 3v3C57 19.553 56.552 20 56 20z" /><path fill="#1f212b" d="M77,31H23c-2.206,0-4-1.794-4-4s1.794-4,4-4h3.434l1.543-2.572C28.875,18.931,30.518,18,32.265,18h35.471c1.747,0,3.389,0.931,4.287,2.428L73.566,23H77c2.206,0,4,1.794,4,4S79.206,31,77,31z M23,25c-1.103,0-2,0.897-2,2s0.897,2,2,2h54c1.103,0,2-0.897,2-2s-0.897-2-2-2h-4c-0.351,0-0.677-0.185-0.857-0.485l-1.835-3.058C69.769,20.559,68.783,20,67.735,20H32.265c-1.048,0-2.033,0.559-2.572,1.457l-1.835,3.058C27.677,24.815,27.351,25,27,25H23z" /><path fill="#1f212b" d="M61.5 25h-36c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h36c.276 0 .5.224.5.5S61.776 25 61.5 25zM73.5 25h-5c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h5c.276 0 .5.224.5.5S73.776 25 73.5 25zM66.5 25h-2c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h2c.276 0 .5.224.5.5S66.776 25 66.5 25zM50 76c-1.654 0-3-1.346-3-3V38c0-1.654 1.346-3 3-3s3 1.346 3 3v25.5c0 .276-.224.5-.5.5S52 63.776 52 63.5V38c0-1.103-.897-2-2-2s-2 .897-2 2v35c0 1.103.897 2 2 2s2-.897 2-2v-3.5c0-.276.224-.5.5-.5s.5.224.5.5V73C53 74.654 51.654 76 50 76zM62 76c-1.654 0-3-1.346-3-3V47.5c0-.276.224-.5.5-.5s.5.224.5.5V73c0 1.103.897 2 2 2s2-.897 2-2V38c0-1.103-.897-2-2-2s-2 .897-2 2v1.5c0 .276-.224.5-.5.5S59 39.776 59 39.5V38c0-1.654 1.346-3 3-3s3 1.346 3 3v35C65 74.654 63.654 76 62 76z" /><path fill="#1f212b" d="M59.5 45c-.276 0-.5-.224-.5-.5v-2c0-.276.224-.5.5-.5s.5.224.5.5v2C60 44.776 59.776 45 59.5 45zM38 76c-1.654 0-3-1.346-3-3V38c0-1.654 1.346-3 3-3s3 1.346 3 3v35C41 74.654 39.654 76 38 76zM38 36c-1.103 0-2 .897-2 2v35c0 1.103.897 2 2 2s2-.897 2-2V38C40 36.897 39.103 36 38 36z" />
-                                </svg>
-                            )
-                        }
-                    </div>
-                    {
-                        data.status === "published" && (
-                            <p className="text-slate-300 w-fit text-center text-sm p-2">You are not allowed to edit or delete a <span className="text-rose-800 font-semibold">published </span> quiz. <span>If you preferred to delete or edit a quiz <span className="font-semibold text-rose-800">unpublished</span> the quiz on quiz view modal</span></p>
-                        )
-                    }
-                    <p className="text-white font-thin text-base">Current Status: <span className="text-violet-900 font-semibold">{ data.status }</span></p>
-                </motion.div>
-            ) }
-        </motion.div>
+                                        {
+                                            data?.status === "draft" && (
+                                                <DeleteIcon onDelete={()=> onDelete(data?.id) } />
+                                            )
+                                        }
+                                    </div>
+                                    {
+                                        data.status === "published" && (
+                                            <p className="text-slate-300 w-fit text-center text-sm p-2">You are not allowed to edit or delete a <span className="text-rose-800 font-semibold">published </span> quiz. <span>If you preferred to delete or edit a quiz <span className="font-semibold text-rose-800">unpublished</span> the quiz on quiz view modal</span></p>
+                                        )
+                                    }
+                                    <p className="text-white font-thin text-base">Current Status: <span className="text-violet-900 font-semibold">{ data.status }</span></p>
+                                </motion.div>
+                            ) }
+                        </motion.div>
+                    )
+            }
+        </>
     );
 }

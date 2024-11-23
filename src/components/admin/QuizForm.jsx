@@ -51,7 +51,6 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
     const onSuccess = ( response ) =>
     {
         // console.log( response );
-
         dispatch( {
             type: 'ADD_QUESTION', payload: {
                 id: state?.quizEditResponse?.id,

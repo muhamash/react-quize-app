@@ -10,7 +10,6 @@ import Question from "../components/admin/Question";
 import QuizCardForm from "../components/admin/QuizCardForm";
 import SideBar from "../components/admin/SideBar";
 import useCreateQuiz from "../hooks/useCreateQuiz";
-import { useDelete } from "../hooks/useDelete";
 import { useFetchData } from "../hooks/useFetchData";
 import { usePatchData } from '../hooks/usePatchData';
 
@@ -79,8 +78,8 @@ export default function DashBoard() {
                 text: "Quiz has been drafted!",
                 icon: "success",
             } );
-            await refetch();
             handleClose();
+            await refetch();
         }
 
         if (response.data === 1) {
@@ -98,31 +97,6 @@ export default function DashBoard() {
             text: `Error: ${error.message}`,
             icon: "error",
         });
-
-    const quizDelete = useDelete({
-        queryKey: [`quizListAdmin`],
-        url: ``,
-        onSuccess,
-        onError,
-    });
-
-    const onDelete = (id) => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#5f149d",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                quizDelete.mutate({
-                    url: `http://localhost:5000/api/admin/quizzes/${id}`,
-                });
-            }
-        });
-    };
 
     const handleOpen = () => setOpen(true);
 
@@ -191,7 +165,6 @@ export default function DashBoard() {
                                         <DashBoardCard
                                             onEdit={ () => handleEditCardClick( q.id ) }
                                             data={ q }
-                                            onDelete={ () => onDelete( q.id ) }
                                         />
                                     </AnimatePresence>
                                 ) )
