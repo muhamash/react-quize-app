@@ -63,7 +63,6 @@ const QuizCard = ( { quiz } ) =>
         setFetchingAttempt( false );
       }
     }
-
     // await refetch();
   };
 
@@ -119,7 +118,7 @@ const QuizCard = ( { quiz } ) =>
           fetchAttemptData();
         } }
         onMouseLeave={ () => setHovered( false ) }
-        className={`rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] cursor-pointer relative ${fetchingAttempt && "cursor-not-allowed"}`}
+        className={`rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] relative ${fetchingAttempt ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
         { hovered && (
           <motion.div
