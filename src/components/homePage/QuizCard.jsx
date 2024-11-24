@@ -10,7 +10,7 @@ import QuizPage from '../../page/QuizePage';
 import ResultPage from '../../page/ResultPage';
 
 const Loader = () => (
-  <div className="w-full flex items-center justify-center p-3">
+  <div className="w-full h-full flex items-center justify-center p-3">
     <GridLoader color="#4f197f" size={30} />
   </div>
 );
