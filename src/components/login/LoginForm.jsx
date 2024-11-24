@@ -19,7 +19,7 @@ const LoginForm = () =>
         setError
     } = useForm();
     
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg4NmExMWM4LWQxMTctNDdmYS05YmQ2LTE1NTFkNDI1YTYzNiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzMxMTEyMzYxLCJleHAiOjE3MzExMTI0MjF9";
+    const token = import.meta.env.VITE_AUTH_TOKEN;
 
     const onSuccess = ( response ) =>
     {
@@ -75,7 +75,7 @@ const LoginForm = () =>
     };
 
     const loginMutation = usePostData( {
-        url: 'http://localhost:5000/api/auth/login',
+        url: `${import.meta.env.VITE_BASE_URL}/auth/login`,
         onSuccess,
         onError
     } );

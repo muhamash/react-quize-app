@@ -23,7 +23,7 @@ export default function DashBoard() {
     const { dispatch, state } = useCreateQuiz();
     const { data: quizList, isLoading, error } = useFetchData(
         `quizListAdmin`,
-        `http://localhost:5000/api/admin/quizzes`
+        `${import.meta.env.VITE_BASE_URL}/admin/quizzes`
     );
 
     if (quizList && state?.quizzes !== quizList) {
@@ -57,7 +57,7 @@ export default function DashBoard() {
         }
     };
 
-    const { refetch } = useFetchData(`quizListAdmin`, `http://localhost:5000/api/admin/quizzes`);
+    const { refetch } = useFetchData(`quizListAdmin`, `${import.meta.env.VITE_BASE_URL}/admin/quizzes`);
 
     const onSuccess = async (response) => {
         if (response?.data?.status === "draft") {
@@ -100,12 +100,12 @@ export default function DashBoard() {
         }
     };
 
-    const publishQuiz = usePatchData({
-        queryKey: [`quizListAdmin`],
-        url: `http://localhost:5000/api/admin/quizzes/${state?.quizList?.id}`,
+    const publishQuiz = usePatchData( {
+        queryKey: [ `quizListAdmin` ],
+        url: `${import.meta.env.VITE_BASE_URL}/admin/quizzes/${state?.quizList?.id}`,
         onSuccess,
         onError,
-    });
+    } );
 
     const handleDraft = () => {
         publishQuiz.mutate({

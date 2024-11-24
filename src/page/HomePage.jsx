@@ -1,3 +1,4 @@
+// import 'dotenv/config';
 import { AnimatePresence } from "framer-motion";
 import { useState } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
@@ -18,7 +19,7 @@ export default function HomePage() {
 
     const {data ,isLoading, error } = useFetchData(
         ['quizzes'],
-        'http://localhost:5000/api/quizzes',
+        `${import.meta.env.VITE_BASE_URL}/quizzes`,
         {},
     );
 

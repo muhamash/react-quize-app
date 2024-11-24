@@ -1,4 +1,3 @@
- 
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -58,7 +57,7 @@ const RegisterForm = () => {
     };
 
     const registrationMutation = usePostData( {
-        url: "http://localhost:5000/api/auth/register",
+        url: `${import.meta.env.VITE_BASE_URL}/auth/register`,
         onSuccess,
         onError
     } );

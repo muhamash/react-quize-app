@@ -39,13 +39,13 @@ const QuizCardForm = ( { onClose } ) =>
   };
 
   const quizCardPatch = usePatchData( {
-    url: `http://localhost:5000/api/admin/quizzes/${state?.quizList?.id}`,
+    url: `${import.meta.env.VITE_BASE_URL}/admin/quizzes/${state?.quizList?.id}`,
     onSuccess,
     onError,
   } );
 
   const quizCardMutation = usePostData( {
-    url: `http://localhost:5000/api/admin/quizzes`,
+    url: `${import.meta.env.VITE_BASE_URL}/admin/quizzes`,
     onSuccess,
     onError,
   } );

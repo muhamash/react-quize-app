@@ -61,7 +61,7 @@ export default function Question ( { question, status, setEditQuestionData } )
             if ( result.isConfirmed )
             {
                 deleteQuestion.mutate( {
-                    url: `http://localhost:5000/api/admin/questions/${question.id}`,
+                    url: `${import.meta.env.VITE_BASE_URL}/admin/questions/${question.id}`,
                 } );
             }
         } );

@@ -53,13 +53,13 @@ export default function DashBoardCard({ data, onEdit }) {
         }).then((result) => {
             if (result.isConfirmed) {
                 quizDelete.mutate({
-                    url: `http://localhost:5000/api/admin/quizzes/${id}`,
+                    url: `${import.meta.env.VITE_BASE_URL}/admin/quizzes/${id}`,
                 });
             }
         });
     };
 
-    const { refetch } = useFetchData( `quizListAdmin`, `http://localhost:5000/api/admin/quizzes` );
+    const { refetch } = useFetchData( `quizListAdmin`, `${import.meta.env.VITE_BASE_URL}/admin/quizzes` );
 
     return (
         <>

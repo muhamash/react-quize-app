@@ -15,7 +15,7 @@ export default function LeaderBoard() {
 
   const { data: leaderBoard, isLoading, error } = useFetchData(
     [ 'leaderBoard', state?.singleQuiz ],
-    `http://localhost:5000/api/quizzes/${state?.singleQuiz[userId]}/attempts`
+    `${import.meta.env.VITE_BASE_URL}/quizzes/${state?.singleQuiz[userId]}/attempts`
   );
 
   // console.log(state)

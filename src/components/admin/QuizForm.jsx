@@ -86,14 +86,14 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
 
     const addQuizMutation = usePostData( {
         queryKey: [`quizListAdmin`],
-        url: `http://localhost:5000/api/admin/quizzes/${state?.quizEditResponse?.id}/questions`,
+        url: `${import.meta.env.VITE_BASE_URL}/admin/quizzes/${state?.quizEditResponse?.id}/questions`,
         onSuccess,
         onError,
     } );
 
     const editQuestionPatch = usePatchData( {
         queryKey: [ `quizListAdmin` ],
-        url: `http://localhost:5000/api/admin/questions/${editQuestionData?.id}`,
+        url: `${import.meta.env.VITE_BASE_URL}/admin/questions/${editQuestionData?.id}`,
         onSuccess,
         onError,
     } );

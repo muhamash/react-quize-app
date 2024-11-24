@@ -40,7 +40,7 @@ const QuizCard = ( { quiz } ) =>
 
   const { data: singleQuiz, isLoading, error } = useFetchData(
     modalStep >= 0 ? `singleQuiz_${quiz.id}` : null,
-    modalStep >= 0 ? `http://localhost:5000/api/quizzes/${quiz.id}` : null
+    modalStep >= 0 ? `${import.meta.env.VITE_BASE_URL}/quizzes/${quiz.id}` : null
   );
 
   // const { refetch } = useFetchData( `quizzes`, `http://localhost:5000/api/quizzes` );
@@ -52,7 +52,7 @@ const QuizCard = ( { quiz } ) =>
       setFetchingAttempt( true );
       try
       {
-        const response = await api.get( `http://localhost:5000/api/quizzes/${quiz.id}` );
+        const response = await api.get( `${import.meta.env.VITE_BASE_URL}/quizzes/${quiz.id}` );
         setAttempt( response?.data?.data?.user_attempt?.attempted );
       } catch ( error )
       {

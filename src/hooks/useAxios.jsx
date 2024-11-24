@@ -32,7 +32,7 @@ const useAxios = () => {
 
                     try {
                         const refreshToken = auth.refreshToken;
-                        const response = await axios.post(`http://localhost:5000/api/auth/refresh-token`, { refreshToken });
+                        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/refresh-token`, { refreshToken });
                         const { accessToken } = response.data.data;
 
                         setAuth({ ...auth, authToken: accessToken });

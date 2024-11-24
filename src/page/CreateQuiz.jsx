@@ -8,6 +8,7 @@ import Question from "../components/admin/Question";
 import QuizForm from "../components/admin/QuizForm";
 import SideBar from "../components/admin/SideBar";
 import useCreateQuiz from '../hooks/useCreateQuiz';
+import { useFetchData } from '../hooks/useFetchData';
 import { usePatchData } from '../hooks/usePatchData';
 
 export default function CreateQuiz ()
@@ -18,7 +19,7 @@ export default function CreateQuiz ()
 
     const quizQuestions = state?.addQuestions[ state?.quizEditResponse?.id ];
 
-    const onSuccess = ( response ) =>
+    const onSuccess = async( response ) =>
     {
         // console.log( response );
         Swal.fire( {
@@ -28,8 +29,8 @@ export default function CreateQuiz ()
             showConfirmButton: false,
             timer: 1500,
         } );
-         
         navigate( "/dashboard" );
+        await refetch();
     };
 
     const onError = ( error ) =>
@@ -43,9 +44,11 @@ export default function CreateQuiz ()
         } );
     };
 
+    const { refetch } = useFetchData( `quizListAdmin`, `${import.meta.env.VITE_BASE_URL}/admin/quizzes` );
+
     const publishQuiz = usePatchData( {
         queryKey: [ `quizListAdmin` ],
-        url: `http://localhost:5000/api/admin/quizzes/${state?.quizEditResponse?.id}`,
+        url: `${import.meta.env.VITE_BASE_URL}/admin/quizzes/${state?.quizEditResponse?.id}`,
         onSuccess,
         onError,
     } );

@@ -132,7 +132,7 @@ export default function Quiz({
       });
   }
   const quizMutation = usePostData({
-    url: `http://localhost:5000/api/quizzes/${data?.data?.id}/attempt`,
+    url: `${import.meta.env.VITE_BASE_URL}/quizzes/${data?.data?.id}/attempt`,
     onSuccess,
     onError
   });
