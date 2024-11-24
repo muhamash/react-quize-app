@@ -98,14 +98,31 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
         onError,
     } );
 
-    const uniqueOptionsValidation = ( options ) =>
+    const uniqueOptionsValidation = ( options, currentIndex ) =>
     {
         if ( !Array.isArray( options ) )
         {
             return "Options must be unique.";
         }
+
         const optionTexts = options.map( ( opt ) => opt.text.trim() );
-        return new Set( optionTexts ).size === optionTexts.length || "Options must be unique.";
+        const currentText = optionTexts[ currentIndex ];
+
+        const duplicateIndexes = optionTexts.reduce( ( acc, text, idx ) =>
+        {
+            if ( text === currentText && idx !== currentIndex )
+            {
+                acc.push( idx );
+            }
+            return acc;
+        }, [] );
+
+        if ( duplicateIndexes.length > 0 )
+        {
+            return `Duplicated with Option ${duplicateIndexes[ 0 ] + 1}`;
+        }
+
+        return true;
     };
 
     const onSubmit = (data) => {
@@ -117,18 +134,6 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            return;
-        };
-
-        const uniqueOptionsError = uniqueOptionsValidation( data.options );
-        if (uniqueOptionsError !== true) {
-            Swal.fire( {
-                position: 'top-end',
-                icon: 'error',
-                title: uniqueOptionsError,
-                showConfirmButton: false,
-                timer: 1500,
-            } );
             return;
         };
 
@@ -200,8 +205,8 @@ export default function QuizForm({editQuestionData, setEditQuestionData}) {
                                 type="text"
                                 { ...register( `options.${index}.text`, {
                                     required: 'Option text is required',
-                                    validate: (value, formValues) => uniqueOptionsValidation(formValues.options),
-                                 } ) }
+                                    validate: ( value, formValues ) => uniqueOptionsValidation( formValues.options, index ),
+                                } ) }
                                 className="w-full p-2 bg-transparent rounded-md text-foreground outline-none focus:ring-0"
                                 placeholder={ `Option ${index + 1}` }
                                 defaultValue={ option.text }
