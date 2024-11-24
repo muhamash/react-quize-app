@@ -69,12 +69,15 @@ const QuizCard = ( { quiz } ) =>
 
   const handleCardClick = () =>
   {
-    if ( auth )
+    if ( !fetchingAttempt )
     {
-      setModalStep( attempt ? 1 : 0 );
-    } else
-    {
-      navigate( '/login' );
+      if ( auth )
+      {
+        setModalStep( attempt ? 1 : 0 );
+      } else
+      {
+        navigate( '/login' );
+      }
     }
   };
 
@@ -105,7 +108,7 @@ const QuizCard = ( { quiz } ) =>
     <>
       <motion.div
         ref={ ref }
-        onClick={ !fetchingAttempt && handleCardClick }
+        onClick={ handleCardClick }
         initial={ { opacity: 0, y: 30 } }
         animate={ isInView ? { opacity: 1, y: 0 } : {} }
         exit={ {opacity: 0 , y: -30 } }
