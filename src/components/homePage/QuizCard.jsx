@@ -116,7 +116,7 @@ const QuizCard = ( { quiz } ) =>
           fetchAttemptData();
         } }
         onMouseLeave={ () => setHovered( false ) }
-        className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] cursor-pointer relative"
+        className={`rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] cursor-pointer relative ${fetchingAttempt && "cursor-not-allowed"}`}
       >
         { hovered && (
           <motion.div
