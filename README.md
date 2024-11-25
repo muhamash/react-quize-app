@@ -1,12 +1,7 @@
-# React + Vite
+# React Quiz App -> a assignment of LWS learning platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# react-quize-app
-# batch-2-assignment-5-quiz-application-muhamash
-# batch-2-assignment-5-quiz-application-muhamash
-# batch-2-assignment-5-quiz-application-muhamash
+#Only Admin can  create or edit or delete a quiz and a quiz's question both
+#Admin is also allowed to published an unpublished quiz or vice versa!
+#Admin will no participate any quiz
+#Only register users can participate a quiz
+#No multiple quiz participation at same quiz
